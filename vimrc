@@ -57,7 +57,8 @@ endif
 "map <F7> "+y
 "map <F8> "+x
 "map <F9> "+p
-
+"<F1> 查看Vim的runtime路径
+nmap <F1> :set rtp<CR>
 "nmap <F2> :NERDTreeToggle<CR>
 nmap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
 nmap <F3> :TagbarToggle<CR>
@@ -69,7 +70,8 @@ inoremap <C-S-F4> <C-O>:close!<CR>
 
 "<Ctrl + F5>显示可打印字符开关
 nnoremap <silent> <C-F5> :set list! list?<CR>
-
+"<F5> 一键分屏
+nnoremap <F5> :vertical ba<CR>
 "<Ctrl + F6> 切换行号显示模式
 nmap <silent> <C-F6> :set relativenumber!<CR>
 
@@ -358,10 +360,10 @@ set splitright                  " 新分割窗口在右边
 
 "--状态行设置--
 set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
-set ruler            " 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
+set ruler            " 显示右下角的状态 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
 
 "--命令行设置--
-set showcmd             " 命令行显示输入的命令
+set showcmd             " 命令行显示输入的命令(共享外部剪贴板) 
 set showmode            " 命令行显示vim当前模式
 
 
@@ -393,8 +395,18 @@ endif
 "  < cscope 工具配置 >
 " -----------------------------------------------------------------------------
 " 用cscope自己的话说 - "你可以把它当做是超过频的ctags"
+"   cscope -Rbq -f path/cscope.out 
+"   0 或 s: 查找本 C 符号
+"	1 或 g: 查找本定义
+"	2 或 d: 查找本函数调用的函数
+"	3 或 c: 查找调用本函数的函数
+"	4 或 t: 查找本字符串
+"	6 或 e: 查找本 egrep 模式
+"	7 或 f: 查找本文件
+"	8 或 i: 查找包含本文件的文件
+
 if has("cscope")
-    "设定可以使用 quickfix 窗口来查看 cscope 结果
+    "把Cscope的查找结果 输出到quickfix窗口
     set cscopequickfix=s-,c-,d-,i-,t-,e-
     "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
     set cscopetag
@@ -417,6 +429,8 @@ if has("cscope")
     nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>
     nmap <c-\>i :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr>
     nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr>
+    " :cw quickfix窗口看到所有查找结果
+    nmap <C-\>w :cw<CR>
 endif
 
 " -----------------------------------------------------------------------------
@@ -425,7 +439,28 @@ endif
 " 对浏览代码非常的方便,可以在函数,变量之间跳转等
 set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在windows下才有用）
 
+set tags+=./../tags,../../tags,../../../tags,../../../../tags
+set tags+=/usr/src/linux-2.6.35/tags,/usr/src/glibc-2.17/tags
+set tags+=
+
+function! UpdateCtags() 
+        let curdir=getcwd() 
+        while !filereadable("./tags") 
+            cd .. 
+            if getcwd() == "/" 
+                break 
+            endif 
+        endwhile 
+        if filewritable("./tags") 
+            !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
+            TlistUpdate 
+        endif 
+        execute ":cd " . curdir 
+endfunction 
+
+"nmap <F10> :call UpdateCtags()<CR> 
 map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 " -----------------------------------------------------------------------------
 "  < gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
@@ -506,7 +541,23 @@ Bundle 'airblade/vim-gitgutter'
 "Bundle 'mhinz/vim-signify'
 
 "C/C++
-"--- 
+"---
+    "--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。  
+Bundle 'exvim/main'
+Plugin 'exvim/ex-config' 
+Plugin 'exvim/ex-utility' 
+Plugin 'exvim/ex-aftercolors' 
+Plugin 'exvim/ex-vimentry' 
+
+Plugin 'exvim/ex-project' 
+Plugin 'exvim/ex-gsearch' " 用于全局搜索，这个比 ack 强大百倍，信我 
+Plugin 'exvim/ex-tags' " 用于 ctags 相关的操作 
+Plugin 'exvim/ex-symbol' " 将 ctags 的 tag 转换成一张列表，用于快速查找成员等操作 
+Plugin 'exvim/ex-cscope' " cscope 相关操作 
+Plugin 'exvim/ex-qfix' " quick-fix 相关操作 
+Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制 
+Plugin 'exvim/ex-tagbar' 
+
 Bundle 'a.vim'
 Bundle 'std_c.zip'
 	"--- 自动生成tags与cscope文件并连接
@@ -551,14 +602,17 @@ Bundle 'cSyntaxAfter'
 Bundle 'scrooloose/syntastic'
 
 "自动补全
-"YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
+    "--- 补齐的几个方案 (单选) 
+Plugin 'exvim/ex-autocomplpop' 
+	"--- neocomplcache对上下文进行索引，结果保存到缓存中
+" Plugin 'Shougo/neocomplcache.vim' 
+" Plugin 'Shougo/neocomplete.vim 
+    "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
 "Bundle 'Valloric/YouCompleteMe'
 
 	"--- 基于ctags数据库即tags文件实现的(基于ctags生成的索引信息来实现自动补全的)
 "Bundle 'OmniCppComplete'
-	"--- neocomplcache对上下文进行索引，结果保存到缓存中
-"Bundle 'Shougo/neocomplcache.vim'
-	"--- 上下文的补全,以前输入过的符号列表
+	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
 "Bundle 'supertab'
 	"--- 自动括号补全
 "Bundle 'Raimondi/delimitMate'
@@ -570,8 +624,11 @@ Bundle 'scrooloose/syntastic'
 "--- 宏定义补全 依赖:: Python 3.x 
 "Bundle 'SirVer/ultisnips'
 "Bundle 'honza/vim-snippets'
-"Bundle 'msanders/snipmate.vim'
-
+    "--- Snippet 的几个方案 (单选) 
+" Plugin 'Shougo/neosnippet.vim' 
+" Plugin 'msanders/snipmate.vim' 
+" Plugin 'spf13/snipmate-snippets' 
+"
 "代码
 "Bundle 'taglist.vim'
 Bundle 'majutsushi/tagbar'
@@ -591,7 +648,7 @@ Bundle 'bling/vim-airline'
 	"--- 跳转到光标后任意位置
 "Bundle 'Lokaltog/vim-easymotion'
 	"--- 括号匹配跳转
-"Bundle 'vim-scripts/matchit.zip'
+Bundle 'vim-scripts/matchit.zip'
 
 "选中
 "Bundle 'terryma/vim-expand-region'
@@ -614,9 +671,10 @@ Bundle 'kien/ctrlp.vim'
 "Bundle 'mileszs/ack.vim'
 
 "中文帮助
-Bundle 'asins/vimcdoc'
-
+"Bundle 'asins/vimcdoc'
 "其他
+    "--- VIM 中文输入法(不会用)
+"Bundle 'vim-scripts/VimIM'
 "--- 括号显示增强
 "Bundle 'kien/rainbow_parentheses.vim'
 "Bundle 'Align'
@@ -864,7 +922,7 @@ let g:tagbar_width=30                       "设置窗口宽度
 
 " 常规模式下输入 tl 调用插件，如果有打开 Tagbar 窗口则先将其关闭
 "nmap tl :TagbarClose<CR>:Tlist<CR>
-nmap tl :Tlist<CR>
+nmap tl :TlistToggle<CR>
 
 let Tlist_Show_One_File=1                   "只显示当前文件的tags
 " let Tlist_Enable_Fold_Column=0              "使taglist插件不显示左边的折叠行
@@ -872,6 +930,10 @@ let Tlist_Exit_OnlyWindow=1                 "如果Taglist窗口是最后一个�
 "let Tlist_File_Fold_Auto_Close=1            "自动折叠
 let Tlist_WinWidth=30                       "设置窗口宽度
 let Tlist_Use_Right_Window=1                "在右侧窗口中显示
+"let g:Tlist_Use_Left_Window=1              "在左侧窗口中显示
+let g:Tlist_Process_File_Always=1 
+"let g:Tlist_Sort_Type='name' 
+let g:Tlist_Inc_Winwidth=0 
 
 " -----------------------------------------------------------------------------
 "  < txtbrowser 插件配置 >
@@ -885,7 +947,22 @@ au BufRead,BufNewFile *.txt setlocal ft=txt
 " 用于分割窗口的最大化与还原
 " 常规模式下按快捷键 <c-w>o 在最大化与还原间切换
 
-
+" -----------------------------------------------------------------------------
+"  < vimIM 输入法配置 >
+" -----------------------------------------------------------------------------
+"正常模式： 　gi  　      无菜单窗中文输入   Insert text ... 　　
+"正常模式： 　n      　   无菜单窗中文搜索   Repeat the latest "/" or "?" ...
+"插入模式： i_CTRL-_   开关中文输入法      Switch between languages ...
+"插入模式： i_CTRL-^    切换中文输入法      Toggle the use of language ...　
+    :let g:vimim_cloud = 'google,sogou,baidu,qq'  
+    :let g:vimim_map = 'tab_as_gi'  
+  " :let g:vimim_mode = 'dynamic'  
+  " :let g:vimim_mycloud = 0  
+  " :let g:vimim_plugin = 'C:/var/mobile/vim/vimfiles/plugin'  
+  " :let g:vimim_punctuation = 2  
+  " :let g:vimim_shuangpin = 0  
+  " :let g:vimim_toggle = 'pinyin,google,sogou' 
+imap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 以下为软件默认配置 >>
 " =============================================================================
