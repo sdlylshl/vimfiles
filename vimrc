@@ -351,7 +351,7 @@ set shortmess=atI                                     "去掉欢迎界面
 
 set showmatch        " 设置匹配模式，显示匹配的括号
 
-set previewwindow               " 标识预览窗口
+"set previewwindow               " 标识预览窗口(一定不要开启 与airline冲突)
 set splitright                  " 新分割窗口在右边
 "set splitbelow                 " 新分割窗口在下边
 
