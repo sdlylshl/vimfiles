@@ -286,8 +286,7 @@ if (g:iswindows && g:isGUI)
     "解决consle输出乱码
     language messages zh_CN.utf-8
 endif
-set splitright                  " 新分割窗口在右边
-"set splitbelow                  " 新分割窗口在下边
+
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
 " -----------------------------------------------------------------------------
@@ -308,9 +307,33 @@ set nofoldenable                                      "关闭折叠
 "marker            对文中的标志折叠
 set foldmethod=indent
 
-" 当文件在外部被修改，自动更新该文件
-set autoread
+"set ignorecase        " 搜索模式里忽略大小写
+"set smartcase        " 如果搜索模式包含大写字符，不使用 'ignorecase' 选项。只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用。
+set autoindent        " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
+"set smartindent        " 智能对齐方式
+set tabstop=4        " 设置制表符(tab键)的宽度
+set softtabstop=4     " 设置软制表符的宽度    
+set shiftwidth=4    " (自动) 缩进使用的4个空格
+set cindent            " 使用 C/C++ 语言的自动缩进方式
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
+"set backspace=2    " 设置退格键可用
+set showmatch        " 设置匹配模式，显示匹配的括号
+set linebreak        " 整词换行
+set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
+"set hidden " Hide buffers when they are abandoned
+set history=50        " set command history to 50    "历史记录50条
 
+"--find setting--
+set incsearch        " 输入字符串就显示匹配点
+set hlsearch        
+
+set autoread         " 当文件在外部被修改，自动加载文件
+set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
+
+set writebackup                             "保存文件前建立备份，保存成功后删除该备份
+set nobackup                                "设置无备份文件
+
+" set noswapfile                              "设置无临时文件
 set ignorecase                                        "搜索模式里忽略大小写
 set smartcase                                         "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
 " set noincsearch                                       "在输入要搜索的文字时，取消实时匹配
@@ -324,32 +347,42 @@ set viminfo^=%
 "  < 界面配置 >
 " -----------------------------------------------------------------------------
 set number                                            "显示行号
-set laststatus=2                                      "启用状态栏信息
 set cmdheight=1                                       "设置命令行的高度为2，默认为1
 set cursorline                                        "突出显示当前行
 set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
-" 设置 gVim 窗口初始位置及大小
+"set previewwindow    " 标识预览窗口
+set splitright                  " 新分割窗口在右边
+"set splitbelow                  " 新分割窗口在下边
+
+
+"--状态行设置--
+"set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
+"set ruler            " 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
+
+"--命令行设置--
+set showcmd            " 命令行显示输入的命令
+set showmode        " 命令行显示vim当前模式
+
+
+" 设置 gvim 窗口初始位置及大小
 if g:isGUI
-    " au GUIEnter * simalt ~x                           "窗口启动时自动最大化
+    " au guienter * simalt ~x                           "窗口启动时自动最大化
     winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
     set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
 endif
 
 " 设置代码配色方案
 if g:isGUI
-    colorscheme Tomorrow-Night-Eighties               "Gvim配色方案
+    colorscheme tomorrow-night-eighties               "gvim配色方案
 else
-    colorscheme Tomorrow-Night-Eighties               "终端配色方案
+    colorscheme tomorrow-night-eighties               "终端配色方案
 endif
 
 " -----------------------------------------------------------------------------
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
-set writebackup                             "保存文件前建立备份，保存成功后删除该备份
-set nobackup                                "设置无备份文件
-" set noswapfile                              "设置无临时文件
 " set vb t_vb=                                "关闭提示音
 
 
@@ -360,11 +393,11 @@ set nobackup                                "设置无备份文件
 " -----------------------------------------------------------------------------
 "  < cscope 工具配置 >
 " -----------------------------------------------------------------------------
-" 用Cscope自己的话说 - "你可以把它当做是超过频的ctags"
+" 用cscope自己的话说 - "你可以把它当做是超过频的ctags"
 if has("cscope")
     "设定可以使用 quickfix 窗口来查看 cscope 结果
     set cscopequickfix=s-,c-,d-,i-,t-,e-
-    "使支持用 Ctrl+]  和 Ctrl+t 快捷键在代码间跳转
+    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
     set cscopetag
     "如果你想反向搜索顺序设置为1
     set csto=0
@@ -372,79 +405,79 @@ if has("cscope")
     if filereadable("cscope.out")
         cs add cscope.out
     "否则添加数据库环境中所指出的
-    elseif $CSCOPE_DB != ""
-        cs add $CSCOPE_DB
+    elseif $cscope_db != ""
+        cs add $cscope_db
     endif
     set cscopeverbose
     "快捷键设置
-    nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-    nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-    nmap <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+    nmap <c-\>s :cs find s <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>g :cs find g <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>c :cs find c <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>t :cs find t <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>e :cs find e <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>
+    nmap <c-\>i :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr>
+    nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr>
 endif
 
 " -----------------------------------------------------------------------------
 "  < ctags 工具配置 >
 " -----------------------------------------------------------------------------
 " 对浏览代码非常的方便,可以在函数,变量之间跳转等
-set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在Windows下才有用）
+set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在windows下才有用）
 
-map <S-F12> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 " -----------------------------------------------------------------------------
 "  < gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
-" 用于 Windows Gvim 全屏窗口，可用 F11 切换
+" 用于 windows gvim 全屏窗口，可用 f11 切换
 " 全屏后再隐藏菜单栏、工具栏、滚动条效果更好
 if (g:iswindows && g:isGUI)
-    nmap <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
+    nmap <f11> <esc>:call libcallnr("gvimfullscreen.dll", "togglefullscreen", 0)<cr>
 endif
 
 " -----------------------------------------------------------------------------
 "  < vimtweak 工具配置 > 请确保以已装了工具
 " -----------------------------------------------------------------------------
 " 这里只用于窗口透明与置顶
-" 常规模式下 Ctrl + Up（上方向键） 增加不透明度，Ctrl + Down（下方向键） 减少不透明度，<Leader>t 窗口置顶与否切换
+" 常规模式下 ctrl + up（上方向键） 增加不透明度，ctrl + down（下方向键） 减少不透明度，<leader>t 窗口置顶与否切换
 if (g:iswindows && g:isGUI)
-    let g:Current_Alpha = 255
-    let g:Top_Most = 0
+    let g:current_alpha = 255
+    let g:top_most = 0
     func! Alpha_add()
-        let g:Current_Alpha = g:Current_Alpha + 10
-        if g:Current_Alpha > 255
-            let g:Current_Alpha = 255
+        let g:current_alpha = g:current_alpha + 10
+        if g:current_alpha > 255
+            let g:current_alpha = 255
         endif
-        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
+        call libcallnr("vimtweak.dll","setalpha",g:current_alpha)
     endfunc
     func! Alpha_sub()
-        let g:Current_Alpha = g:Current_Alpha - 10
-        if g:Current_Alpha < 155
-            let g:Current_Alpha = 155
+        let g:current_alpha = g:current_alpha - 10
+        if g:current_alpha < 155
+            let g:current_alpha = 155
         endif
-        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
+        call libcallnr("vimtweak.dll","setalpha",g:current_alpha)
     endfunc
     func! Top_window()
-        if  g:Top_Most == 0
-            call libcallnr("vimtweak.dll","EnableTopMost",1)
-            let g:Top_Most = 1
+        if  g:top_most == 0
+            call libcallnr("vimtweak.dll","enabletopmost",1)
+            let g:top_most = 1
         else
-            call libcallnr("vimtweak.dll","EnableTopMost",0)
-            let g:Top_Most = 0
+            call libcallnr("vimtweak.dll","enabletopmost",0)
+            let g:top_most = 0
         endif
     endfunc
 
     "快捷键设置
-    nmap <s-up> :call Alpha_add()<CR>
-    nmap <s-down> :call Alpha_sub()<CR>
-    nmap <leader>T :call Top_window()<CR>
+    nmap <s-up> :call Alpha_add()<cr>
+    nmap <s-down> :call Alpha_sub()<cr>
+    nmap <leader>t :call Top_window()<cr>
 endif
 " =============================================================================
-"                          << Vundle 插件管理工具配置  >>
+"                          << vundle 插件管理工具配置  >>
 " =============================================================================
 " 用于更方便的管理vim插件，具体用法参考 :h vundle 帮助
-" Vundle工具安装方法为在终端输入如下命令
+" vundle工具安装方法为在终端输入如下命令
 " git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 " 如果想在 windows 安装就必需先安装 "git for window"，可查阅网上资料
 
@@ -465,9 +498,12 @@ Bundle 'gmarik/vundle'
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
 "GIT
-"Bundle 'tpope/vim-fugitive'
+    "--- 状态栏显示git分支(master)
+Bundle 'tpope/vim-fugitive'
+    "--- 状态栏显示fit分支号
+Bundle 'airblade/vim-gitgutter'
+
 "Bundle 'motemen/git-vim'
-"Bundle 'airblade/vim-gitgutter'
 "Bundle 'mhinz/vim-signify'
 
 "C/C++
@@ -542,7 +578,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'majutsushi/tagbar'
 
 "状态栏
-Bundle 'bling/vim-airline'
+"Bundle 'bling/vim-airline'
 "Bundle 'Lokaltog/vim-powerline'
 "Bundle 'Lokaltog/powerline-fonts'
 "Bundle 'itchyny/lightline.vim'
@@ -916,7 +952,7 @@ if g:islinux
             syntax on
         endif
 
-        set mouse=v                    " 在任何模式下启用鼠标
+        "set mouse=a                    " 在任何模式下启用鼠标
         set t_Co=256                   " 在终端启用256色
         set backspace=2                " 设置退格键可用
 
