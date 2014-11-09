@@ -22,22 +22,25 @@ endif
 " 自动切换目录为当前编辑文件所在目录
 au BufRead,BufNewFile,BufEnter * cd %:p:h
 
-" lcd是紧紧改变当前窗口的工作路径
-" %  代表当前文件的文件名
-" :p 扩展成全名(就是带了路径)
-" :h 析取出路径
-" :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
+"    lcd是紧紧改变当前窗口的工作路径
+"    %  代表当前文件的文件名
+"    :p 扩展成全名(就是带了路径)
+"    :h 析取出路径
+"    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
 
 " 恢复上次文件打开位置
 set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
+"离开插入模式后 自动关闭预览窗口
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+ 
 " 快捷打开编辑vimrc文件的键盘绑定
-if (g:iswindows && g:isGUI)	
-	map <silent><leader>ee :e $VIM/_vimrc<cr>
+if (g:iswindows)	
+	map <leader>ee :e $VIM/_vimrc<cr>
 	autocmd bufwritepost _vimrc source $VIM/_vimrc
 else
-	map <silent><leader>ee :e $HOME/.vimrc<cr>
+	map <leader>ee :e $HOME/.vimrc<cr>
 	autocmd! bufwritepost *.vimrc source $HOME/.vimrc
 endif 
 
@@ -84,20 +87,6 @@ nnoremap <silent> <C-F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 " F10 to run python script
 nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 
-" <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
-if g:isGUI 
-    nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
-        \set guioptions-=m <Bar>
-        \set guioptions-=T <Bar>
-        \set guioptions-=r <Bar>
-        \set guioptions-=L <Bar>
-    \else <Bar>
-        \set guioptions+=m <Bar>
-        \set guioptions+=T <Bar>
-        \set guioptions+=r <Bar>
-        \set guioptions+=L <Bar>
-    \endif<CR>
-endif
 "<F12>窗口最大化
 nnoremap <silent> <F12> <c-w>=
 nnoremap <silent> <C-F12> <c-w>_<c-w>\|
@@ -105,7 +94,12 @@ nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 "nnoremap <silent> <F5> :cp<CR>      "QuickFix窗口中上一条记录
 "nnoremap <silent> <F6> :cn<CR>      "QuickFix窗口中下一条记录
 "nnoremap <silent> <F7> :Grep<CR>    "查找命令
-
+" QuickFix open and close
+"nnoremap <F11> :copen<CR>
+"nnoremap <F12> :cclose<CR>
+"
+" 手动刷新tags(含cscope)
+nmap tg :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q *<CR>:set tags+=./tags<CR>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR>
 "--------------------------------------------------------------
 "搜索居中
 nnoremap <silent> n nzz
@@ -170,6 +164,14 @@ imap <c-h> <Left>
 " Ctrl + L 插入模式下光标向右移动
 imap <c-l> <Right>
 
+"回车即选中当前项
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+"上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+
 " --------tab/buffer相关
 
 "Use arrow key to change buffer"
@@ -200,7 +202,9 @@ map <leader>tp :tabprev<cr>
 map <leader>te :tabedit<cr>
 map <leader>td :tabclose<cr>
 map <leader>tm :tabm<cr>
-
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
 " 新建tab  Ctrl+t
 nnoremap <C-t>     :tabnew<CR>
@@ -312,6 +316,13 @@ set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
 "set hidden " Hide buffers when they are abandoned
 set history=50        " set command history to 50    "历史记录50条
 
+" 自动补全配置让Vim补全菜单行为跟IDE一致
+set completeopt=longest,menu
+" 增强模式中的命令行自动完成操作
+set wildmenu
+" ignore compiled files
+" set wildignore=*.o,*~,*.pyc,*.class,*.swp
+"
 set smarttab                                          "指定按一次backspace就删除shiftwidth宽度
 set nofoldenable                                      "关闭折叠
 set foldmethod=indent
@@ -380,7 +391,22 @@ if g:isGUI
 else
     colorscheme tomorrow-night-eighties               "终端配色方案
 endif
-
+" <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
+if g:isGUI 
+    nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
+        \set guioptions-=m <Bar>    "取消菜单栏
+        \set guioptions-=T <Bar>    "取消导航栏
+        \set guioptions-=r <Bar>    "去除右边滚动条
+        \set guioptions-=L <Bar>    "去除左边滚动条
+        \set guioptions-=b <Bar>    "去除水平滚动条 
+    \else <Bar>
+        \set guioptions+=m <Bar>
+        \set guioptions+=T <Bar>
+        \set guioptions+=r <Bar>
+        \set guioptions+=L <Bar>
+        \set guioptions+=b <Bar>    
+    \endif<CR>
+endi
 " -----------------------------------------------------------------------------
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
@@ -411,33 +437,42 @@ endif
 "	8 或 i: 查找包含本文件的文件
 
 if has("cscope")
+    set csprg=/usr/bin/cscope   " 制定cscope命令                  
+    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
+    "如果你想反向搜索顺序设置为1
+    set csto=0
     "把Cscope的查找结果 输出到quickfix窗口
     set cscopequickfix=s-,c-,d-,i-,t-,e-
     "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
     set cscopetag
-    "如果你想反向搜索顺序设置为1
-    set csto=0
-    "在当前目录中添加任何数据库
+    " 同时搜索tag文件和cscope数据库
+    " set cst
+    set nocsverb
+    "如果当前目录下有cscope.out则加载进Vim
     if filereadable("cscope.out")
         cs add cscope.out
-    "否则添加数据库环境中所指出的
+    "否则添加数据库环境中所指定的数据库到Vim
     elseif $cscope_db != ""
         cs add $cscope_db
     endif
     set cscopeverbose
     "快捷键设置
+    " 查找符号
     nmap <c-\>s :cs find s <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>g :cs find g <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>c :cs find c <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>t :cs find t <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>g :cs find g <c-r>=expand("<cword>")<cr><cr>  " 查找定义
+    nmap <c-\>c :cs find c <c-r>=expand("<cword>")<cr><cr>  " 查找调用这个函数的函数
+    nmap <c-\>t :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
     nmap <c-\>e :cs find e <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>
+    nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
     nmap <c-\>i :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr>
-    nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr>
+    nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr> " 查找被这个函数调用的函数
+    " 查找include这个文件的文件   
+    nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
     " :cw quickfix窗口看到所有查找结果
     nmap <C-\>w :cw<CR>
     "   重新初始化所有连接
     nmap <C-\>r :cs reset<CR>
+    "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
 endif
 
 " -----------------------------------------------------------------------------
@@ -663,6 +698,7 @@ Bundle 'vim-scripts/matchit.zip'
 "Bundle 'terryma/vim-multiple-cursors'
 
 "文件浏览
+    "---  快速注释
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'jistr/vim-nerdtree-tabs'
@@ -716,6 +752,25 @@ filetype plugin indent on                             "启用缩进
 " =============================================================================
 "                          << 以下为常用插件配置 >>
 " =============================================================================
+" -----------------------------------------------------------------------------
+"  < YouCompleteMe 插件配置 >
+" -----------------------------------------------------------------------------
+
+"let g:ycm_key_list_select_completion=['<c-n>']
+"let g:ycm_key_list_previous_completion=['<c-p>']
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py' 
+let g:ycm_collect_indentifiers_from_tags_files=1 
+let g:ycm_seed_identifiers_with_syntax=1 
+" 避免YCM每次加载都对用户提示是否加载 
+let g:ycm_confirm_extra_conf=0 
+let g:ycm_autoclose_preview_window_after_completion=1 
+let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+" 跳到定义或声明 
+nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR> 
+" 强制进行编译 
+nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR> 
 
 " -----------------------------------------------------------------------------
 "  < a.vim 插件配置 >
@@ -765,7 +820,29 @@ au! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
 " -----------------------------------------------------------------------------
 " 一个全路径模糊文件，缓冲区，最近最多使用，... 检索插件；详细帮助见 :h ctrlp
 " 常规模式下输入：Ctrl + p 调用插件
-
+"let g:ctrlp_map = '<leader>p'
+"let g:ctrlp_cmd = 'CtrlP'
+"map <leader>f :CtrlPMRU<CR>
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/<a href="http://www.it165.net/os/oslin/" target="_blank" class="keylink">Linux</a>
+"let g:ctrlp_custom_ignore = {
+"    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+"    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz)$',
+"    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+"    \ }
+let g:ctrlp_custom_ignore = {
+\ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|lib|out|png|img|bak|db|o)'
+\ }
+" 在每次进行切换分支或者重新设定custome_ignore选项的时候,必须手动清除CtrlP的缓存,
+" 也可以使用下句不让它进行缓存处理，但扫描时间会比较耗时
+"let g:ctrlp_use_caching = 0
+let g:ctrlp_working_path_mode=0
+let g:ctrlp_match_window_bottom=1
+let g:ctrlp_max_height=15
+let g:ctrlp_match_window_reversed=0
+let g:ctrlp_mruf_max=500
+let g:ctrlp_follow_symlinks=1
+nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>d :CtrlPDir<CR>
 " -----------------------------------------------------------------------------
 "  < emmet-vim（前身为Zen coding） 插件配置 >
 " -----------------------------------------------------------------------------
@@ -812,7 +889,17 @@ let g:indentLine_color_term = 239
 " let g:miniBufExplMapCTabSwitchBufs = 1      "功能增强（不过好像只有在Windows中才有用）
 " "                                            <C-Tab> 向前循环切换到每个buffer上,并在但前窗口打开
 " "                                            <C-S-Tab> 向后循环切换到每个buffer上,并在当前窗口打开
-
+"let g:miniBufExplModSelTarget = 1
+""解决FileExplorer窗口变小问题
+"let g:miniBufExplForceSyntaxEnable = 1
+"let g:miniBufExplorerMoreThanOne=2
+"let g:miniBufExplCycleArround=1
+"" 默认方向键左右可以切换buffer
+"nnoremap <TAB> :MBEbn<CR>
+"nnoremap <s-TAB> :MBEbp<CR>
+"noremap <leader>bn :MBEbn<CR>
+"noremap <leader>bp :MBEbp<CR>
+"noremap <leader>bd :MBEbd<CR>
 " -----------------------------------------------------------------------------
 "  < neocomplcache 插件配置 >
 " -----------------------------------------------------------------------------
@@ -838,7 +925,19 @@ let NERDSpaceDelims = 1                     "在左注释符之后，右注释�
 "  < nerdtree 插件配置 >
 " -----------------------------------------------------------------------------
 " 有目录村结构的文件浏览插件
+let NERDTreeWinPos='left' 
+let NERDTreeHighlightCursorline=1
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif 
+
+nnoremap <leader>n :NERDTreeToggle<CR> 
 nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
+
+" -----------------------------------------------------------------------------
+"  < FuzzyFinder 插件配置 >
+" -----------------------------------------------------------------------------
+nnoremap <leader>ff :FufFile<CR> 
+nnoremap <leader>fb :FufBuffer<CR> 
+nnoremap <leader>fd :FufDir<CR> 
 
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
@@ -910,6 +1009,19 @@ let c_cpp_comments = 0
 "  < Syntastic 插件配置 >
 " -----------------------------------------------------------------------------
 " 用于保存文件时查检语法
+" 在打开文件的时候检查 
+let g:syntastic_check_on_open = 1 
+let g:syntastic_cpp_include_dirs = ['/usr/include/'] 
+let g:syntastic_cpp_remove_include_errors = 1 
+let g:syntastic_cpp_check_header = 1 
+let g:syntastic_cpp_compiler = 'clang++' 
+let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++' 
+"set error or warning signs 
+let g:syntastic_error_symbol = '?' 
+let g:syntastic_warning_symbol = '?' 
+"whether to show balloons 
+let g:syntastic_enable_balloons = 1 
+let g:syntastic_always_populate_loc_list = 1 
 
 " -----------------------------------------------------------------------------
 "  < Tagbar 插件配置 >
