@@ -293,50 +293,47 @@ endif
 filetype on                                           "启用文件类型侦测
 filetype plugin on                                    "针对不同的文件类型加载对应的插件
 filetype plugin indent on                             "启用缩进
+
 set smartindent                                       "启用智能对齐方式
-set expandtab                                         "将Tab键转换为空格
 set tabstop=4                                         "设置Tab键的宽度，可以更改，如：宽度为2
+set softtabstop=4     " 设置软制表符的宽度    
+set shiftwidth=4    " (自动) 缩进使用的4个空格
 set shiftwidth=4                                      "换行时自动缩进宽度，可更改（宽度同tabstop）
+set expandtab                                         "将Tab键转换为空格
+"set backspace=2    " 设置退格键可用
+"set smartindent        " 智能对齐方式
+set autoindent        " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
+set cindent            " 使用 C/C++ 语言的自动缩进方式
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
+set linebreak        " 整词换行
+set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
+"set hidden " Hide buffers when they are abandoned
+set history=50        " set command history to 50    "历史记录50条
+
 set smarttab                                          "指定按一次backspace就删除shiftwidth宽度
 set nofoldenable                                      "关闭折叠
+set foldmethod=indent
 "manual            手工定义折叠
 "indent            更多的缩进表示更高级别的折叠
 "expr              用表达式来定义折叠
 "syntax            用语法高亮来定义折叠
 "diff              对没有更改的文本进行折叠
 "marker            对文中的标志折叠
-set foldmethod=indent
-
-"set ignorecase        " 搜索模式里忽略大小写
-"set smartcase        " 如果搜索模式包含大写字符，不使用 'ignorecase' 选项。只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用。
-set autoindent        " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
-"set smartindent        " 智能对齐方式
-set tabstop=4        " 设置制表符(tab键)的宽度
-set softtabstop=4     " 设置软制表符的宽度    
-set shiftwidth=4    " (自动) 缩进使用的4个空格
-set cindent            " 使用 C/C++ 语言的自动缩进方式
-set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
-"set backspace=2    " 设置退格键可用
-set showmatch        " 设置匹配模式，显示匹配的括号
-set linebreak        " 整词换行
-set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
-"set hidden " Hide buffers when they are abandoned
-set history=50        " set command history to 50    "历史记录50条
-
-"--find setting--
-set incsearch        " 输入字符串就显示匹配点
-set hlsearch        
 
 set autoread         " 当文件在外部被修改，自动加载文件
 set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 
 set writebackup                             "保存文件前建立备份，保存成功后删除该备份
 set nobackup                                "设置无备份文件
-
 " set noswapfile                              "设置无临时文件
-set ignorecase                                        "搜索模式里忽略大小写
-set smartcase                                         "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
-" set noincsearch                                       "在输入要搜索的文字时，取消实时匹配
+
+"--find setting--
+set incsearch       " 实时匹配
+"set noincsearch    " 取消实时匹配
+"set hlsearch        " 高亮搜索
+set nohlsearch      " 关闭高亮搜索
+set ignorecase      "搜索模式里忽略大小写
+set smartcase       "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
 
 " 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
 au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
@@ -352,18 +349,20 @@ set cursorline                                        "突出显示当前行
 set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
-"set previewwindow    " 标识预览窗口
+set showmatch        " 设置匹配模式，显示匹配的括号
+
+set previewwindow               " 标识预览窗口
 set splitright                  " 新分割窗口在右边
-"set splitbelow                  " 新分割窗口在下边
+"set splitbelow                 " 新分割窗口在下边
 
 
 "--状态行设置--
-"set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
-"set ruler            " 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
+set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
+set ruler            " 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
 
 "--命令行设置--
-set showcmd            " 命令行显示输入的命令
-set showmode        " 命令行显示vim当前模式
+set showcmd             " 命令行显示输入的命令
+set showmode            " 命令行显示vim当前模式
 
 
 " 设置 gvim 窗口初始位置及大小
@@ -578,7 +577,7 @@ Bundle 'scrooloose/syntastic'
 Bundle 'majutsushi/tagbar'
 
 "状态栏
-"Bundle 'bling/vim-airline'
+Bundle 'bling/vim-airline'
 "Bundle 'Lokaltog/vim-powerline'
 "Bundle 'Lokaltog/powerline-fonts'
 "Bundle 'itchyny/lightline.vim'
