@@ -392,9 +392,9 @@ endif
 
 " 设置代码配色方案
 if g:isGUI
-    colorscheme tomorrow-night-eighties               "gvim配色方案
+    colorscheme Tomorrow-Night              "gvim配色方案
 else
-    colorscheme tomorrow-night-eighties               "终端配色方案
+    colorscheme Tomorrow-Night               "终端配色方案
 endif
 " <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
 if g:isGUI 
@@ -569,8 +569,13 @@ if g:islinux
     set rtp+=~/.vim/bundle/vundle/
     call vundle#rc()
 else
-    set rtp+=$VIM/vimfiles/bundle/vundle/
-    call vundle#rc('$VIM/vimfiles/bundle/')
+	if exists('$HOME/vimfiles')		
+		set rtp+=$HOME/vimfiles/bundle/vundle/
+		call vundle#rc('$HOME/vimfiles/bundle/')
+	else
+		set rtp+=$VIM/vimfiles/bundle/vundle/
+		call vundle#rc('$VIM/vimfiles/bundle/')
+	endif
 endif
 
 " 使用Vundle来管理插件，这个必须要有。
@@ -590,20 +595,20 @@ Bundle 'airblade/vim-gitgutter'
 "C/C++
 "---
     "--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。  
-Bundle 'exvim/main'
-Plugin 'exvim/ex-config' 
-Plugin 'exvim/ex-utility' 
-Plugin 'exvim/ex-aftercolors' 
-Plugin 'exvim/ex-vimentry' 
+"Bundle 'exvim/main'
+"Plugin 'exvim/ex-config' 
+"Plugin 'exvim/ex-utility' 
+"Plugin 'exvim/ex-aftercolors' 
+"Plugin 'exvim/ex-vimentry' 
 
-Plugin 'exvim/ex-project' 
-Plugin 'exvim/ex-gsearch' " 用于全局搜索，这个比 ack 强大百倍，信我 
-Plugin 'exvim/ex-tags' " 用于 ctags 相关的操作 
-Plugin 'exvim/ex-symbol' " 将 ctags 的 tag 转换成一张列表，用于快速查找成员等操作 
-Plugin 'exvim/ex-cscope' " cscope 相关操作 
-Plugin 'exvim/ex-qfix' " quick-fix 相关操作 
-Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制 
-Plugin 'exvim/ex-tagbar' 
+"Plugin 'exvim/ex-project' 
+"Plugin 'exvim/ex-gsearch' " 用于全局搜索，这个比 ack 强大百倍，信我 
+"Plugin 'exvim/ex-tags' " 用于 ctags 相关的操作 
+"Plugin 'exvim/ex-symbol' " 将 ctags 的 tag 转换成一张列表，用于快速查找成员等操作 
+"Plugin 'exvim/ex-cscope' " cscope 相关操作 
+"Plugin 'exvim/ex-qfix' " quick-fix 相关操作 
+"Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制 
+"Plugin 'exvim/ex-tagbar' 
 
 Bundle 'a.vim'
 Bundle 'std_c.zip'
@@ -650,7 +655,7 @@ Bundle 'scrooloose/syntastic'
 
 "自动补全
     "--- 补齐的几个方案 (单选) 
-Plugin 'exvim/ex-autocomplpop' 
+"Plugin 'exvim/ex-autocomplpop' 
 	"--- neocomplcache对上下文进行索引，结果保存到缓存中
 " Plugin 'Shougo/neocomplcache.vim' 
 " Plugin 'Shougo/neocomplete.vim 
@@ -695,7 +700,7 @@ Bundle 'bling/vim-airline'
 	"--- 跳转到光标后任意位置
 "Bundle 'Lokaltog/vim-easymotion'
 	"--- 括号匹配跳转
-Bundle 'vim-scripts/matchit.zip'
+"Bundle 'vim-scripts/matchit.zip'
 
 "选中
 "Bundle 'terryma/vim-expand-region'
@@ -742,13 +747,13 @@ Bundle 'kien/ctrlp.vim'
 "Bundle 'ZoomWin'
 
 "主题color scheme
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'chriskempson/vim-tomorrow-theme'
-Bundle 'rainux/vim-desert-warm-256'
-Bundle 'nanotech/jellybeans.vim'
-Bundle 'vim-scripts/tir_black'
-Bundle 'twerth/ir_black'
-Bundle 'tomasr/molokai'
+"Bundle 'altercation/vim-colors-solarized'
+"Bundle 'chriskempson/vim-tomorrow-theme'
+"Bundle 'rainux/vim-desert-warm-256'
+"Bundle 'nanotech/jellybeans.vim'
+"Bundle 'vim-scripts/tir_black'
+"Bundle 'twerth/ir_black'
+"Bundle 'tomasr/molokai'
 
 "配置
 "Bundle 'carlhuda/janus'
