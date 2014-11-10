@@ -37,11 +37,16 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
  
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)	
-	map <leader>ee :e $VIM/_vimrc<cr>
-	autocmd bufwritepost _vimrc source $VIM/_vimrc
+    if exists('$HOME/vimfiles/*vimrc')  
+	    map <leader>ee :e $HOME/vimfiles/*vimrc<CR>
+    else
+        map <leader>ee :e $VIM/*vimrc<CR>
+    endif
+
+    autocmd! bufwritepost *vimrc source %
 else
-	map <leader>ee :e $HOME/.vimrc<cr>
-	autocmd! bufwritepost *.vimrc source $HOME/.vimrc
+	map <leader>ee :e $HOME/*vimrc<cr>
+	autocmd! bufwritepost *vimrc source %
 endif 
 
 " =============================================================================
@@ -52,7 +57,7 @@ endif
 " 秒内，而<Leader>cs是先按"\"键再按"c"又再按"s"键；如要修改"<leader>"键，可以把
 " 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
 
- let mapleader = ";"
+" let mapleader = ";"
  
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
@@ -141,7 +146,7 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " 快速进入shell
-nnoremap <silent><leader>e :shell<cr>
+nnoremap <silent><leader>sh :shell<cr>
 
 " 在文件名上按gf时，在新的tab中打开
 map gf :tabnew <cfile><cr>
@@ -504,50 +509,50 @@ endfunction
 map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 " -----------------------------------------------------------------------------
-"  < gvimfullscreen 工具配置 > 请确保已安装了工具
+"  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
-" 用于 windows gvim 全屏窗口，可用 f11 切换
+" 用于 Windows Gvim 全屏窗口，可用 F11 切换
 " 全屏后再隐藏菜单栏、工具栏、滚动条效果更好
 if (g:iswindows && g:isGUI)
-    nmap <f11> <esc>:call libcallnr("gvimfullscreen.dll", "togglefullscreen", 0)<cr>
+    map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 endif
-
+ 
 " -----------------------------------------------------------------------------
-"  < vimtweak 工具配置 > 请确保以已装了工具
+"  < 4 - vimtweak 工具配置 > 请确保以已装了工具
 " -----------------------------------------------------------------------------
 " 这里只用于窗口透明与置顶
-" 常规模式下 ctrl + up（上方向键） 增加不透明度，ctrl + down（下方向键） 减少不透明度，<leader>t 窗口置顶与否切换
+" 常规模式下 Ctrl + Up（上方向键） 增加不透明度，Ctrl + Down（下方向键） 减少不透明度，<Leader>t 窗口置顶与否切换
 if (g:iswindows && g:isGUI)
-    let g:current_alpha = 255
-    let g:top_most = 0
+    let g:Current_Alpha = 255
+    let g:Top_Most = 0
     func! Alpha_add()
-        let g:current_alpha = g:current_alpha + 10
-        if g:current_alpha > 255
-            let g:current_alpha = 255
+        let g:Current_Alpha = g:Current_Alpha + 10
+        if g:Current_Alpha > 255
+            let g:Current_Alpha = 255
         endif
-        call libcallnr("vimtweak.dll","setalpha",g:current_alpha)
+        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
     endfunc
     func! Alpha_sub()
-        let g:current_alpha = g:current_alpha - 10
-        if g:current_alpha < 155
-            let g:current_alpha = 155
+        let g:Current_Alpha = g:Current_Alpha - 10
+        if g:Current_Alpha < 155
+            let g:Current_Alpha = 155
         endif
-        call libcallnr("vimtweak.dll","setalpha",g:current_alpha)
+        call libcallnr("vimtweak.dll","SetAlpha",g:Current_Alpha)
     endfunc
     func! Top_window()
-        if  g:top_most == 0
-            call libcallnr("vimtweak.dll","enabletopmost",1)
-            let g:top_most = 1
+        if  g:Top_Most == 0
+            call libcallnr("vimtweak.dll","EnableTopMost",1)
+            let g:Top_Most = 1
         else
-            call libcallnr("vimtweak.dll","enabletopmost",0)
-            let g:top_most = 0
+            call libcallnr("vimtweak.dll","EnableTopMost",0)
+            let g:Top_Most = 0
         endif
     endfunc
-
+ 
     "快捷键设置
-    nmap <s-up> :call Alpha_add()<cr>
-    nmap <s-down> :call Alpha_sub()<cr>
-    nmap <leader>t :call Top_window()<cr>
+    map <s-up> :call Alpha_add()<CR>
+    map <s-down> :call Alpha_sub()<CR>
+    map <leader>tw :call Top_window()<CR>
 endif
 " =============================================================================
 "                          << vundle 插件管理工具配置  >>
