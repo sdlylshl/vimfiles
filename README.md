@@ -6,7 +6,7 @@
     3. ln -s vimfiles/vimrc .vimrc
     4. ./powerline-fonts/install.sh
     
-    {
+    {测试未通过 禁用
     sudo chmod 766 /usr/share/fonts
     cp -r vimfile/bundle/powerline-fonts /usr/share/fonts/
     cd /usr/share/fonts/powerline-fonts
@@ -15,3 +15,4 @@
     b.makefontdir
     c.fc -catch(刷新字体缓存)
     }
+##Windows
