@@ -102,9 +102,7 @@ nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 " QuickFix open and close
 "nnoremap <F11> :copen<CR>
 "nnoremap <F12> :cclose<CR>
-"
-" 手动刷新tags(含cscope)
-nmap tg :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q *<CR>:set tags+=./tags<CR>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR>
+
 "--------------------------------------------------------------
 "搜索居中
 nnoremap <silent> n nzz
@@ -514,12 +512,12 @@ function! UpdateCtags()
         endwhile 
 
         if  filereadable("./.git/config")
-            !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
+            !ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
             "TlistUpdate
             execute ":cd " . curdir 
         else
             execute ":cd " . curdir 
-            !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
+            !ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
         endif 
 endfunction 
 
@@ -1106,7 +1104,7 @@ let g:airline_powerline_fonts = 1
 " -----------------------------------------------------------------------------
 " 增强源代码浏览，其功能就像Windows中的"Source Insight"
 
-
+let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .'
 " -----------------------------------------------------------------------------
 "  < std_c 插件配置 >
 " -----------------------------------------------------------------------------
