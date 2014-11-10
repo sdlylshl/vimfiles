@@ -8,7 +8,7 @@
     
     {
     sudo chmod 766 /usr/share/fonts
-    cp vimfile/bundle/powerline-fonts /usr/share/fonts/
+    cp -r vimfile/bundle/powerline-fonts /usr/share/fonts/
     cd /usr/share/fonts/powerline-fonts
     建立字体缓存
     a.makefontscale
