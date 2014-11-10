@@ -1032,6 +1032,10 @@ nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
 nnoremap <leader>ff :FufFile<CR> 
 nnoremap <leader>fb :FufBuffer<CR> 
 nnoremap <leader>fd :FufDir<CR> 
+nnoremap <leader>ft :FufTag<CR> 
+nnoremap <leader>fc :FufChangeList<CR> 
+nnoremap <leader>fj :FufJumpList<CR> 
+nnoremap <leader>fq :FufQuickfix<CR> 
 
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
