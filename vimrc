@@ -480,6 +480,18 @@ if has("cscope")
     "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
 endif
 
+"    $ cscope -Rbkq
+"    这个命令会生成三个文件：cscope.out, cscope.in.out, cscope.po.out。
+"    其中cscope.out是基本的符号索引，后两个文件是使用"-q"选项生成的，可以加快cscope的索引速度。上面命令的参数含义如下：
+"    -R: 在生成索引文件时，搜索子目录树中的代码
+"    -b: 只生成索引文件，不进入cscope的界面
+"    -k: 在生成索引文件时，不搜索/usr/include目录
+"    -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
+"    -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用"-"，表示由标准输入获得文件列表。
+"    -I dir: 在-I选项指出的目录中查找头文件
+"    -u: 扫描所有文件，重新生成交叉索引文件
+"    -C: 在搜索时忽略大小写
+"    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
 " -----------------------------------------------------------------------------
 "  < ctags 工具配置 >
 " -----------------------------------------------------------------------------
@@ -487,25 +499,31 @@ endif
 set tags=./tags;                            "向上级目录递归查找tags文件（好像只有在windows下才有用）
 
 set tags+=./../tags,../../tags,../../../tags,../../../../tags
-set tags+=/usr/src/linux-2.6.35/tags,/usr/src/glibc-2.17/tags
-set tags+=
+if g:islinux
+    set tags+=/usr/src/linux-2.6.35/tags,/usr/src/glibc-2.17/tags
+endif
+"set tags+=
 
 function! UpdateCtags() 
         let curdir=getcwd() 
-        while !filereadable("./tags") 
-            cd .. 
-            if getcwd() == "/" 
-                break 
-            endif 
+        
+        let l:deeps = 5
+        while !filereadable("./.git/config") && l:deeps > 1
+            cd ..
+            let l:deeps = l:deeps -1
         endwhile 
-        if filewritable("./tags") 
+
+        if  filereadable("./.git/config")
             !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
-            TlistUpdate 
+            "TlistUpdate
+            execute ":cd " . curdir 
+        else
+            execute ":cd " . curdir 
+            !ctags -R --file-scope=yes --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
         endif 
-        execute ":cd " . curdir 
 endfunction 
 
-"nmap <F10> :call UpdateCtags()<CR> 
+nmap <F10> :call UpdateCtags()<CR> 
 map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 " -----------------------------------------------------------------------------
@@ -727,8 +745,8 @@ Bundle 'cSyntaxAfter'
 "Bundle 'mattn/calendar-vim'
 "Bundle 'dhruvasagar/vim-table-mode' 
 
-"语法检查
-Bundle 'scrooloose/syntastic'
+"语法检查 错误信息在左侧状态栏标注
+"Bundle 'scrooloose/syntastic'
 
 "自动补全
     "--- 补齐的几个方案 (单选) 
@@ -1130,6 +1148,7 @@ let g:syntastic_always_populate_loc_list = 1
 "nmap tb :TlistClose<CR>:TagbarToggle<CR>
 let g:tagbar_width=30                       "设置窗口宽度
 " let g:tagbar_left=1                         "在左侧窗口中显示
+let g:tagbar_sort = 0                       "按源文件顺序排列
 " 加载代码时自动打开tagbar
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 " -----------------------------------------------------------------------------
