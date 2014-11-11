@@ -566,7 +566,8 @@ set history=50        " set command history to 50    "历史记录50条
 
 "开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
 "set ofu=syntaxcomplete#Complete
-set omnifunc=omni
+set omnifunc=syntaxcomplete#Complete
+"set omnifunc=omni
 " 自动补全配置让Vim补全菜单行为跟IDE一致
 set completeopt=longest,menu
 " 增强模式中的命令行自动完成操作
@@ -1274,8 +1275,8 @@ nnoremap <leader>fq :FufQuickfix<CR>
 "--extra=+q : 为类成员标签添加类标识  
 " 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
 " 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
-"set completeopt=menu                        "关闭预览窗口
-set completeopt=menu,longest,menuone
+set completeopt=menu                        "关闭预览窗口
+"set completeopt=menu,longest,menuone
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
