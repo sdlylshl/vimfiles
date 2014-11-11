@@ -172,39 +172,80 @@ if has("gui_running")
 else
     let g:isGUI = 0
 endif
-" =============================================================================
-"                          << 自动命令 >>
-" =============================================================================
-" 自动切换目录为当前编辑文件所在目录
-au BufRead,BufNewFile,BufEnter * cd %:p:h
 
-"    lcd是紧紧改变当前窗口的工作路径
-"    %  代表当前文件的文件名
-"    :p 扩展成全名(就是带了路径)
-"    :h 析取出路径
-"    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
+" -----------------------------------------------------------------------------
+"  < Windows Gvim 默认配置> 做了一点修改
+" -----------------------------------------------------------------------------
+if (g:iswindows && g:isGUI)
+    source $VIMRUNTIME/vimrc_example.vim
+    source $VIMRUNTIME/mswin.vim
+    behave mswin
+    set diffexpr=MyDiff()
 
-" 恢复上次文件打开位置
-set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+    function! MyDiff()
+        let opt = '-a --binary '
+        if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+        if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+        let arg1 = v:fname_in
+        if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+        let arg2 = v:fname_new
+        if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+        let arg3 = v:fname_out
+        if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+        let eq = ''
+        if $VIMRUNTIME =~ ' '
+            if &sh =~ '\<cmd'
+                let cmd = '"' . $VIMRUNTIME . '\diff"'
+                let eq = '""'
+            else
+                let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+            endif
+        else
+            let cmd = $VIMRUNTIME . '\diff'
+        endif
+        silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+    endfunction
+endif
 
-"离开插入模式后 自动关闭预览窗口
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
- 
-" 快捷打开编辑vimrc文件的键盘绑定
-if (g:iswindows)	
-    if exists('$HOME/vimfiles/*vimrc')  
-	    map <leader>ee :e $HOME/vimfiles/*vimrc<CR>
-    else
-        map <leader>ee :e $VIM/*vimrc<CR>
+" -----------------------------------------------------------------------------
+"  < Linux Gvim/Vim 默认配置> 做了一点修改
+" -----------------------------------------------------------------------------
+if g:islinux
+    set hlsearch        "高亮搜索
+    set incsearch       "在输入要搜索的文字时，实时匹配
+
+	" 自动跳转当上次结束编辑的位置
+    if has("autocmd")
+        au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
     endif
 
-    autocmd! bufwritepost *vimrc source %
-else
-	map <leader>ee :e $HOME/*vimrc<cr>
-	autocmd! bufwritepost *vimrc source %
-endif 
+    if g:isGUI
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/gvimrc.local")
+            source /etc/vim/gvimrc.local
+        endif
+    else
+        " This line should not be removed as it ensures that various options are
+        " properly set to work with the Vim-related packages available in Debian.
+		"此处会修改vim runtimepath rtp 所以放到Bundle前面
+        runtime! debian.vim
 
+        " Vim5 and later versions support syntax highlighting. Uncommenting the next
+        " line enables syntax highlighting by default.
+        if has("syntax")
+            syntax on
+        endif
+
+        "set mouse=a                    " 在任何模式下启用鼠标
+        set t_Co=256                   " 在终端启用256色
+        set backspace=2                " 设置退格键可用
+
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/vimrc.local")
+            source /etc/vim/vimrc.local
+        endif
+    endif
+endif
 " =============================================================================
 "                          << 快捷键 >>
 " =============================================================================
@@ -524,8 +565,8 @@ set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
 set history=50        " set command history to 50    "历史记录50条
 
 "开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
-set ofu=syntaxcomplete#Complete
-"set omnifunc=omni
+"set ofu=syntaxcomplete#Complete
+set omnifunc=omni
 " 自动补全配置让Vim补全菜单行为跟IDE一致
 set completeopt=longest,menu
 " 增强模式中的命令行自动完成操作
@@ -752,7 +793,7 @@ function! UpdateCtags()
             execute ":cd " . workdir 
         else
             cd %:h
-            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+iafksS --extra=+qf .
+            !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
         endif 
 endfunction 
 
@@ -806,79 +847,6 @@ if (g:iswindows && g:isGUI)
     map <leader>tw :call Top_window()<CR>
 endif
 
-" -----------------------------------------------------------------------------
-"  < Windows Gvim 默认配置> 做了一点修改
-" -----------------------------------------------------------------------------
-if (g:iswindows && g:isGUI)
-    source $VIMRUNTIME/vimrc_example.vim
-    source $VIMRUNTIME/mswin.vim
-    behave mswin
-    set diffexpr=MyDiff()
-
-    function! MyDiff()
-        let opt = '-a --binary '
-        if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-        if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-        let arg1 = v:fname_in
-        if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-        let arg2 = v:fname_new
-        if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-        let arg3 = v:fname_out
-        if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-        let eq = ''
-        if $VIMRUNTIME =~ ' '
-            if &sh =~ '\<cmd'
-                let cmd = '"' . $VIMRUNTIME . '\diff"'
-                let eq = '""'
-            else
-                let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-            endif
-        else
-            let cmd = $VIMRUNTIME . '\diff'
-        endif
-        silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-    endfunction
-endif
-
-" -----------------------------------------------------------------------------
-"  < Linux Gvim/Vim 默认配置> 做了一点修改
-" -----------------------------------------------------------------------------
-if g:islinux
-    set hlsearch        "高亮搜索
-    set incsearch       "在输入要搜索的文字时，实时匹配
-
-	" 自动跳转当上次结束编辑的位置
-    if has("autocmd")
-        au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    endif
-
-    if g:isGUI
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/gvimrc.local")
-            source /etc/vim/gvimrc.local
-        endif
-    else
-        " This line should not be removed as it ensures that various options are
-        " properly set to work with the Vim-related packages available in Debian.
-		"此处会修改vim runtimepath rtp 所以放到Bundle前面
-        runtime! debian.vim
-
-        " Vim5 and later versions support syntax highlighting. Uncommenting the next
-        " line enables syntax highlighting by default.
-        if has("syntax")
-            syntax on
-        endif
-
-        "set mouse=a                    " 在任何模式下启用鼠标
-        set t_Co=256                   " 在终端启用256色
-        set backspace=2                " 设置退格键可用
-
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/vimrc.local")
-            source /etc/vim/vimrc.local
-        endif
-    endif
-endif
 
 " =============================================================================
 "                          << vundle 插件管理工具配置  >>
@@ -1319,7 +1287,6 @@ let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 let OmniCpp_SelectFirstItem = 2
 let OmniCpp_DisplayMode=1
 
-au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1455,7 +1422,7 @@ au BufRead,BufNewFile *.txt setlocal ft=txt
   " :let g:vimim_punctuation = 2  
   " :let g:vimim_shuangpin = 0  
   " :let g:vimim_toggle = 'pinyin,google,sogou' 
-imap<silent><C-L> <Plug>VimimChineseToggle
+" imap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 以下为软件默认配置 >>
 " =============================================================================
@@ -1791,3 +1758,55 @@ function! ViewInBrowser(name)
         echohl WarningMsg | echo " please choose the correct source file"
     endif
 endfunction
+" =============================================================================
+"                          << 自动命令 >>
+" =============================================================================
+" 自动切换目录为当前编辑文件所在目录
+au BufRead,BufNewFile,BufEnter * cd %:p:h
+
+"    lcd是紧紧改变当前窗口的工作路径
+"    %  代表当前文件的文件名
+"    :p 扩展成全名(就是带了路径)
+"    :h 析取出路径
+"    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
+
+" 恢复上次文件打开位置
+set viminfo='10,\"100,:20,%,n~/.viminfo
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
+"离开插入模式后 自动关闭预览窗口
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
+
+"关於omni的设定要写在 filetype plugin ... on, 的后面.
+filetype plugin indent on
+autocmd FileType c set omnifunc=ccomplete#Complete 
+autocmd FileType cpp set omnifunc=omni#cpp#complete#main
+autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType java set omnifunc=javacomplete#Complete
+if has("autocmd") && exists("+omnifunc")
+     autocmd Filetype *
+   \ if &omnifunc == "" |
+   \   setlocal omnifunc=syntaxcomplete#Complete |
+   \ endif
+endif
+
+" 快捷打开编辑vimrc文件的键盘绑定
+if (g:iswindows)	
+    if exists('$HOME/vimfiles/*vimrc')  
+	    map <leader>ee :e $HOME/vimfiles/*vimrc<CR>
+    else
+        map <leader>ee :e $VIM/*vimrc<CR>
+    endif
+
+    autocmd! bufwritepost *vimrc source %
+else
+	map <leader>ee :e $HOME/*vimrc<cr>
+	autocmd! bufwritepost *vimrc source %
+endif 
+
