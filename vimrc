@@ -969,31 +969,37 @@ Bundle 'cSyntaxAfter'
 
 "自动补全
     "--- 补齐的几个方案 (单选) 
-"Plugin 'exvim/ex-autocomplpop' 
-	"--- neocomplcache对上下文进行索引，结果保存到缓存中
-" Plugin 'Shougo/neocomplcache.vim' 
-" Plugin 'Shougo/neocomplete.vim 
+"Bundle 'exvim/ex-autocomplpop' 
+
+    "--- neocomplcache对上下文进行索引，结果保存到缓存中
+Bundle 'Shougo/neocomplcache.vim' 
+    "--- lua
+"Bundle 'Shougo/neocomplete.vim' 
+ 	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
+Bundle 'supertab'
+ 
     "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
 "Bundle 'Valloric/YouCompleteMe'
 
 	"--- 基于ctags数据库即tags文件实现的(基于ctags生成的索引信息来实现自动补全的)
-"Bundle 'OmniCppComplete'
-	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
-"Bundle 'supertab'
+Bundle 'OmniCppComplete'
+	"--- Omni Completion for JAVA 依赖:Ctags
+"Bundle 'vim-javacompleteex'
+
+
 	"--- 自动括号补全
 "Bundle 'Raimondi/delimitMate'
 "Bundle 'docunext/closetag.vim'
-	"--- Java 补全插件
-"Bundle 'vim-javacompleteex'
+
 
 "代码片段
 "--- 宏定义补全 依赖:: Python 3.x 
 "Bundle 'SirVer/ultisnips'
 "Bundle 'honza/vim-snippets'
     "--- Snippet 的几个方案 (单选) 
-" Plugin 'Shougo/neosnippet.vim' 
-" Plugin 'msanders/snipmate.vim' 
-" Plugin 'spf13/snipmate-snippets' 
+" Bundle 'Shougo/neosnippet.vim' 
+" Bundle 'msanders/snipmate.vim' 
+" Bundle 'spf13/snipmate-snippets' 
 "
 "代码
 "Bundle 'taglist.vim'
@@ -1236,7 +1242,7 @@ let g:indentLine_color_term = 239
 " -----------------------------------------------------------------------------
 " 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
 let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
-" let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
+let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 " 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
 
 " -----------------------------------------------------------------------------
@@ -1319,7 +1325,7 @@ let g:airline_powerline_fonts = 1
 " 用于各种代码补全，这种补全是一种对代码中的词与代码块的缩写补全，详细用法可以参
 " 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
 " 侠有什么其它解决方法希望不要保留呀
-
+" let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/"
 " -----------------------------------------------------------------------------
 "  < SrcExpl 插件配置 >
 " -----------------------------------------------------------------------------
