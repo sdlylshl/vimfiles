@@ -503,7 +503,7 @@ endif
 "set tags+=
 
 function! UpdateCtags() 
-        let curdir=getcwd() 
+        let workdir=getcwd() 
         
         let l:deeps = 5
         while !filereadable("./.git/config") && l:deeps > 1
@@ -512,12 +512,12 @@ function! UpdateCtags()
         endwhile 
 
         if  filereadable("./.git/config")
-            !ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
+            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .
             "TlistUpdate
-            execute ":cd " . curdir 
+            execute ":cd " . workdir 
         else
-            execute ":cd " . curdir 
-            !ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q 
+            cd %:h
+            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .
         endif 
 endfunction 
 
@@ -1104,7 +1104,7 @@ let g:airline_powerline_fonts = 1
 " -----------------------------------------------------------------------------
 " 增强源代码浏览，其功能就像Windows中的"Source Insight"
 
-let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .'
+let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q '
 " -----------------------------------------------------------------------------
 "  < std_c 插件配置 >
 " -----------------------------------------------------------------------------
