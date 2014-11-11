@@ -331,6 +331,17 @@ inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
+"系统默认自动补全 OmniCppComplete 配置
+"使用pumvisible()来判断下拉菜单是否显示
+"inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
+inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
+inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
+inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>" 
+"如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
+"如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
+"如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
+"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
+
 " --------tab/buffer相关
 
 "Use arrow key to change buffer"
@@ -512,6 +523,9 @@ set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
 "set hidden " Hide buffers when they are abandoned
 set history=50        " set command history to 50    "历史记录50条
 
+"开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
+set ofu=syntaxcomplete#Complete
+"set omnifunc=omni
 " 自动补全配置让Vim补全菜单行为跟IDE一致
 set completeopt=longest,menu
 " 增强模式中的命令行自动完成操作
@@ -733,12 +747,12 @@ function! UpdateCtags()
         endwhile 
 
         if  filereadable("./.git/config")
-            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .
+            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+qf .
             "TlistUpdate
             execute ":cd " . workdir 
         else
             cd %:h
-            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q .
+            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+iafksS --extra=+qf .
         endif 
 endfunction 
 
@@ -928,7 +942,7 @@ Bundle 'a.vim'
 Bundle 'std_c.zip'
 	"--- 自动生成tags与cscope文件并连接
 	"More convenience way to use ctags and cscope in vim
-Bundle 'ccvext.vim'
+"Bundle 'ccvext.vim'
 	"--- create cscope database and connect to existing proper database automatically.
 Bundle 'sdlylshl/cscope.vim'
 
@@ -968,21 +982,21 @@ Bundle 'cSyntaxAfter'
 "Bundle 'scrooloose/syntastic'
 
 "自动补全
-    "--- 补齐的几个方案 (单选) 
-"Bundle 'exvim/ex-autocomplpop' 
 
-    "--- neocomplcache对上下文进行索引，结果保存到缓存中
-Bundle 'Shougo/neocomplcache.vim' 
-    "--- lua
-"Bundle 'Shougo/neocomplete.vim' 
- 	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
-Bundle 'supertab'
- 
     "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
 "Bundle 'Valloric/YouCompleteMe'
 
-	"--- 基于ctags数据库即tags文件实现的(基于ctags生成的索引信息来实现自动补全的)
-Bundle 'OmniCppComplete'
+"Bundle 'exvim/ex-autocomplpop' 
+
+    "--- neocomplcache对上下文进行索引，结果保存到缓存中
+"Bundle 'Shougo/neocomplcache.vim' 
+    "--- lua
+"Bundle 'Shougo/neocomplete.vim' 
+ 	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
+"Bundle 'supertab'
+ 
+	"--- 类(class),结构(struct)和联合(union)补全 依赖:Ctags
+"Bundle 'OmniCppComplete'
 	"--- Omni Completion for JAVA 依赖:Ctags
 "Bundle 'vim-javacompleteex'
 
@@ -1287,10 +1301,25 @@ nnoremap <leader>fq :FufQuickfix<CR>
 " 说明可以参考帮助或网络教程等
 " 使用前先执行如下 ctags 命令（本配置中可以直接使用 ccvext 插件来执行以下命令）
 " ctags -R --c++-kinds=+p --fields=+iaS --extra=+q
+" --c++-kinds=+p : 为标签添加函数原型(prototype)信息  
+"--fields=+iaS : 为标签添加继承信息(inheritance)，访问控制(access)信息，函数特征(function Signature,如参数表或原型等)  
+"--extra=+q : 为类成员标签添加类标识  
 " 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
 " 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
-set completeopt=menu                        "关闭预览窗口
+"set completeopt=menu                        "关闭预览窗口
+set completeopt=menu,longest,menuone
+let OmniCpp_NamespaceSearch = 2
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 
+let OmniCpp_MayCompleteDot = 1   
+let OmniCpp_MayCompleteArrow = 1 
+let OmniCpp_MayCompleteScope = 1 
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+let OmniCpp_SelectFirstItem = 2
+let OmniCpp_DisplayMode=1
 
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 " -----------------------------------------------------------------------------
