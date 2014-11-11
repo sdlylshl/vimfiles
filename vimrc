@@ -5,7 +5,7 @@
 "   # \\v ，或叫做very magic (通常都是这么叫)可以取消转义符
 "   /codes\\(\\n\\|\\s\\)*where  : 普通的正则表达式
 "   /\\vcodes(\\n|\\s)*where   : very magic，| 不用加 \\ 了！\r\n----------------------------------------
-"   # 把东西送到命令行/搜索行 (SUPER:偶不再翻译这种叹词了)
+"   # 把东西送到命令行/搜索行
 "   <C-R><C-W>              : 送一个狭义词
 "   <C-R><C-A>              : 送一个广义词
 "   <C-R>-                  : 送一个小型删除寄存器register
@@ -632,11 +632,25 @@ endi
 "	7 或 f: 查找本文件
 "	8 或 i: 查找包含本文件的文件
 
+"    $ cscope -Rbkq
+"    这个命令会生成三个文件：cscope.out, cscope.in.out, cscope.po.out。
+"    其中cscope.out是基本的符号索引，后两个文件是使用"-q"选项生成的，可以加快cscope的索引速度。上面命令的参数含义如下：
+"    -R: 在生成索引文件时，搜索子目录树中的代码
+"    -b: 只生成索引文件，不进入cscope的界面
+"    -k: 在生成索引文件时，不搜索/usr/include目录
+"    -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
+"    -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用"-"，表示由标准输入获得文件列表。
+"    -I dir: 在-I选项指出的目录中查找头文件
+"    -u: 扫描所有文件，重新生成交叉索引文件
+"    -C: 在搜索时忽略大小写
+"    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
+
 if has("cscope")
-    set csprg=/usr/bin/cscope   " 制定cscope命令                  
+    "set csprg=/usr/bin/cscope   " 制定cscope命令                  
     "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
-    "如果你想反向搜索顺序设置为1
-    set csto=0
+    "set csto=0
+    "优先查找Ctags数据库
+    set cscopetagorder=1
     "把Cscope的查找结果 输出到quickfix窗口
     set cscopequickfix=s-,c-,d-,i-,t-,e-
     "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
@@ -645,12 +659,35 @@ if has("cscope")
     " set cst
     set nocsverb
     "如果当前目录下有cscope.out则加载进Vim
-    if filereadable("cscope.out")
-        cs add cscope.out
+    "if filereadable("cscope.out")
+    "    cs add cscope.out
     "否则添加数据库环境中所指定的数据库到Vim
-    elseif $cscope_db != ""
-        cs add $cscope_db
-    endif
+    "elseif $cscope_db != ""
+    "    cs add $cscope_db
+    "endif
+    function! UpdateCscope()
+
+        let l:deeps = 5
+        while l:deeps > 1
+            if filereadable("./.git/config")
+                !cscope -Rbkq  
+                cs add cscope.out 
+                cs reset
+                break
+            endif
+
+            cd ..
+            let l:deeps = l:deeps -1
+        endwhile
+
+        if  l:deeps <=1
+            cd %:h
+            !cscope -Rbkq
+            cs add cscope.out
+            cs reset
+        endif
+
+    endfunction 
     set cscopeverbose
     "快捷键设置
     " 查找符号
@@ -669,20 +706,10 @@ if has("cscope")
     "   重新初始化所有连接
     nmap <C-\>r :cs reset<CR>
     "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+    nmap <F8> :call UpdateCscope()<CR>
 endif
-
-"    $ cscope -Rbkq
-"    这个命令会生成三个文件：cscope.out, cscope.in.out, cscope.po.out。
-"    其中cscope.out是基本的符号索引，后两个文件是使用"-q"选项生成的，可以加快cscope的索引速度。上面命令的参数含义如下：
-"    -R: 在生成索引文件时，搜索子目录树中的代码
-"    -b: 只生成索引文件，不进入cscope的界面
-"    -k: 在生成索引文件时，不搜索/usr/include目录
-"    -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
-"    -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用"-"，表示由标准输入获得文件列表。
-"    -I dir: 在-I选项指出的目录中查找头文件
-"    -u: 扫描所有文件，重新生成交叉索引文件
-"    -C: 在搜索时忽略大小写
-"    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
+"保留生成文件
+let g:cscope_files_kept = 1
 " -----------------------------------------------------------------------------
 "  < ctags 工具配置 >
 " -----------------------------------------------------------------------------
@@ -901,16 +928,16 @@ Bundle 'a.vim'
 Bundle 'std_c.zip'
 	"--- 自动生成tags与cscope文件并连接
 	"More convenience way to use ctags and cscope in vim
-"Bundle 'ccvext.vim'
+Bundle 'ccvext.vim'
 	"--- create cscope database and connect to existing proper database automatically.
-"Bundle 'cscope.vim'
+Bundle 'sdlylshl/cscope.vim'
 
 	"--- 显示层次的功能或使用cscope数据库文件调用树
 	"--- 依赖::Cscope, Vim 7.xx
 "Bundle 'vim-scripts/CCTree'
 
 	"--- VIM 下的Source Insight
-Bundle 'wesleyche/SrcExpl'
+"Bundle 'wesleyche/SrcExpl'
 
 	"--- 高亮C函数
 Bundle 'cSyntaxAfter'
@@ -1011,7 +1038,7 @@ Bundle 'FuzzyFinder'
 "Bundle 'mileszs/ack.vim'
 
 "中文帮助
-"Bundle 'asins/vimcdoc'
+Bundle 'asins/vimcdoc'
 "其他
     "--- VIM 中文输入法(不会用)
 "Bundle 'vim-scripts/VimIM'
@@ -1229,7 +1256,7 @@ let NERDSpaceDelims = 1                     "在左注释符之后，右注释�
 "  < nerdtree 插件配置 >
 " -----------------------------------------------------------------------------
 " 有目录村结构的文件浏览插件
-let NERDTreeWinPos='left' 
+let NERDTreeWinPos='right' 
 let NERDTreeHighlightCursorline=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif 
 
@@ -1297,7 +1324,8 @@ let g:airline_powerline_fonts = 1
 "  < SrcExpl 插件配置 >
 " -----------------------------------------------------------------------------
 " 增强源代码浏览，其功能就像Windows中的"Source Insight"
-
+let g:SrcExpl_gobackKey = '<BS>'
+let g:SrcExpl_jumpKey = '<C-CR>'
 let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q '
 " -----------------------------------------------------------------------------
 "  < std_c 插件配置 >
@@ -1339,8 +1367,9 @@ let g:syntastic_always_populate_loc_list = 1
 " 常规模式下输入 tb 调用插件，如果有打开 TagList 窗口则先将其关闭
 "nmap tb :TlistClose<CR>:TagbarToggle<CR>
 let g:tagbar_width=30                       "设置窗口宽度
-" let g:tagbar_left=1                         "在左侧窗口中显示
+let g:tagbar_left=1                         "在左侧窗口中显示
 let g:tagbar_sort = 0                       "按源文件顺序排列
+let g:tagbar_autofocus = 1
 " 加载代码时自动打开tagbar
 autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 " -----------------------------------------------------------------------------
