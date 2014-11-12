@@ -544,25 +544,30 @@ endif
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
 " -----------------------------------------------------------------------------
-filetype on                                           "启用文件类型侦测
-filetype plugin on                                    "针对不同的文件类型加载对应的插件
-filetype plugin indent on                             "启用缩进
+filetype on                                         "启用文件类型侦测
+filetype plugin on                                  "针对不同的文件类型加载对应的插件
+filetype plugin indent on                           "启用缩进
 
-set smartindent                                       "启用智能对齐方式
-set tabstop=4                                         "设置Tab键的宽度，可以更改，如：宽度为2
-set softtabstop=4     " 设置软制表符的宽度    
-set shiftwidth=4    " (自动) 缩进使用的4个空格
-set shiftwidth=4                                      "换行时自动缩进宽度，可更改（宽度同tabstop）
-set expandtab                                         "将Tab键转换为空格
-"set backspace=2    " 设置退格键可用
-"set smartindent        " 智能对齐方式
-set autoindent        " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
+set iskeyword+=_,$,@,%,#,-          " 带有如下符号的单词不要被换行分割 
+
+"缩进设置
+set tabstop=4                                       "设置制表符Tab键      宽度
+set softtabstop=4                                   "设置软制表符   宽度    
+set shiftwidth=4                                    "换行时自动缩进 宽度 
+set expandtab                                       "将Tab键转换为空格
+" 在行和段开始处使用制表符 
+set smarttab                                          "指定按一次backspace就删除shiftwidth宽度
+set backspace=indent,eol,start
+"indent: 如果用了:set indent,:set ai 等自动缩进，想用退格键将字段缩进的删掉，必须设置这个选项。否则不响应。
+"eol:如果插入模式下在行开头，想通过退格键合并两行，需要设置eol。
+"start：要想删除此次插入前的输入，需设置这个。
+
+set smartindent                                       "为C程序提供 智能自动缩进
+set autoindent        " 继承前一行的缩进方式 设置自动对齐(缩进) 使用 noautoindent 取消设置
 set cindent            " 使用 C/C++ 语言的自动缩进方式
 set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
-set linebreak        " 整词换行
-set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
-"set hidden " Hide buffers when they are abandoned
-set history=50        " set command history to 50    "历史记录50条
+" 补全时忽略这些忽略文件
+set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
 
 "开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
 "set ofu=syntaxcomplete#Complete
@@ -570,12 +575,11 @@ set history=50        " set command history to 50    "历史记录50条
 "set omnifunc=omni
 " 自动补全配置让Vim补全菜单行为跟IDE一致
 "set completeopt=longest,menu
-" 增强模式中的命令行自动完成操作
+
+" 增强模式中的命令行 自动完成操作
 set wildmenu
-" ignore compiled files
-" set wildignore=*.o,*~,*.pyc,*.class,*.swp
-"
-set smarttab                                          "指定按一次backspace就删除shiftwidth宽度
+
+
 set nofoldenable                                      "关闭折叠
 set foldmethod=indent
 "manual            手工定义折叠
@@ -588,23 +592,40 @@ set foldmethod=indent
 set autoread         " 当文件在外部被修改，自动加载文件
 set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 
+" 文件设置 
 set writebackup                             "保存文件前建立备份，保存成功后删除该备份
 set nobackup                                "设置无备份文件
-" set noswapfile                              "设置无临时文件
+set noswapfile                              "设置无临时文件
+set linebreak                               " 整词换行
+set whichwrap=b,s,<,>,[,]   " 光标从行首和行末时可以跳到另一行去
 
-"--find setting--
-set incsearch       " 实时匹配
-"set noincsearch    " 取消实时匹配
-"set hlsearch        " 高亮搜索
-set nohlsearch      " 关闭高亮搜索
-set ignorecase      "搜索模式里忽略大小写
-set smartcase       "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
-
-" 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
-au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
+set browsedir=current    "设置文件浏览使用的目录
+"注：
+"last 使用文件浏览器最近访问相同的目录。
+"buffer 使用相关缓冲区的目录。
+"current 使用当前目录。
+"{path} 使用指定目录。
 
 " Remember info about open buffers on close"
 set viminfo^=%
+
+" 保存全局变量 
+set viminfo+=! 
+
+" 与windows共享剪贴板   
+set clipboard+=unnamed  
+
+
+"历史记录
+set history=50        " set command history to 50    "历史记录50条
+
+" 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
+au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
+" 高亮字符，让其不受80列限制 
+:highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white 
+:match OverLength '\%81v.*' 
+
+
 " -----------------------------------------------------------------------------
 "  < 界面配置 >
 " -----------------------------------------------------------------------------
@@ -614,16 +635,35 @@ set cursorline                                        "突出显示当前行
 set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
-set showmatch        " 设置匹配模式，显示匹配的括号
+set linespace=0                  " 字符间插入的像素行数目         
+
+set whichwrap+=<,>,h,l  " 允许backspace和光标键跨越行边界 
+
+"--搜索设置--
+set incsearch       " 实时匹配
+"set noincsearch    
+
+"set hlsearch        " 高亮搜索
+set nohlsearch      
+set ignorecase      "忽略大小写
+set smartcase       "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
+
+set showmatch        " 高亮显示匹配的括号 
+set matchtime=5      " 匹配括号高亮的时间（单位是十分之一秒）
 
 "set previewwindow               " 标识预览窗口(一定不要开启 与airline冲突)
 set splitright                  " 新分割窗口在右边
 "set splitbelow                 " 新分割窗口在下边
+set fillchars=vert:\ ,stl:\ ,stlnc:\ " 在被分割的窗口间显示空白，便于阅读 
 
+" 光标移动到buffer的顶部和底部时保持3行距离 
+set scrolloff=3 
 
 "--状态行设置--
 set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
 set ruler            " 显示右下角的状态 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
+" 我的状态行显示的内容（包括文件类型和解码） 
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")} 
 
 "--命令行设置--
 set showcmd             " 命令行显示输入的命令(共享外部剪贴板) 
@@ -801,6 +841,7 @@ endfunction
 nmap <F10> :call UpdateCtags()<CR> 
 map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
 " -----------------------------------------------------------------------------
 "  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
@@ -965,8 +1006,8 @@ Bundle 'cSyntaxAfter'
 "--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
 "Bundle 'supertab'
  
-	"--- 类(class),结构(struct)和联合(union)补全 依赖:Ctags
-"Bundle 'OmniCppComplete'
+	"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
+Bundle 'OmniCppComplete'
 	"--- Omni Completion for JAVA 依赖:Ctags
 "Bundle 'vim-javacompleteex'
 
@@ -1404,8 +1445,9 @@ let Tlist_WinWidth=30                       "设置窗口宽度
 let Tlist_Use_Right_Window=1                "在右侧窗口中显示
 "let g:Tlist_Use_Left_Window=1              "在左侧窗口中显示
 let g:Tlist_Process_File_Always=1 
-"let g:Tlist_Sort_Type='name' 
+let g:Tlist_Sort_Type='name'                " 按照名称排序  
 let g:Tlist_Inc_Winwidth=0 
+let g:Tlist_Compart_Format = 1 " 压缩方式 
 
 " -----------------------------------------------------------------------------
 "  < txtbrowser 插件配置 >
@@ -1782,6 +1824,11 @@ au BufRead,BufNewFile,BufEnter * cd %:p:h
 "    :h 析取出路径
 "    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
 
+
+" 自动删除行尾 Dos回车符和空格
+autocmd BufRead * silent! %s/[\r \t]\+$//
+autocmd BufEnter *.php :%s/[ \t\r]\+$//e
+
 " 恢复上次文件打开位置
 set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
@@ -1791,22 +1838,22 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
-"filetype plugin indent on
-"autocmd FileType c set omnifunc=ccomplete#Complete 
-"autocmd FileType cpp set omnifunc=omni#cpp#complete#main
-"autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-"autocmd FileType python set omnifunc=pythoncomplete#Complete
-"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-"autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-"autocmd FileType java set omnifunc=javacomplete#Complete
-"if has("autocmd") && exists("+omnifunc")
-"     autocmd Filetype *
-"   \ if &omnifunc == "" |
-"   \   setlocal omnifunc=syntaxcomplete#Complete |
-"   \ endif
-"endif
+filetype plugin indent on
+autocmd FileType c set omnifunc=ccomplete#Complete 
+autocmd FileType cpp set omnifunc=omni#cpp#complete#main
+autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType java set omnifunc=javacomplete#Complete
+if has("autocmd") && exists("+omnifunc")
+     autocmd Filetype *
+   \ if &omnifunc == "" |
+   \   setlocal omnifunc=syntaxcomplete#Complete |
+   \ endif
+endif
 
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)	
