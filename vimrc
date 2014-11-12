@@ -566,10 +566,10 @@ set history=50        " set command history to 50    "历史记录50条
 
 "开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
 "set ofu=syntaxcomplete#Complete
-set omnifunc=syntaxcomplete#Complete
+"set omnifunc=syntaxcomplete#Complete
 "set omnifunc=omni
 " 自动补全配置让Vim补全菜单行为跟IDE一致
-set completeopt=longest,menu
+"set completeopt=longest,menu
 " 增强模式中的命令行自动完成操作
 set wildmenu
 " ignore compiled files
@@ -961,7 +961,8 @@ Bundle 'cSyntaxAfter'
 "Bundle 'Shougo/neocomplcache.vim' 
     "--- lua
 "Bundle 'Shougo/neocomplete.vim' 
- 	"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
+
+"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
 "Bundle 'supertab'
  
 	"--- 类(class),结构(struct)和联合(union)补全 依赖:Ctags
@@ -1091,7 +1092,60 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符�
 nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR> 
 " 强制进行编译 
 nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR> 
+" -----------------------------------------------------------------------------
+"  < omnicppcomplete 插件配置 >
+" -----------------------------------------------------------------------------
+" 用于C/C++代码补全，这种补全主要针对命名空间、类、结构、共同体等进行补全，详细
+" 说明可以参考帮助或网络教程等
+" 使用前先执行如下 ctags 命令（本配置中可以直接使用 ccvext 插件来执行以下命令）
+" ctags -R --c++-kinds=+p --fields=+iaS --extra=+q
+" --c++-kinds=+p : 为标签添加函数原型(prototype)信息  
+"--fields=+iaS : 为标签添加继承信息(inheritance)，访问控制(access)信息，函数特征(function Signature,如参数表或原型等)  
+"--extra=+q : 为类成员标签添加类标识  
+" 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
+" 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
+set completeopt=menu                        "关闭预览窗口
+"set completeopt=menu,longest,menuone
+let OmniCpp_NamespaceSearch = 2
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 
+let OmniCpp_MayCompleteDot = 1   
+let OmniCpp_MayCompleteArrow = 1 
+let OmniCpp_MayCompleteScope = 1 
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+let OmniCpp_SelectFirstItem = 2
+let OmniCpp_DisplayMode=1
 
+"系统omni 快捷键默认<C-n>
+" -----------------------------------------------------------------------------
+"  < neocomplcache 插件配置 >
+" -----------------------------------------------------------------------------
+" 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
+let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
+let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
+" 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
+"默认快捷键<C-x><C-u>
+
+" -----------------------------------------------------------------------------
+"  < supertab 插件配置 >
+" -----------------------------------------------------------------------------
+let g:SuperTabDefaultCompletionType = '<C-X><C-U>'
+" -----------------------------------------------------------------------------
+"  < vim-javacompleteex（也就是 javacomplete 增强版）插件配置 >
+" -----------------------------------------------------------------------------
+" java 补全插件
+
+
+
+" -----------------------------------------------------------------------------
+"  < snipMate 插件配置 >
+" -----------------------------------------------------------------------------
+" 用于各种代码补全，这种补全是一种对代码中的词与代码块的缩写补全，详细用法可以参
+" 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
+" 侠有什么其它解决方法希望不要保留呀
+" let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/
+"
 " -----------------------------------------------------------------------------
 "  < a.vim 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1189,11 +1243,6 @@ let g:indentLine_color_term = 239
 " let g:indentLine_color_gui = '#A4E57E'
 
 " -----------------------------------------------------------------------------
-"  < vim-javacompleteex（也就是 javacomplete 增强版）插件配置 >
-" -----------------------------------------------------------------------------
-" java 补全插件
-
-" -----------------------------------------------------------------------------
 "  < Mark--Karkat（也就是 Mark） 插件配置 >
 " -----------------------------------------------------------------------------
 " 给不同的单词高亮，表明不同的变量时很有用，详细帮助见 :h mark.txt
@@ -1220,13 +1269,6 @@ let g:indentLine_color_term = 239
 "noremap <leader>bn :MBEbn<CR>
 "noremap <leader>bp :MBEbp<CR>
 "noremap <leader>bd :MBEbd<CR>
-" -----------------------------------------------------------------------------
-"  < neocomplcache 插件配置 >
-" -----------------------------------------------------------------------------
-" 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
-let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
-let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
-" 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
 
 " -----------------------------------------------------------------------------
 "  < nerdcommenter 插件配置 >
@@ -1264,31 +1306,6 @@ nnoremap <leader>fj :FufJumpList<CR>
 nnoremap <leader>fq :FufQuickfix<CR> 
 
 " -----------------------------------------------------------------------------
-"  < omnicppcomplete 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于C/C++代码补全，这种补全主要针对命名空间、类、结构、共同体等进行补全，详细
-" 说明可以参考帮助或网络教程等
-" 使用前先执行如下 ctags 命令（本配置中可以直接使用 ccvext 插件来执行以下命令）
-" ctags -R --c++-kinds=+p --fields=+iaS --extra=+q
-" --c++-kinds=+p : 为标签添加函数原型(prototype)信息  
-"--fields=+iaS : 为标签添加继承信息(inheritance)，访问控制(access)信息，函数特征(function Signature,如参数表或原型等)  
-"--extra=+q : 为类成员标签添加类标识  
-" 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
-" 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
-set completeopt=menu                        "关闭预览窗口
-"set completeopt=menu,longest,menuone
-let OmniCpp_NamespaceSearch = 2
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 
-let OmniCpp_MayCompleteDot = 1   
-let OmniCpp_MayCompleteArrow = 1 
-let OmniCpp_MayCompleteScope = 1 
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
-let OmniCpp_SelectFirstItem = 2
-let OmniCpp_DisplayMode=1
-
-" -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 " -----------------------------------------------------------------------------
 "设置字体:字号（字体名称空格用下划线代替<N）
@@ -1316,13 +1333,7 @@ let g:airline_powerline_fonts = 1
 " -----------------------------------------------------------------------------
 " 主要用"."命令来重复上次插件使用的命令
 
-" -----------------------------------------------------------------------------
-"  < snipMate 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于各种代码补全，这种补全是一种对代码中的词与代码块的缩写补全，详细用法可以参
-" 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
-" 侠有什么其它解决方法希望不要保留呀
-" let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/"
+"
 " -----------------------------------------------------------------------------
 "  < SrcExpl 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1780,22 +1791,22 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
-filetype plugin indent on
-autocmd FileType c set omnifunc=ccomplete#Complete 
-autocmd FileType cpp set omnifunc=omni#cpp#complete#main
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType java set omnifunc=javacomplete#Complete
-if has("autocmd") && exists("+omnifunc")
-     autocmd Filetype *
-   \ if &omnifunc == "" |
-   \   setlocal omnifunc=syntaxcomplete#Complete |
-   \ endif
-endif
+"filetype plugin indent on
+"autocmd FileType c set omnifunc=ccomplete#Complete 
+"autocmd FileType cpp set omnifunc=omni#cpp#complete#main
+"autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+"autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+"autocmd FileType java set omnifunc=javacomplete#Complete
+"if has("autocmd") && exists("+omnifunc")
+"     autocmd Filetype *
+"   \ if &omnifunc == "" |
+"   \   setlocal omnifunc=syntaxcomplete#Complete |
+"   \ endif
+"endif
 
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)	
