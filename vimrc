@@ -11,7 +11,7 @@
 "   <C-R>-                  : 送一个小型删除寄存器register
 "   <C-R>[0-9a-z]           : 送一个命名寄存器register
 "   <C-R>%                  : 送文件名过去 (#也行)
-"   
+"
 "   ) 下一句
 "   ( 上一句
 "   } 下一段
@@ -255,7 +255,7 @@ endif
 " 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
 
 " let mapleader = ";"
- 
+
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 "从系统剪切板中复制，剪切，粘贴
@@ -377,7 +377,7 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 "inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
 inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
 inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
-inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>" 
+inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
 "如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
 "如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
@@ -548,14 +548,14 @@ filetype on                                         "启用文件类型侦测
 filetype plugin on                                  "针对不同的文件类型加载对应的插件
 filetype plugin indent on                           "启用缩进
 
-set iskeyword+=_,$,@,%,#,-          " 带有如下符号的单词不要被换行分割 
+set iskeyword+=_,$,@,%,#,-          " 带有如下符号的单词不要被换行分割
 
 "缩进设置
 set tabstop=4                                       "设置制表符Tab键      宽度
-set softtabstop=4                                   "设置软制表符   宽度    
-set shiftwidth=4                                    "换行时自动缩进 宽度 
+set softtabstop=4                                   "设置软制表符   宽度
+set shiftwidth=4                                    "换行时自动缩进 宽度
 set expandtab                                       "将Tab键转换为空格
-" 在行和段开始处使用制表符 
+" 在行和段开始处使用制表符
 set smarttab                                          "指定按一次backspace就删除shiftwidth宽度
 set backspace=indent,eol,start
 "indent: 如果用了:set indent,:set ai 等自动缩进，想用退格键将字段缩进的删掉，必须设置这个选项。否则不响应。
@@ -592,7 +592,7 @@ set foldmethod=indent
 set autoread         " 当文件在外部被修改，自动加载文件
 set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 
-" 文件设置 
+" 文件设置
 set writebackup                             "保存文件前建立备份，保存成功后删除该备份
 set nobackup                                "设置无备份文件
 set noswapfile                              "设置无临时文件
@@ -609,11 +609,11 @@ set browsedir=current    "设置文件浏览使用的目录
 " Remember info about open buffers on close"
 set viminfo^=%
 
-" 保存全局变量 
-set viminfo+=! 
+" 保存全局变量
+set viminfo+=!
 
-" 与windows共享剪贴板   
-set clipboard+=unnamed  
+" 与windows共享剪贴板
+set clipboard+=unnamed
 
 
 "历史记录
@@ -621,9 +621,9 @@ set history=50        " set command history to 50    "历史记录50条
 
 " 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
 au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
-" 高亮字符，让其不受80列限制 
-:highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white 
-:match OverLength '\%81v.*' 
+" 高亮字符，让其不受80列限制
+:highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+:match OverLength '\%81v.*'
 
 
 " -----------------------------------------------------------------------------
@@ -635,38 +635,38 @@ set cursorline                                        "突出显示当前行
 set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
-set linespace=0                  " 字符间插入的像素行数目         
+set linespace=0                  " 字符间插入的像素行数目
 
-set whichwrap+=<,>,h,l  " 允许backspace和光标键跨越行边界 
+set whichwrap+=<,>,h,l  " 允许backspace和光标键跨越行边界
 
 "--搜索设置--
 set incsearch       " 实时匹配
-"set noincsearch    
+"set noincsearch
 
 "set hlsearch        " 高亮搜索
-set nohlsearch      
+set nohlsearch
 set ignorecase      "忽略大小写
 set smartcase       "如果搜索模式包含大写字符，不使用 'ignorecase' 选项，只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用
 
-set showmatch        " 高亮显示匹配的括号 
+set showmatch        " 高亮显示匹配的括号
 set matchtime=5      " 匹配括号高亮的时间（单位是十分之一秒）
 
 "set previewwindow               " 标识预览窗口(一定不要开启 与airline冲突)
 set splitright                  " 新分割窗口在右边
 "set splitbelow                 " 新分割窗口在下边
-set fillchars=vert:\ ,stl:\ ,stlnc:\ " 在被分割的窗口间显示空白，便于阅读 
+set fillchars=vert:\ ,stl:\ ,stlnc:\ " 在被分割的窗口间显示空白，便于阅读
 
-" 光标移动到buffer的顶部和底部时保持3行距离 
-set scrolloff=3 
+" 光标移动到buffer的顶部和底部时保持3行距离
+set scrolloff=3
 
 "--状态行设置--
 set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
 set ruler            " 显示右下角的状态 标尺，用于显示光标位置的行号和列号，逗号分隔。每个窗口都有自己的标尺。如果窗口有状态行，标尺在那里显示。否则，它显示在屏幕的最后一行上。
-" 我的状态行显示的内容（包括文件类型和解码） 
-"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")} 
+" 我的状态行显示的内容（包括文件类型和解码）
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
 
 "--命令行设置--
-set showcmd             " 命令行显示输入的命令(共享外部剪贴板) 
+set showcmd             " 命令行显示输入的命令(共享外部剪贴板)
 set showmode            " 命令行显示vim当前模式
 
 
@@ -684,19 +684,19 @@ else
     colorscheme Tomorrow-Night               "终端配色方案
 endif
 " <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
-if g:isGUI 
+if g:isGUI
     nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
         \set guioptions-=m <Bar>    "取消菜单栏
         \set guioptions-=T <Bar>    "取消导航栏
         \set guioptions-=r <Bar>    "去除右边滚动条
         \set guioptions-=L <Bar>    "去除左边滚动条
-        \set guioptions-=b <Bar>    "去除水平滚动条 
+        \set guioptions-=b <Bar>    "去除水平滚动条
     \else <Bar>
         \set guioptions+=m <Bar>
         \set guioptions+=T <Bar>
         \set guioptions+=r <Bar>
         \set guioptions+=L <Bar>
-        \set guioptions+=b <Bar>    
+        \set guioptions+=b <Bar>
     \endif<CR>
 endi
 " -----------------------------------------------------------------------------
@@ -718,7 +718,7 @@ endi
 "   上面这条命令很重要, 必须写全, 不能只写前半句:
 "   :cs add /home/wooin/vim71/cscope.out
 "   因为源码是多级目录的, 如果这样写, cscope是无法在子目录中的源码中工作的
-"   cscope -Rbq -f path/cscope.out 
+"   cscope -Rbq -f path/cscope.out
 "   0 或 s: 查找本 C 符号
 "	1 或 g: 查找本定义
 "	2 或 d: 查找本函数调用的函数
@@ -742,7 +742,7 @@ endi
 "    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
 
 if has("cscope")
-    "set csprg=/usr/bin/cscope   " 制定cscope命令                  
+    "set csprg=/usr/bin/cscope   " 制定cscope命令
     "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
     "set csto=0
     "优先查找Ctags数据库
@@ -766,8 +766,8 @@ if has("cscope")
         let l:deeps = 5
         while l:deeps > 1
             if filereadable("./.git/config")
-                !cscope -Rbkq  
-                cs add cscope.out 
+                !cscope -Rbkq
+                cs add cscope.out
                 cs reset
                 break
             endif
@@ -783,7 +783,7 @@ if has("cscope")
             cs reset
         endif
 
-    endfunction 
+    endfunction
     set cscopeverbose
     "快捷键设置
     " 查找符号
@@ -795,7 +795,7 @@ if has("cscope")
     nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
     nmap <c-\>i :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr>
     nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr> " 查找被这个函数调用的函数
-    " 查找include这个文件的文件   
+    " 查找include这个文件的文件
     nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
     " :cw quickfix窗口看到所有查找结果
     nmap <C-\>w :cw<CR>
@@ -819,26 +819,26 @@ if g:islinux
 endif
 set tags+=$VIM,$VIMRUNTIME
 
-function! UpdateCtags() 
-        let workdir=getcwd() 
-        
+function! UpdateCtags()
+        let workdir=getcwd()
+
         let l:deeps = 5
         while !filereadable("./.git/config") && l:deeps > 1
             cd ..
             let l:deeps = l:deeps -1
-        endwhile 
+        endwhile
 
         if  filereadable("./.git/config")
             !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+qf .
             "TlistUpdate
-            execute ":cd " . workdir 
+            execute ":cd " . workdir
         else
             cd %:h
             !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
-        endif 
-endfunction 
+        endif
+endfunction
 
-nmap <F10> :call UpdateCtags()<CR> 
+nmap <F10> :call UpdateCtags()<CR>
 map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
@@ -850,7 +850,7 @@ map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 if (g:iswindows && g:isGUI)
     map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 endif
- 
+
 " -----------------------------------------------------------------------------
 "  < 4 - vimtweak 工具配置 > 请确保以已装了工具
 " -----------------------------------------------------------------------------
@@ -882,7 +882,7 @@ if (g:iswindows && g:isGUI)
             let g:Top_Most = 0
         endif
     endfunc
- 
+
     "快捷键设置
     map <s-up> :call Alpha_add()<CR>
     map <s-down> :call Alpha_sub()<CR>
@@ -905,7 +905,7 @@ if g:islinux
     set rtp+=~/.vim/bundle/vundle/
     call vundle#rc()
 else
-	if exists('$HOME/vimfiles')		
+	if exists('$HOME/vimfiles')
 		set rtp+=$HOME/vimfiles/bundle/vundle/
 		call vundle#rc('$HOME/vimfiles/bundle/')
 	else
@@ -932,21 +932,21 @@ Bundle 'airblade/vim-gitgutter'
 
 "C/C++
 "---
-    "--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。  
+    "--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。
 "Bundle 'exvim/main'
-"Plugin 'exvim/ex-config' 
-"Plugin 'exvim/ex-utility' 
-"Plugin 'exvim/ex-aftercolors' 
-"Plugin 'exvim/ex-vimentry' 
+"Plugin 'exvim/ex-config'
+"Plugin 'exvim/ex-utility'
+"Plugin 'exvim/ex-aftercolors'
+"Plugin 'exvim/ex-vimentry'
 
-"Plugin 'exvim/ex-project' 
-"Plugin 'exvim/ex-gsearch' " 用于全局搜索，这个比 ack 强大百倍，信我 
-"Plugin 'exvim/ex-tags' " 用于 ctags 相关的操作 
-"Plugin 'exvim/ex-symbol' " 将 ctags 的 tag 转换成一张列表，用于快速查找成员等操作 
-"Plugin 'exvim/ex-cscope' " cscope 相关操作 
-"Plugin 'exvim/ex-qfix' " quick-fix 相关操作 
-"Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制 
-"Plugin 'exvim/ex-tagbar' 
+"Plugin 'exvim/ex-project'
+"Plugin 'exvim/ex-gsearch' " 用于全局搜索，这个比 ack 强大百倍，信我
+"Plugin 'exvim/ex-tags' " 用于 ctags 相关的操作
+"Plugin 'exvim/ex-symbol' " 将 ctags 的 tag 转换成一张列表，用于快速查找成员等操作
+"Plugin 'exvim/ex-cscope' " cscope 相关操作
+"Plugin 'exvim/ex-qfix' " quick-fix 相关操作
+"Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制
+"Plugin 'exvim/ex-tagbar'
 
 Bundle 'a.vim'
 Bundle 'std_c.zip'
@@ -986,7 +986,7 @@ Bundle 'cSyntaxAfter'
 "Bundle 'hughbien/org-vim'
 "Bundle 'tpope/vim-speeddating'
 "Bundle 'mattn/calendar-vim'
-"Bundle 'dhruvasagar/vim-table-mode' 
+"Bundle 'dhruvasagar/vim-table-mode'
 
 "语法检查 错误信息在左侧状态栏标注
 "Bundle 'scrooloose/syntastic'
@@ -996,16 +996,16 @@ Bundle 'cSyntaxAfter'
     "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
 "Bundle 'Valloric/YouCompleteMe'
 
-"Bundle 'exvim/ex-autocomplpop' 
+"Bundle 'exvim/ex-autocomplpop'
 
-    "--- neocomplcache对上下文进行索引，结果保存到缓存中
-"Bundle 'Shougo/neocomplcache.vim' 
+    "--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
+"Bundle 'Shougo/neocomplcache.vim'
     "--- lua
-"Bundle 'Shougo/neocomplete.vim' 
+"Bundle 'Shougo/neocomplete.vim'
 
-"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。 
+"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
 "Bundle 'supertab'
- 
+
 	"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
 Bundle 'OmniCppComplete'
 	"--- Omni Completion for JAVA 依赖:Ctags
@@ -1018,13 +1018,13 @@ Bundle 'OmniCppComplete'
 
 
 "代码片段
-"--- 宏定义补全 依赖:: Python 3.x 
+"--- 宏定义补全 依赖:: Python 3.x
 "Bundle 'SirVer/ultisnips'
 "Bundle 'honza/vim-snippets'
-    "--- Snippet 的几个方案 (单选) 
-" Bundle 'Shougo/neosnippet.vim' 
-" Bundle 'msanders/snipmate.vim' 
-" Bundle 'spf13/snipmate-snippets' 
+    "--- Snippet 的几个方案 (单选)
+" Bundle 'Shougo/neosnippet.vim'
+" Bundle 'msanders/snipmate.vim'
+" Bundle 'spf13/snipmate-snippets'
 "
 "代码
 "Bundle 'taglist.vim'
@@ -1112,7 +1112,7 @@ filetype plugin indent on                             "启用缩进
 "  < exVim 插件配置 >
 " ----------------------------------------------------------------------------
 "利用 .exvim 文件作为 Vim 的访问入口，使得 .exvim 文件下的路径形成项目的概念。
-"比如我们使用 IDE 如 Visual Studio 时打开项目工程 .sln 文件一样的概念。 
+"比如我们使用 IDE 如 Visual Studio 时打开项目工程 .sln 文件一样的概念。
 
 " -----------------------------------------------------------------------------
 "  < YouCompleteMe 插件配置 >
@@ -1120,19 +1120,19 @@ filetype plugin indent on                             "启用缩进
 
 "let g:ycm_key_list_select_completion=['<c-n>']
 "let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py' 
-let g:ycm_collect_indentifiers_from_tags_files=1 
-let g:ycm_seed_identifiers_with_syntax=1 
-" 避免YCM每次加载都对用户提示是否加载 
-let g:ycm_confirm_extra_conf=0 
-let g:ycm_autoclose_preview_window_after_completion=1 
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+let g:ycm_collect_indentifiers_from_tags_files=1
+let g:ycm_seed_identifiers_with_syntax=1
+" 避免YCM每次加载都对用户提示是否加载
+let g:ycm_confirm_extra_conf=0
+let g:ycm_autoclose_preview_window_after_completion=1
 let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
 let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-" 跳到定义或声明 
-nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR> 
-" 强制进行编译 
-nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR> 
+" 跳到定义或声明
+nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" 强制进行编译
+nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1140,9 +1140,9 @@ nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
 " 说明可以参考帮助或网络教程等
 " 使用前先执行如下 ctags 命令（本配置中可以直接使用 ccvext 插件来执行以下命令）
 " ctags -R --c++-kinds=+p --fields=+iaS --extra=+q
-" --c++-kinds=+p : 为标签添加函数原型(prototype)信息  
-"--fields=+iaS : 为标签添加继承信息(inheritance)，访问控制(access)信息，函数特征(function Signature,如参数表或原型等)  
-"--extra=+q : 为类成员标签添加类标识  
+" --c++-kinds=+p : 为标签添加函数原型(prototype)信息
+"--fields=+iaS : 为标签添加继承信息(inheritance)，访问控制(access)信息，函数特征(function Signature,如参数表或原型等)
+"--extra=+q : 为类成员标签添加类标识
 " 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
 " 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
 set completeopt=menu                        "关闭预览窗口
@@ -1150,10 +1150,10 @@ set completeopt=menu                        "关闭预览窗口
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 
-let OmniCpp_MayCompleteDot = 1   
-let OmniCpp_MayCompleteArrow = 1 
-let OmniCpp_MayCompleteScope = 1 
+let OmniCpp_ShowPrototypeInAbbr = 1
+let OmniCpp_MayCompleteDot = 1
+let OmniCpp_MayCompleteArrow = 1
+let OmniCpp_MayCompleteScope = 1
 let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 let OmniCpp_SelectFirstItem = 2
 let OmniCpp_DisplayMode=1
@@ -1328,29 +1328,29 @@ let NERDSpaceDelims = 1                     "在左注释符之后，右注释�
 "  < nerdtree 插件配置 >
 " -----------------------------------------------------------------------------
 " 有目录村结构的文件浏览插件
-let NERDTreeWinPos='right' 
+let NERDTreeWinPos='right'
 let NERDTreeHighlightCursorline=1
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif 
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
 
-nnoremap <leader>n :NERDTreeToggle<CR> 
+nnoremap <leader>n :NERDTreeToggle<CR>
 nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
 
 " -----------------------------------------------------------------------------
 "  < FuzzyFinder 插件配置 >
 " -----------------------------------------------------------------------------
-nnoremap <leader>ff :FufFile<CR> 
-nnoremap <leader>fb :FufBuffer<CR> 
-nnoremap <leader>fd :FufDir<CR> 
-nnoremap <leader>ft :FufTag<CR> 
-nnoremap <leader>fc :FufChangeList<CR> 
-nnoremap <leader>fj :FufJumpList<CR> 
-nnoremap <leader>fq :FufQuickfix<CR> 
+nnoremap <leader>ff :FufFile<CR>
+nnoremap <leader>fb :FufBuffer<CR>
+nnoremap <leader>fd :FufDir<CR>
+nnoremap <leader>ft :FufTag<CR>
+nnoremap <leader>fc :FufChangeList<CR>
+nnoremap <leader>fj :FufJumpList<CR>
+nnoremap <leader>fq :FufQuickfix<CR>
 
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 " -----------------------------------------------------------------------------
 "设置字体:字号（字体名称空格用下划线代替<N）
-set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI                 
+set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
 "set guifont=Consolas_for_Powerline_FixedD:h9
 
 "启用标签栏[必备]Smarter tab line
@@ -1400,19 +1400,19 @@ let c_cpp_comments = 0
 "  < Syntastic 插件配置 >
 " -----------------------------------------------------------------------------
 " 用于保存文件时查检语法
-" 在打开文件的时候检查 
-let g:syntastic_check_on_open = 1 
-let g:syntastic_cpp_include_dirs = ['/usr/include/'] 
-let g:syntastic_cpp_remove_include_errors = 1 
-let g:syntastic_cpp_check_header = 1 
-let g:syntastic_cpp_compiler = 'clang++' 
-let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++' 
-"set error or warning signs 
-let g:syntastic_error_symbol = '?' 
-let g:syntastic_warning_symbol = '?' 
-"whether to show balloons 
-let g:syntastic_enable_balloons = 1 
-let g:syntastic_always_populate_loc_list = 1 
+" 在打开文件的时候检查
+let g:syntastic_check_on_open = 1
+let g:syntastic_cpp_include_dirs = ['/usr/include/']
+let g:syntastic_cpp_remove_include_errors = 1
+let g:syntastic_cpp_check_header = 1
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
+"set error or warning signs
+let g:syntastic_error_symbol = '?'
+let g:syntastic_warning_symbol = '?'
+"whether to show balloons
+let g:syntastic_enable_balloons = 1
+let g:syntastic_always_populate_loc_list = 1
 
 " -----------------------------------------------------------------------------
 "  < Tagbar 插件配置 >
@@ -1444,10 +1444,10 @@ let Tlist_Exit_OnlyWindow=1                 "如果Taglist窗口是最后一个�
 let Tlist_WinWidth=30                       "设置窗口宽度
 let Tlist_Use_Right_Window=1                "在右侧窗口中显示
 "let g:Tlist_Use_Left_Window=1              "在左侧窗口中显示
-let g:Tlist_Process_File_Always=1 
-let g:Tlist_Sort_Type='name'                " 按照名称排序  
-let g:Tlist_Inc_Winwidth=0 
-let g:Tlist_Compart_Format = 1 " 压缩方式 
+let g:Tlist_Process_File_Always=1
+let g:Tlist_Sort_Type='name'                " 按照名称排序
+let g:Tlist_Inc_Winwidth=0
+let g:Tlist_Compart_Format = 1 " 压缩方式
 
 " -----------------------------------------------------------------------------
 "  < txtbrowser 插件配置 >
@@ -1468,14 +1468,14 @@ au BufRead,BufNewFile *.txt setlocal ft=txt
 "正常模式： 　n      　   无菜单窗中文搜索   Repeat the latest "/" or "?" ...
 "插入模式： i_CTRL-_   开关中文输入法      Switch between languages ...
 "插入模式： i_CTRL-^    切换中文输入法      Toggle the use of language ...　
-    :let g:vimim_cloud = 'google,sogou,baidu,qq'  
-    :let g:vimim_map = 'tab_as_gi'  
-  " :let g:vimim_mode = 'dynamic'  
-  " :let g:vimim_mycloud = 0  
-  " :let g:vimim_plugin = 'C:/var/mobile/vim/vimfiles/plugin'  
-  " :let g:vimim_punctuation = 2  
-  " :let g:vimim_shuangpin = 0  
-  " :let g:vimim_toggle = 'pinyin,google,sogou' 
+    :let g:vimim_cloud = 'google,sogou,baidu,qq'
+    :let g:vimim_map = 'tab_as_gi'
+  " :let g:vimim_mode = 'dynamic'
+  " :let g:vimim_mycloud = 0
+  " :let g:vimim_plugin = 'C:/var/mobile/vim/vimfiles/plugin'
+  " :let g:vimim_punctuation = 2
+  " :let g:vimim_shuangpin = 0
+  " :let g:vimim_toggle = 'pinyin,google,sogou'
 " imap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 以下为软件默认配置 >>
@@ -1839,7 +1839,7 @@ au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
 filetype plugin indent on
-autocmd FileType c set omnifunc=ccomplete#Complete 
+autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType cpp set omnifunc=omni#cpp#complete#main
 autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -1856,8 +1856,8 @@ if has("autocmd") && exists("+omnifunc")
 endif
 
 " 快捷打开编辑vimrc文件的键盘绑定
-if (g:iswindows)	
-    if exists('$HOME/vimfiles/*vimrc')  
+if (g:iswindows)
+    if exists('$HOME/vimfiles/*vimrc')
 	    map <leader>ee :e $HOME/vimfiles/*vimrc<CR>
     else
         map <leader>ee :e $VIM/*vimrc<CR>
@@ -1867,5 +1867,5 @@ if (g:iswindows)
 else
 	map <leader>ee :e $HOME/*vimrc<cr>
 	autocmd! bufwritepost *vimrc source %
-endif 
+endif
 
