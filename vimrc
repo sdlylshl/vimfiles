@@ -1003,7 +1003,7 @@ Bundle 'cSyntaxAfter'
     "--- lua
 "Bundle 'Shougo/neocomplete.vim'
 
-"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
+"--- [与系统omni重复]在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
 "Bundle 'supertab'
 
 	"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
@@ -1171,7 +1171,8 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 " -----------------------------------------------------------------------------
 "  < supertab 插件配置 >
 " -----------------------------------------------------------------------------
-let g:SuperTabDefaultCompletionType = '<C-X><C-U>'
+"let g:SuperTabDefaultCompletionType = '<C-N>' "neo
+
 " -----------------------------------------------------------------------------
 "  < vim-javacompleteex（也就是 javacomplete 增强版）插件配置 >
 " -----------------------------------------------------------------------------
@@ -1838,22 +1839,22 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
-filetype plugin indent on
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType cpp set omnifunc=omni#cpp#complete#main
-autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
-autocmd FileType java set omnifunc=javacomplete#Complete
-if has("autocmd") && exists("+omnifunc")
-     autocmd Filetype *
-   \ if &omnifunc == "" |
-   \   setlocal omnifunc=syntaxcomplete#Complete |
-   \ endif
-endif
+"filetype plugin indent on
+"autocmd FileType c set omnifunc=ccomplete#Complete
+"autocmd FileType cpp set omnifunc=omni#cpp#complete#main
+"autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+"autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+"autocmd FileType java set omnifunc=javacomplete#Complete
+"if has("autocmd") && exists("+omnifunc")
+     "autocmd Filetype *
+   "\ if &omnifunc == "" |
+   "\   setlocal omnifunc=syntaxcomplete#Complete |
+   "\ endif
+"endif
 
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)
