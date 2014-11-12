@@ -393,6 +393,8 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "Use arrow key to change buffer"
 " TODO: 如何跳转到确定的buffer?
 " :b 1 :b 2   :bf :bl
+"强制关闭当前缓存
+noremap <leader>c :bd!<CR>
 
 " Buffer切换
 nnoremap [b :bprevious<cr>
@@ -645,7 +647,7 @@ au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 set number                                            "显示行号
 set cmdheight=1                                       "设置命令行的高度为2，默认为1
 
-set cursorcolumn                                      "突出显示列
+"set cursorcolumn                                      "突出显示列
 set cursorline                                        "突出显示当前行
 
 set nowrap                                            "设置不自动换行
@@ -938,13 +940,13 @@ Bundle 'clones/vim-l9'
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
 "GIT
-Bundle 'tpope/vim-git'
+"Bundle 'tpope/vim-git'
     "--- 状态栏显示git分支(master)
 Bundle 'tpope/vim-fugitive'
     "--- 状态栏显示fit分支号
 Bundle 'airblade/vim-gitgutter'
 
-"Bundle 'motemen/git-vim'
+Bundle 'motemen/git-vim'
 "Bundle 'mhinz/vim-signify'
 
 "C/C++
@@ -1069,7 +1071,7 @@ endif
 "选中
 "Bundle 'terryma/vim-expand-region'
 "多光标多行编辑
-"Bundle 'terryma/vim-multiple-cursors'
+Bundle 'terryma/vim-multiple-cursors'
 
 "文件浏览
     "---  快速注释
@@ -1240,7 +1242,13 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
 " 一个对齐的插件，用来——排版与对齐代码，功能强大，不过用到的机会不多
-
+" -----------------------------------------------------------------------------
+"  < tabular 插件配置 >
+" -----------------------------------------------------------------------------
+" \bb                 按=号对齐代码 [Tabular插件]
+nmap <leader>bb :Tab /=<CR>
+" \bn                 自定义对齐    [Tabular插件]
+nmap <leader>bn :Tab /
 " -----------------------------------------------------------------------------
 "  < auto-pairs 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1506,7 +1514,17 @@ au BufRead,BufNewFile *.txt setlocal ft=txt
 " -----------------------------------------------------------------------------
 "
 map <leader>td <Plug>TaskList
-
+" -----------------------------------------------------------------------------
+"  < TaskList 插件配置 >
+" -----------------------------------------------------------------------------
+"let g:multi_cursor_use_default_mapping=0
+" Default mapping
+"let g:multi_cursor_next_key='<C-n>'
+"let g:multi_cursor_prev_key='<C-p>'
+"let g:multi_cursor_skip_key='<C-x>'
+"let g:multi_cursor_quit_key='<Esc>'
+" Map start key separately from next key
+"let g:multi_cursor_start_key='<F6>'
 " -----------------------------------------------------------------------------
 "  < ZoomWin 插件配置 >
 " -----------------------------------------------------------------------------
