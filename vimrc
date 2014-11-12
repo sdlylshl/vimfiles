@@ -1424,10 +1424,10 @@ let g:syntastic_always_populate_loc_list = 1
 "nmap tb :TlistClose<CR>:TagbarToggle<CR>
 let g:tagbar_width=30                       "设置窗口宽度
 let g:tagbar_left=1                         "在左侧窗口中显示
-let g:tagbar_sort = 0                       "按源文件顺序排列
 let g:tagbar_autofocus = 1
+let g:tagbar_sort = 1                       "按源文件顺序排列
 " 加载代码时自动打开tagbar
-autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 " -----------------------------------------------------------------------------
 "  < TagList 插件配置 >
 " -----------------------------------------------------------------------------
