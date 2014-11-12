@@ -45,6 +45,10 @@
 "   &gt;% 从当前到匹配小(中,大)括号之间的文本右移
 "   &lt;% 从当前到匹配小(中,大)括号之间的文本左移
 "   (似乎漏了一个符号|, 移动到某一列----译注)
+"   pl:显示文件结构 fl:显示目录结构
+"   viw 选中一个单词 yiw 复制一个单词
+"   :reg 显示剪贴板
+"   + 是系统剪切板
 "   a 在当前位置之后添加
 "   A 在当前行的末尾添加
 "   ^a 没有使用
@@ -176,7 +180,8 @@ endif
 " -----------------------------------------------------------------------------
 "  < Windows Gvim 默认配置> 做了一点修改
 " -----------------------------------------------------------------------------
-if (g:iswindows && g:isGUI)
+"if (g:iswindows && g:isGUI)
+if g:iswindows
     source $VIMRUNTIME/vimrc_example.vim
     source $VIMRUNTIME/mswin.vim
     behave mswin
@@ -411,7 +416,7 @@ map <leader>tn :tabnext<cr>
 map <leader>tp :tabprev<cr>
 
 map <leader>te :tabedit<cr>
-map <leader>td :tabclose<cr>
+map <leader>tc :tabclose<cr>
 map <leader>tm :tabm<cr>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
@@ -450,10 +455,6 @@ let g:last_active_tab = 1
 "nnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
 "vnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
 autocmd TabLeave * let g:last_active_tab = tabpagenr()
-" -----------------------------------------------------------------------------
-"  < 代码自动补全 >
-" -----------------------------------------------------------------------------
-
 
 "快捷键:
 "ctrl+j 选择下一个补全
@@ -527,18 +528,31 @@ autocmd TabLeave * let g:last_active_tab = tabpagenr()
 set encoding=utf-8                                    "设置gvim内部编码，默认不更改
 set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
 set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1     "设置支持打开的文件的编码
+set termencoding=chinese                              "解决gvim不乱码，但vim乱码
 
 " 文件格式，默认 ffs=dos,unix
 set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
 set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
 
-if (g:iswindows && g:isGUI)
+
+
+
+"if (g:iswindows && g:isGUI)
+if (g:iswindows)
     "解决菜单乱码
     source $VIMRUNTIME/delmenu.vim
     source $VIMRUNTIME/menu.vim
 
     "解决consle输出乱码
     language messages zh_CN.utf-8
+
+    set langmenu=zh_CN.UTF-8
+    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+    if g:isGUI
+    "colorscheme molokai
+    "set term=xterm
+    set t_Co=256
+    endif
 endif
 
 " -----------------------------------------------------------------------------
@@ -578,7 +592,6 @@ set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
 
 " 增强模式中的命令行 自动完成操作
 set wildmenu
-
 
 set nofoldenable                                      "关闭折叠
 set foldmethod=indent
@@ -631,7 +644,10 @@ au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 " -----------------------------------------------------------------------------
 set number                                            "显示行号
 set cmdheight=1                                       "设置命令行的高度为2，默认为1
+
+set cursorcolumn                                      "突出显示列
 set cursorline                                        "突出显示当前行
+
 set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
@@ -681,7 +697,7 @@ endif
 if g:isGUI
     colorscheme Tomorrow-Night              "gvim配色方案
 else
-    colorscheme Tomorrow-Night               "终端配色方案
+    colorscheme Tomorrow-Night-Eighties               "终端配色方案
 endif
 " <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
 if g:isGUI
@@ -922,6 +938,7 @@ Bundle 'clones/vim-l9'
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
 "GIT
+Bundle 'tpope/vim-git'
     "--- 状态栏显示git分支(master)
 Bundle 'tpope/vim-fugitive'
     "--- 状态栏显示fit分支号
@@ -1031,10 +1048,12 @@ Bundle 'OmniCppComplete'
 Bundle 'majutsushi/tagbar'
 
 "状态栏
-Bundle 'bling/vim-airline'
-"Bundle 'Lokaltog/vim-powerline'
-"Bundle 'Lokaltog/powerline-fonts'
-"Bundle 'itchyny/lightline.vim'
+if g:isGUI
+    Bundle 'bling/vim-airline'
+    "Bundle 'Lokaltog/vim-powerline'
+    "Bundle 'Lokaltog/powerline-fonts'
+    "Bundle 'itchyny/lightline.vim'
+endif
 
 "编辑
 "--- 快速加环绕符
@@ -1063,11 +1082,17 @@ Bundle 'kien/ctrlp.vim'
 "Bundle 'vim-scripts/minibufexplorerpp'
 "Bundle 'ShowMarks'
 "Bundle 'Mark--Karkat'
+
 "--- 模糊查找 依赖vim-L9库
 Bundle 'FuzzyFinder'
+
+if g:islinux
 "--- 依赖: ACK2.x
 "Bundle 'mileszs/ack.vim'
-
+"Bundle 'petdance/ack2'
+    "--- 依赖:ACK AG
+"Bundle 'dyng/ctrlsf.vim'
+endif
 "中文帮助
 Bundle 'asins/vimcdoc'
 "其他
@@ -1080,10 +1105,14 @@ Bundle 'asins/vimcdoc'
 "Bundle 'godlygeek/tabular'
 
 	"--- 快速跳转到TODO列表
-"Bundle 'vim-scripts/TaskList.vim'
+Bundle 'vim-scripts/TaskList.vim'
 
 "Bundle 'jiangmiao/auto-pairs'
 
+
+
+"--- 撤销树Gundo.vim 依赖:python
+"Bundle 'sjl/gundo.vim'
 
 "Bundle 'Yggdroot/indentLine'
 
@@ -1095,6 +1124,7 @@ Bundle 'asins/vimcdoc'
 "Bundle 'altercation/vim-colors-solarized'
 "Bundle 'chriskempson/vim-tomorrow-theme'
 "Bundle 'rainux/vim-desert-warm-256'
+Bundle 'wombat256.vim'
 "Bundle 'nanotech/jellybeans.vim'
 "Bundle 'vim-scripts/tir_black'
 "Bundle 'twerth/ir_black'
@@ -1356,7 +1386,12 @@ nnoremap <leader>ft :FufTag<CR>
 nnoremap <leader>fc :FufChangeList<CR>
 nnoremap <leader>fj :FufJumpList<CR>
 nnoremap <leader>fq :FufQuickfix<CR>
-
+" -----------------------------------------------------------------------------
+"  < ctrlsf 插件配置 >
+" -----------------------------------------------------------------------------
+let g:ctrlsf_ackprg = 'ag'
+let g:ctrlsf_auto_close = 0
+map <D-F> :CtrlSF<space>
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1465,6 +1500,12 @@ let g:Tlist_Compart_Format = 1 " 压缩方式
 " -----------------------------------------------------------------------------
 " 用于文本文件生成标签与与语法高亮（调用TagList插件生成标签，如果可以）
 au BufRead,BufNewFile *.txt setlocal ft=txt
+
+" -----------------------------------------------------------------------------
+"  < TaskList 插件配置 >
+" -----------------------------------------------------------------------------
+"
+map <leader>td <Plug>TaskList
 
 " -----------------------------------------------------------------------------
 "  < ZoomWin 插件配置 >
