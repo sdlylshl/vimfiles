@@ -717,14 +717,25 @@ if g:isGUI
 else
     colorscheme Tomorrow-Night-Eighties               "终端配色方案
 endif
+
 " <Ctrl + F11> 切换显示/隐藏菜单栏、工具栏、滚动条，
 if g:isGUI
+    "菜单栏
+    set guioptions-=m
+    "导航栏
+    set guioptions-=T
+    "右边滚动条
+    set guioptions-=r
+    "左边滚动条
+    set guioptions-=L
+    "水平滚动条
+    set guioptions-=b
     nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
-        \set guioptions-=m <Bar>    "取消菜单栏
-        \set guioptions-=T <Bar>    "取消导航栏
-        \set guioptions-=r <Bar>    "去除右边滚动条
-        \set guioptions-=L <Bar>    "去除左边滚动条
-        \set guioptions-=b <Bar>    "去除水平滚动条
+        \set guioptions-=m <Bar>
+        \set guioptions-=T <Bar>
+        \set guioptions-=r <Bar>
+        \set guioptions-=L <Bar>
+        \set guioptions-=b <Bar>
     \else <Bar>
         \set guioptions+=m <Bar>
         \set guioptions+=T <Bar>
@@ -732,7 +743,7 @@ if g:isGUI
         \set guioptions+=L <Bar>
         \set guioptions+=b <Bar>
     \endif<CR>
-endi
+endif
 " -----------------------------------------------------------------------------
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
