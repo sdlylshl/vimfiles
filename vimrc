@@ -805,25 +805,25 @@ if has("cscope")
     set cscopeverbose
     "快捷键设置
     " 查找符号
-    nmap <c-\>s :cs find s <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>g :cs find g <c-r>=expand("<cword>")<cr><cr>  " 查找定义
-    nmap <c-\>c :cs find c <c-r>=expand("<cword>")<cr><cr>  " 查找调用这个函数的函数
-    nmap <c-\>t :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
-    nmap <c-\>e :cs find e <c-r>=expand("<cword>")<cr><cr>
-    nmap <c-\>f :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
-    nmap <c-\>i :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr>
-    nmap <c-\>d :cs find d <c-r>=expand("<cword>")<cr><cr> " 查找被这个函数调用的函数
-    " 查找include这个文件的文件
+    nmap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
+    nmap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
+    nmap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
+    nmap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
+    nmap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
+    nmap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
+    nmap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
     nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
-    " :cw quickfix窗口看到所有查找结果
-    nmap <C-\>w :cw<CR>
-    "   重新初始化所有连接
-    nmap <C-\>r :cs reset<CR>
+    nmap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
+
+    nmap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
+    nmap <C-\>r :cs reset<CR>               "   重新初始化所有连接
+
     "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
     nmap <F8> :call UpdateCscope()<CR>
+
+
 endif
-"保留生成文件
-let g:cscope_files_kept = 1
+
 " -----------------------------------------------------------------------------
 "  < ctags 工具配置 >
 " -----------------------------------------------------------------------------
@@ -1150,6 +1150,30 @@ filetype plugin indent on                             "启用缩进
 "nmap <Leader>hr <Plug>GitGutterRevertHunk
 "显示diff差异<Leader>hp
 "
+
+" -----------------------------------------------------------------------------
+"  < cscope 插件配置 >
+" ----------------------------------------------------------------------------
+" s: Find this C symbol
+"map <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+" g: Find this definition
+"map <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+" d: Find functions called by this function
+"map <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+" c: Find functions calling this function
+"map <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+" t: Find this text string
+"map <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+" e: Find this egrep pattern
+"map <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+" f: Find this file
+"map <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+" i: Find files #including this file
+"map <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+"map <leader>l :call ToggleLocationList()<CR>
+"保留生成文件
+let g:cscope_files_kept = 1
+
 " -----------------------------------------------------------------------------
 "  < exVim 插件配置 >
 " ----------------------------------------------------------------------------
@@ -1387,13 +1411,13 @@ nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
 " -----------------------------------------------------------------------------
 "  < FuzzyFinder 插件配置 >
 " -----------------------------------------------------------------------------
-nnoremap <leader>ff :FufFile<CR>
-nnoremap <leader>fb :FufBuffer<CR>
-nnoremap <leader>fd :FufDir<CR>
-nnoremap <leader>ft :FufTag<CR>
-nnoremap <leader>fc :FufChangeList<CR>
-nnoremap <leader>fj :FufJumpList<CR>
-nnoremap <leader>fq :FufQuickfix<CR>
+nnoremap <leader>fuf :FufFile<CR>
+nnoremap <leader>fub :FufBuffer<CR>
+nnoremap <leader>fud :FufDir<CR>
+nnoremap <leader>fut :FufTag<CR>
+nnoremap <leader>fuc :FufChangeList<CR>
+nnoremap <leader>fuj :FufJumpList<CR>
+nnoremap <leader>fuq :FufQuickfix<CR>
 " -----------------------------------------------------------------------------
 "  < ctrlsf 插件配置 >
 " -----------------------------------------------------------------------------
