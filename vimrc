@@ -221,7 +221,7 @@ if g:islinux
 
 	" 自动跳转当上次结束编辑的位置
     if has("autocmd")
-        au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+        autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
     endif
 
     if g:isGUI
@@ -484,7 +484,7 @@ autocmd TabLeave * let g:last_active_tab = tabpagenr()
 "         endfor
 "         call setqflist(qflist)
 "      endfunction
-"      au QuickfixCmdPost make call QfMakeConv()
+"      autocmd QuickfixCmdPost make call QfMakeConv()
 " endif
 "  -----------------------------------------------------------------------------
 "  < :set 设置 >
@@ -634,11 +634,10 @@ set clipboard+=unnamed
 "历史记录
 set history=50        " set command history to 50    "历史记录50条
 
-" 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
-au BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
+
 " 高亮字符，让其不受80列限制
-:highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-:match OverLength '\%81v.*'
+highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+match OverLength '\%81v.*'
 
 
 " -----------------------------------------------------------------------------
@@ -690,7 +689,7 @@ set showmode            " 命令行显示vim当前模式
 
 " 设置 gvim 窗口初始位置及大小
 if g:isGUI
-    " au guienter * simalt ~x                           "窗口启动时自动最大化
+    "autocmd guienter * simalt ~x                     "窗口启动时自动最大化
     winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
     set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
 endif
@@ -1065,7 +1064,9 @@ endif
 "移动
 	"--- 跳转到光标后任意位置
 "Bundle 'Lokaltog/vim-easymotion'
-	"--- 括号匹配跳转
+	"--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
+    " % 正向匹配      g% 反向匹配
+    " [% 定位块首     ]% 定位块尾
 "Bundle 'vim-scripts/matchit.zip'
 
 "选中
@@ -1102,6 +1103,9 @@ Bundle 'asins/vimcdoc'
 "Bundle 'vim-scripts/VimIM'
 "--- 括号显示增强
 "Bundle 'kien/rainbow_parentheses.vim'
+    "--- 括号自动配对
+"Bundle 'jiangmiao/auto-pairs'
+
 "Bundle 'Align'
 	"--- 代码对齐
 "Bundle 'godlygeek/tabular'
@@ -1109,7 +1113,6 @@ Bundle 'asins/vimcdoc'
 	"--- 快速跳转到TODO列表
 Bundle 'vim-scripts/TaskList.vim'
 
-"Bundle 'jiangmiao/auto-pairs'
 
 
 
@@ -1117,7 +1120,7 @@ Bundle 'vim-scripts/TaskList.vim'
 "Bundle 'sjl/gundo.vim'
 
 "Bundle 'Yggdroot/indentLine'
-
+    "--- 显示文本文件的目录树和语法高亮
 "Bundle 'TxtBrowser'
 	"--- <c-w>o 在最大化与还原间切换
 "Bundle 'ZoomWin'
@@ -1126,7 +1129,7 @@ Bundle 'vim-scripts/TaskList.vim'
 "Bundle 'altercation/vim-colors-solarized'
 "Bundle 'chriskempson/vim-tomorrow-theme'
 "Bundle 'rainux/vim-desert-warm-256'
-Bundle 'wombat256.vim'
+"Bundle 'wombat256.vim'
 "Bundle 'nanotech/jellybeans.vim'
 "Bundle 'vim-scripts/tir_black'
 "Bundle 'twerth/ir_black'
@@ -1258,10 +1261,21 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 "  < a.vim 插件配置 >
 " -----------------------------------------------------------------------------
 " 用于切换C/C++头文件
-":A	    ---在新Buffer中切换到c/h文件
-":AS	---横向分割窗口并打开c/h文件
-":AV	---纵向分割窗口并打开c/h文件
-":AT	---新建一个标签页并打开c/h文件
+"   :A 头文件／源文件切换
+"   :AS 分割窗后并切换头/源文件(切割为上下两个窗口)
+"   :AV 垂直切割窗口后切换头/源文件(切割为左右两个窗口)
+"   :AT 新建Vim标签式窗口后切换
+"   :AN 在多个匹配文件间循环切换
+" 将光标所在处单词作为文件名打开
+"   :IH 切换至光标所在文件
+"   :IHS 分割窗口后切换至光标所在文件(指将光标所在处单词作为文件名打开)
+"   :IHV 垂直分割窗口后切换
+"   :IHT 新建标签式窗口后切换
+"   :IHN 在多个匹配文件间循环切换
+" 快捷键操作
+"<Leader>ih 切换至光标所在文件*
+"<Leader>is 切换至光标所在处(单词所指)文件的配对文件(如光标所在处为foo.h，则切换至foo.c/foo.cpp...)
+"<Leader>ihn 在多个匹配文件间循环切换
 " -----------------------------------------------------------------------------
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1301,7 +1315,7 @@ nmap <leader>bn :Tab /
 "  < cSyntaxAfter 插件配置 >
 " -----------------------------------------------------------------------------
 " 高亮括号与运算符等
-au! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
+autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
 
 " -----------------------------------------------------------------------------
 "  < ctrlp.vim 插件配置 >
@@ -1531,7 +1545,7 @@ let g:Tlist_Compart_Format = 1 " 压缩方式
 "  < txtbrowser 插件配置 >
 " -----------------------------------------------------------------------------
 " 用于文本文件生成标签与与语法高亮（调用TagList插件生成标签，如果可以）
-au BufRead,BufNewFile *.txt setlocal ft=txt
+autocmd BufRead,BufNewFile *.txt setlocal ft=txt
 
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
@@ -1910,7 +1924,7 @@ endfunction
 "                          << 自动命令 >>
 " =============================================================================
 " 自动切换目录为当前编辑文件所在目录
-au BufRead,BufNewFile,BufEnter * cd %:p:h
+"   autocmd! BufRead,BufNewFile,BufEnter * cd %:p:h
 
 "    lcd是紧紧改变当前窗口的工作路径
 "    %  代表当前文件的文件名
@@ -1918,6 +1932,8 @@ au BufRead,BufNewFile,BufEnter * cd %:p:h
 "    :h 析取出路径
 "    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
 
+" 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
+autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 
 " 自动删除行尾 Dos回车符和空格
 autocmd BufRead * silent! %s/[\r \t]\+$//
@@ -1925,11 +1941,11 @@ autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
 set viminfo='10,\"100,:20,%,n~/.viminfo
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 "离开插入模式后 自动关闭预览窗口
 "autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-au cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
+autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
 "filetype plugin indent on
@@ -1959,7 +1975,7 @@ if (g:iswindows)
 
     autocmd! bufwritepost *vimrc source %
 else
-	map <leader>ee :e $HOME/*vimrc<cr>
-	autocmd! bufwritepost *vimrc source %
+	map <leader>ee :e $HOME/.vimrc<cr>
+	autocmd! bufwritepost .vimrc source %
 endif
 
