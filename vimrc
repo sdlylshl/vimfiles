@@ -177,6 +177,26 @@ else
     let g:isGUI = 0
 endif
 
+"查找并切换到.git目录
+let g:isGit = 0
+function! ToGitDir() 
+        cd %:p:h
+        let l:deeps = 5
+        while l:deeps > 1
+            let l:deeps = l:deeps -1
+            if filereadable("./.git/config")
+                let g:isGit = 1
+                break          
+            else
+                cd ..
+            endif           
+        endwhile
+
+        if l:deeps <=1          
+            cd %:p:h
+            let g:isGit = 0
+        endif
+endfunction
 " -----------------------------------------------------------------------------
 "  < Windows Gvim 默认配置> 做了一点修改
 " -----------------------------------------------------------------------------
@@ -219,10 +239,7 @@ if g:islinux
     set hlsearch        "高亮搜索
     set incsearch       "在输入要搜索的文字时，实时匹配
 
-	" 自动跳转当上次结束编辑的位置
-    if has("autocmd")
-        autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    endif
+
 
     if g:isGUI
         " Source a global configuration file if available
@@ -348,9 +365,6 @@ nnoremap <C-y> 5<C-y>
 " 快速进入shell
 nnoremap <silent><leader>sh :shell<cr>
 
-" 在文件名上按gf时，在新的tab中打开
-map gf :tabnew <cfile><cr>
-
 " 常规模式下输入 cS 清除行尾空格
 nmap cS :%s/\s\+$//g<CR>:noh<CR>
 
@@ -394,7 +408,7 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 " TODO: 如何跳转到确定的buffer?
 " :b 1 :b 2   :bf :bl
 "强制关闭当前缓存
-noremap <leader>c :bd!<CR>
+noremap <silent> <c-w> :bd!<CR>
 
 " Buffer切换
 nnoremap [b :bprevious<cr>
@@ -412,20 +426,21 @@ noremap <M-right> :bnext<CR>
 map <leader>th :tabfirst<cr>
 map <leader>tl :tablast<cr>
 
-map <leader>tj :tabnext<cr>
-map <leader>tk :tabprev<cr>
-map <leader>tn :tabnext<cr>
-map <leader>tp :tabprev<cr>
+"map <leader>tj :tabnext<cr>
+"map <leader>tk :tabprev<cr>
+"map <leader>tn :tabnext<cr>
+"map <leader>tp :tabprev<cr>
 
-map <leader>te :tabedit<cr>
+"map <leader>te :tabedit<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabm<cr>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
-" 新建tab  Ctrl+t
-map <leader>tw :tabnew<CR>
+" 在文件名上按gf时，在新的tab中打开
+map gf :tabnew <cfile><cr>
+map <leader>n :tabnew<cr>
 "nnoremap <C-t>     :tabnew<CR>
 "inoremap <C-t>     <Esc>:tabnew<CR>
 " TODO: 配置成功这里, 切换更方便, 两个键
@@ -437,16 +452,16 @@ nnoremap <C-tab>   :tabnext<CR>
 " nnoremap <C-Right> :tabnext<CR>
 
 " normal模式下切换到确切的tab
-noremap <leader>1 1gt
-noremap <leader>2 2gt
-noremap <leader>3 3gt
-noremap <leader>4 4gt
-noremap <leader>5 5gt
-noremap <leader>6 6gt
-noremap <leader>7 7gt
-noremap <leader>8 8gt
-noremap <leader>9 9gt
-noremap <leader>0 :tablast<cr>
+map <leader>1 1gt
+map <leader>2 2gt
+map <leader>3 3gt
+map <leader>4 4gt
+map <leader>5 5gt
+map <leader>6 6gt
+map <leader>7 7gt
+map <leader>8 8gt
+map <leader>9 9gt
+map <leader>0 :tablast<cr>
 
 " Toggles between the active and last active tab "
 " The first tab is always 1 "
@@ -607,6 +622,8 @@ set foldmethod=indent
 set autoread         " 当文件在外部被修改，自动加载文件
 set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 
+set autochdir       "自动切换当前目录为当前文件所在的目录
+
 " 文件设置
 set writebackup                             "保存文件前建立备份，保存成功后删除该备份
 set nobackup                                "设置无备份文件
@@ -625,7 +642,7 @@ set browsedir=current    "设置文件浏览使用的目录
 set viminfo^=%
 
 " 保存全局变量
-set viminfo+=!
+"set viminfo+=!
 
 " 与windows共享剪贴板
 set clipboard+=unnamed
@@ -758,67 +775,50 @@ endi
 "    -C: 在搜索时忽略大小写
 "    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
 
-if has("cscope")
-    "set csprg=/usr/bin/cscope   " 制定cscope命令
-    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
-    "set csto=0
-    "优先查找Ctags数据库
-    set cscopetagorder=1
-    "把Cscope的查找结果 输出到quickfix窗口
-    set cscopequickfix=s-,c-,d-,i-,t-,e-
-    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
-    set cscopetag
-    " 同时搜索tag文件和cscope数据库
-    " set cst
-    set nocsverb
-    "如果当前目录下有cscope.out则加载进Vim
-    "if filereadable("cscope.out")
-    "    cs add cscope.out
-    "否则添加数据库环境中所指定的数据库到Vim
-    "elseif $cscope_db != ""
-    "    cs add $cscope_db
-    "endif
-    function! UpdateCscope()
-
-        let l:deeps = 5
-        while l:deeps > 1
-            if filereadable("./.git/config")
-                !cscope -Rbkq
-                cs add cscope.out
-                cs reset
-                break
-            endif
-
-            cd ..
-            let l:deeps = l:deeps -1
-        endwhile
-
-        if  l:deeps <=1
-            cd %:h
-            !cscope -Rbkq
-            cs add cscope.out
-            cs reset
-        endif
-
-    endfunction
-    set cscopeverbose
-    "快捷键设置
-    " 查找符号
-    nmap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
-    nmap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
-    nmap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
-    nmap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
-    nmap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
-    nmap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
-    nmap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
-    nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
-    nmap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
-
-    nmap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
-    nmap <C-\>r :cs reset<CR>               "   重新初始化所有连接
-
-    "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
-    nmap <F8> :call UpdateCscope()<CR>
+if has("cscope") 
+"    "set csprg=/usr/bin/cscope   " 制定cscope命令
+"    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
+"    "set csto=0
+"    "优先查找Ctags数据库
+"    set cscopetagorder=1
+"    "把Cscope的查找结果 输出到quickfix窗口
+"    set cscopequickfix=s-,c-,d-,i-,t-,e-
+"    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
+"    set cscopetag
+"    " 同时搜索tag文件和cscope数据库
+"    " set cst
+"    set nocsverb
+"    "如果当前目录下有cscope.out则加载进Vim
+"    "if filereadable("cscope.out")
+"    "    cs add cscope.out
+"    "否则添加数据库环境中所指定的数据库到Vim
+"    "elseif $cscope_db != ""
+"    "    cs add $cscope_db
+"    "endif
+"    function! UpdateCscope()
+"        call ToGitDir()
+"        !cscope -Rbkq
+"        cs add cscope.out
+"        cs reset
+"    endfunction
+"    set cscopeverbose
+"    "快捷键设置
+"    " 查找符号
+"    nmap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
+"    nmap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
+"    nmap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
+"    nmap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
+"    nmap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
+"    nmap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
+"    nmap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
+"    nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
+"    nmap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
+"
+"    nmap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
+"    nmap <C-\>r :cs reset<CR>               "   重新初始化所有连接
+"
+"    "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+"    nmap <F8> :call UpdateCscope()<CR>
 
 
 endif
@@ -837,22 +837,8 @@ endif
 set tags+=$VIM,$VIMRUNTIME
 
 function! UpdateCtags()
-        let workdir=getcwd()
-
-        let l:deeps = 5
-        while !filereadable("./.git/config") && l:deeps > 1
-            cd ..
-            let l:deeps = l:deeps -1
-        endwhile
-
-        if  filereadable("./.git/config")
-            !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+qf .
-            "TlistUpdate
-            execute ":cd " . workdir
-        else
-            cd %:h
-            !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
-        endif
+        call ToGitDir()
+        !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
 endfunction
 
 nmap <F10> :call UpdateCtags()<CR>
@@ -1276,6 +1262,9 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 "<Leader>ih 切换至光标所在文件*
 "<Leader>is 切换至光标所在处(单词所指)文件的配对文件(如光标所在处为foo.h，则切换至foo.c/foo.cpp...)
 "<Leader>ihn 在多个匹配文件间循环切换
+
+let g:alternateRelativeFiles = 1
+let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
 " -----------------------------------------------------------------------------
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1284,9 +1273,9 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 "  < tabular 插件配置 >
 " -----------------------------------------------------------------------------
 " \bb                 按=号对齐代码 [Tabular插件]
-nmap <leader>bb :Tab /=<CR>
+"nmap <leader>bb :Tab /=<CR>
 " \bn                 自定义对齐    [Tabular插件]
-nmap <leader>bn :Tab /
+"nmap <leader>bn :Tab /
 " -----------------------------------------------------------------------------
 "  < auto-pairs 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1419,8 +1408,7 @@ let NERDTreeWinPos='right'
 let NERDTreeHighlightCursorline=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
 
-nnoremap <leader>n :NERDTreeToggle<CR>
-nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
+"nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
 
 " -----------------------------------------------------------------------------
 "  < FuzzyFinder 插件配置 >
@@ -1924,8 +1912,23 @@ endfunction
 "                          << 自动命令 >>
 " =============================================================================
 " 自动切换目录为当前编辑文件所在目录
-"   autocmd! BufRead,BufNewFile,BufEnter * cd %:p:h
-
+"autocmd! BufRead,BufNewFile,BufEnter * lcd %:p:h
+"autocmd! BufRead,BufNewFile,BufEnter * call ToGitDir()
+"  :p			/home/mool/vim/src/version.c
+"  :p:.				       src/version.c
+"  :p:~				 ~/vim/src/version.c
+"  :h				       src
+"  :p:h			/home/mool/vim/src
+"  :p:h:h		/home/mool/vim
+"  :t					   version.c
+"  :p:t					   version.c
+"  :r				       src/version
+"  :p:r			/home/mool/vim/src/version
+"  :t:r					   version
+"  :e						   c
+"  :s?version?main?		       src/main.c
+"  :s?version?main?:p	/home/mool/vim/src/main.c
+"  :p:gs?/?\\?		\home\mool\vim\src\version.c
 "    lcd是紧紧改变当前窗口的工作路径
 "    %  代表当前文件的文件名
 "    :p 扩展成全名(就是带了路径)
@@ -1933,16 +1936,17 @@ endfunction
 "    :autocmd BufEnter * lcd %:p:h   : 自动更改到当前文件所在的目录
 
 " 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
-autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
+"autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 
 " 自动删除行尾 Dos回车符和空格
-autocmd BufRead * silent! %s/[\r \t]\+$//
-autocmd BufEnter *.php :%s/[ \t\r]\+$//e
+"autocmd BufRead * silent! %s/[\r \t]\+$//
+"autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
-set viminfo='10,\"100,:20,%,n~/.viminfo
-autocmd BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
-
+"set viminfo='10,\"100,:20,%,n~/.viminfo
+autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+" 自动跳转当上次结束编辑的位置
+"autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 "离开插入模式后 自动关闭预览窗口
 "autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
@@ -1968,14 +1972,14 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)
     if exists('$HOME/vimfiles/*vimrc')
-	    map <leader>ee :e $HOME/vimfiles/*vimrc<CR>
+	    map <leader>e :e $HOME/vimfiles/*vimrc<CR>
     else
-        map <leader>ee :e $VIM/*vimrc<CR>
+        map <leader>e :e $VIM/*vimrc<CR>
     endif
 
     autocmd! bufwritepost *vimrc source %
 else
-	map <leader>ee :e $HOME/.vimrc<cr>
+	map <leader>e :e $HOME/.vimrc<cr>
 	autocmd! bufwritepost .vimrc source %
 endif
 
