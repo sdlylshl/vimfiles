@@ -473,6 +473,8 @@ set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
 " 文件格式，默认 ffs=dos,unix
 set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
 set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
+"不明字符用双字节表示
+set ambiwidth=double
 
 if g:iswindows
 "设置字体:字号（字体名称空格用下划线代替<N）
@@ -676,13 +678,13 @@ noremap <C-l> <c-w>l
 
 " --- move around splits {
 " move to and maximize the below split 
-map <C-J> <C-W>j<C-W>_
+nnoremap <C-J> <C-W>j<C-W>_
 " move to and maximize the above split 
-map <C-K> <C-W>k<C-W>_
+nnoremap <C-K> <C-W>k<C-W>_
 " move to and maximize the left split 
-nmap <c-h> <c-w>h<c-w><bar>
+nnoremap <c-h> <c-w>h<c-w><bar>
 " move to and maximize the right split  
-nmap <c-l> <c-w>l<c-w><bar>
+nnoremap <c-l> <c-w>l<c-w><bar>
 set wmw=0                     " set the min width of a window to 0 so we can maximize others 
 set wmh=0                     " set the min height of a window to 0 so we can maximize others
 " }
@@ -1214,6 +1216,8 @@ Bundle 'scrooloose/nerdtree'
 "Bundle 'troydm/asyncfinder.vim'
 "Bundle 'Shougo/unite.vim'
 Bundle 'kien/ctrlp.vim'
+"--- http://gnuwin32.sourceforge.net/packages/grep.htm (.../findutils.htm)
+Bundle 'yegappan/grep'
 
 if g:islinux
 "--- 依赖: ACK2.x
@@ -1268,7 +1272,15 @@ filetype plugin indent on                             "启用缩进
 " =============================================================================
 "                          << 以下为常用插件配置 >>
 " =============================================================================
-
+" -----------------------------------------------------------------------------
+"  < Grep 插件配置 >
+" ----------------------------------------------------------------------------
+":cwindow 
+let Grep_OpenQuickfixWindow = 0 
+"循环查找
+"let Grep_Find_Use_Xargs = 0 
+let Grep_Default_Filelist = '*.[chS]'
+let Grep_Skip_Files = '*.bak *~' 
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
 " ----------------------------------------------------------------------------
