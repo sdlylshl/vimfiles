@@ -291,14 +291,15 @@ nmap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
 nmap <F3> :TagbarToggle<CR>
 nmap <F4> :SrcExplToggle<CR>
 
-" CTRL-SHIFT+F4 强制关闭当前窗口
-noremap <C-S-F4> :close!<CR>
-inoremap <C-S-F4> <C-O>:close!<CR>
+" CTRL+ F4 强制关闭当前窗口
+nnoremap <C-F4> :close!<CR>
+inoremap <C-F4> <C-O>:close!<CR>
 
+"<F5> 一键分屏
+"nnoremap <F5> :vertical ba<CR>
 "<Ctrl + F5>显示可打印字符开关
 nnoremap <silent> <C-F5> :set list! list?<CR>
-"<F5> 一键分屏
-nnoremap <F5> :vertical ba<CR>
+
 "<Ctrl + F6> 切换行号显示模式
 nmap <silent> <C-F6> :set relativenumber!<CR>
 
@@ -315,12 +316,11 @@ nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 nnoremap <silent> <F12> <c-w>=
 nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 
-"nnoremap <silent> <F5> :cp<CR>      "QuickFix窗口中上一条记录
-"nnoremap <silent> <F6> :cn<CR>      "QuickFix窗口中下一条记录
-"nnoremap <silent> <F7> :Grep<CR>    "查找命令
-" QuickFix open and close
-"nnoremap <F11> :copen<CR>
-"nnoremap <F12> :cclose<CR>
+nnoremap <silent> <F5> :cw<CR>
+nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
+nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
+nnoremap <silent> <F8> :cclose<CR>
+
 
 "--------------------------------------------------------------
 "搜索居中
@@ -409,7 +409,17 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 " :b 1 :b 2   :bf :bl
 "强制关闭当前缓存
 noremap <silent> <c-w> :bd!<CR>
-
+" normal模式下切换到确切的tab
+map <leader>1 :b 1<CR>
+map <leader>2 :b 2<CR>
+map <leader>3 :b 3<CR>
+map <leader>4 :b 4<CR>
+map <leader>5 :b 5<CR>
+map <leader>6 :b 6<CR>
+map <leader>7 :b 7<CR>
+map <leader>8 :b 8<CR>
+map <leader>9 :b 9<CR>
+map <leader>0 :blast<cr>
 " Buffer切换
 nnoremap [b :bprevious<cr>
 nnoremap ]b :bnext<cr>
@@ -437,10 +447,11 @@ map <leader>tm :tabm<cr>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-
+set winaltkeys=no
 " 在文件名上按gf时，在新的tab中打开
 map gf :tabnew <cfile><cr>
-map <leader>n :tabnew<cr>
+" alt+n 打开新tab
+map î  :tabnew<cr>
 "nnoremap <C-t>     :tabnew<CR>
 "inoremap <C-t>     <Esc>:tabnew<CR>
 " TODO: 配置成功这里, 切换更方便, 两个键
@@ -452,19 +463,20 @@ nnoremap <C-tab>   :tabnext<CR>
 " nnoremap <C-Right> :tabnext<CR>
 
 " normal模式下切换到确切的tab
-map <leader>1 1gt
-map <leader>2 2gt
-map <leader>3 3gt
-map <leader>4 4gt
-map <leader>5 5gt
-map <leader>6 6gt
-map <leader>7 7gt
-map <leader>8 8gt
-map <leader>9 9gt
-map <leader>0 :tablast<cr>
+"映射alt+{num}
+map ± 1gt
+map ² 2gt
+map ³ 3gt
+map ´ 4gt
+map µ 5gt
+map ¶ 6gt
+map · 7gt
+map ¸ 8gt
+map ¹ 9gt
+map ° :tablast<cr>
 
-" Toggles between the active and last active tab "
-" The first tab is always 1 "
+" toggles between the active and last active tab "
+" the first tab is always 1 "
 let g:last_active_tab = 1
 " nnoremap <leader>gt :execute 'tabnext ' . g:last_active_tab<cr>
 " nnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
@@ -624,6 +636,9 @@ set autowrite        " 自动把内容写回文件: 如果文件被修改过，�
 
 set autochdir       "自动切换当前目录为当前文件所在的目录
 
+"不用altkeys映射到窗口列表
+set winaltkeys=no
+
 " 文件设置
 set writebackup                             "保存文件前建立备份，保存成功后删除该备份
 set nobackup                                "设置无备份文件
@@ -647,6 +662,8 @@ set viminfo^=%
 " 与windows共享剪贴板
 set clipboard+=unnamed
 
+" 优化大文件编辑
+let g:LargeFile=10
 
 "历史记录
 set history=50        " set command history to 50    "历史记录50条
@@ -931,8 +948,6 @@ endif
 " 使用Vundle来管理插件，这个必须要有。
 Bundle 'gmarik/vundle'
 
-Bundle 'clones/vim-l9'
-
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
 "GIT
@@ -992,7 +1007,6 @@ Bundle 'cSyntaxAfter'
 "Bundle 'edkolev/tmuxline.vim'
 "Bundle 'Shougo/vimshell.vim'
 "Bundle 'Shougo/vimproc.vim'
-"Bundle 'Shougo/unite.vim'
 "Bundle 'edkolev/promptline.vim'
 
 "org-mode
@@ -1076,15 +1090,21 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'jistr/vim-nerdtree-tabs'
-"Bundle 'Shougo/unite.vim'
-Bundle 'kien/ctrlp.vim'
+
+
 "Bundle 'jlanzarotta/bufexplorer'
 "Bundle 'vim-scripts/minibufexplorerpp'
 "Bundle 'ShowMarks'
 "Bundle 'Mark--Karkat'
 
-"--- 模糊查找 依赖vim-L9库
-Bundle 'FuzzyFinder'
+
+    "--- 模糊查找 依赖:vim-L9库
+"Bundle 'clones/vim-l9'
+"Bundle 'FuzzyFinder'
+    "--- 依赖:python
+"Bundle 'troydm/asyncfinder.vim'
+"Bundle 'Shougo/unite.vim'
+Bundle 'kien/ctrlp.vim'
 
 if g:islinux
 "--- 依赖: ACK2.x
