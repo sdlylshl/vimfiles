@@ -197,6 +197,7 @@ function! ToGitDir()
             let g:isGit = 0
         endif
 endfunction
+
 " -----------------------------------------------------------------------------
 "  < Windows Gvim 默认配置> 做了一点修改
 " -----------------------------------------------------------------------------
@@ -296,13 +297,19 @@ set backspace=indent,eol,start
 "indent: 如果用了:set indent,:set ai 等自动缩进，想用退格键将字段缩进的删掉，必须设置这个选项。否则不响应。
 "eol:如果插入模式下在行开头，想通过退格键合并两行，需要设置eol。
 "start：要想删除此次插入前的输入，需设置这个。
+autocmd! FileType Makefile set noexpandtab
 
 set smartindent                                       "为C程序提供 智能自动缩进
 set autoindent        " 继承前一行的缩进方式 设置自动对齐(缩进) 使用 noautoindent 取消设置
 set cindent            " 使用 C/C++ 语言的自动缩进方式
 set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
+" C/C++ specific settings
+autocmd FileType c,cpp  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
+
 " 补全时忽略这些忽略文件
 set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
+
+set copyindent		" copy the previous indentation on autoindenting
 
 "开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
 "set ofu=syntaxcomplete#Complete
@@ -311,8 +318,10 @@ set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
 " 自动补全配置让Vim补全菜单行为跟IDE一致
 "set completeopt=longest,menu
 
+set wildchar=<TAB>	" start wild expansion in the command line using <TAB>
+
 " 增强模式中的命令行 自动完成操作
-set wildmenu
+set wildmenu            " wild char completion men
 
 set nofoldenable                                      "关闭折叠
 set foldmethod=indent
@@ -351,7 +360,7 @@ set viminfo^=%
 " 保存全局变量
 "set viminfo+=!
 
-" 与windows共享剪贴板
+" 与windows共享剪贴板  yank to the system register (*)
 set clipboard+=unnamed
 
 " 优化大文件编辑
@@ -507,6 +516,17 @@ else
         set termencoding=utf-8          "解决Linux终端乱码
         "set mouse=a                    " 在任何模式下启用鼠标
         set t_Co=256                    " 在终端启用256色
+        " fixed the arrow key problems caused by AutoClose
+        set term=linux
+        "imap OA <ESC>ki
+        "imap OB <ESC>ji
+        "imap OC <ESC>li
+        "imap OD <ESC>hi
+
+        nmap OA k
+        nmap OB j
+        nmap OC l
+        nmap OD h 
 
         " Source a global configuration file if available
         if filereadable("/etc/vim/vimrc.local")
@@ -514,6 +534,9 @@ else
         endif
     endif
 endif
+
+" --- AutoClose - Inserts matching bracket, paren, brace or quote 
+
 " -----------------------------------------------------------------------------
 "                     < windows 下解决 Quickfix 乱码问题 >
 " -----------------------------------------------------------------------------
@@ -590,7 +613,23 @@ nnoremap <silent> <F5> :cw<CR>
 nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
 nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
 nnoremap <silent> <F8> :cclose<CR>
+" open the error console
+map <leader>cc :botright cope<CR> 
+" move to next error
+map <leader>] :cn<CR>
+" move to the prev error
+map <leader>[ :cp<CR
+"--------------------------------------------------------------------------- 
+" Tip #382: Search for <cword> and replace with input() in all open buffers 
+"--------------------------------------------------------------------------- 
+fun! Replace() 
+    let s:word = input("Replace " . expand('<cword>') . " with:") 
+    :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge' 
+    :unlet! s:word 
+endfun 
 
+"replace the current word in all opened buffers
+map <leader>r :call Replace()<CR>
 
 "--------------------------------------------------------------
 "搜索居中
@@ -626,11 +665,52 @@ noremap <C-l> <c-w>l
 "noremap <c-s-h> <c-w>h<c-w>_<c-w>\|
 "noremap <c-s-l> <c-w>l<c-w>_<c-w>\|
 
+" --- move around splits {
+" move to and maximize the below split 
+map <C-J> <C-W>j<C-W>_
+" move to and maximize the above split 
+map <C-K> <C-W>k<C-W>_
+" move to and maximize the left split 
+nmap <c-h> <c-w>h<c-w><bar>
+" move to and maximize the right split  
+nmap <c-l> <c-w>l<c-w><bar>
+set wmw=0                     " set the min width of a window to 0 so we can maximize others 
+set wmh=0                     " set the min height of a window to 0 so we can maximize others
+" }
+
 " 把空格键映射成:
 nnoremap <space> :
 
 nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
+
+" allow multiple indentation/deindentation in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" :cd. change working directory to that of the current file
+cmap cd. lcd %:p:h
+
+" Writing Restructured Text (Sphinx Documentation) {
+   " Ctrl-u 1:    underline Parts w/ #'s
+   noremap  <C-u>1 yyPVr#yyjp
+   inoremap <C-u>1 <esc>yyPVr#yyjpA
+   " Ctrl-u 2:    underline Chapters w/ *'s
+   noremap  <C-u>2 yyPVr*yyjp
+   inoremap <C-u>2 <esc>yyPVr*yyjpA
+   " Ctrl-u 3:    underline Section Level 1 w/ ='s
+   noremap  <C-u>3 yypVr=
+   inoremap <C-u>3 <esc>yypVr=A
+   " Ctrl-u 4:    underline Section Level 2 w/ -'s
+   noremap  <C-u>4 yypVr-
+   inoremap <C-u>4 <esc>yypVr-A
+   " Ctrl-u 5:    underline Section Level 3 w/ ^'s
+   noremap  <C-u>5 yypVr^
+   inoremap <C-u>5 <esc>yypVr^A
+"}
+
+" ,p toggles paste mode
+nmap <leader>p :set paste!<BAR>set paste?<CR>
 
 " 快速进入shell
 nnoremap <silent><leader>sh :shell<cr>
@@ -687,10 +767,12 @@ noremap <M-right> :bnext<CR>
 " -----------------------------------------------------------------------------
 "  <  tab 操作 >
 " -----------------------------------------------------------------------------
-" TODO: ctrl + n 变成切换tab的方法
 " http://vim.wikia.com/wiki/Alternative_tab_navigation
 " http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
-"noremap <C-2> 2gt
+" new tab
+map <C-t><C-t> :tabnew<CR>
+" close tab
+map <C-t><C-w> :tabclose<CR> 
 noremap <leader>th :tabfirst<cr>
 noremap <leader>tl :tablast<cr>
 
@@ -768,6 +850,20 @@ inoremap .> ->
 inoremap ä <esc>ebdei
 " alt+s删除引号之间的字符串
 inoremap ó <esc>di"i
+
+" Ctrl-[ jump out of the tag stack (undo Ctrl-])
+noremap <C-[> <ESC>:po<CR>
+
+" ,g generates the header guard
+map <leader>g :call IncludeGuard()<CR>
+fun! IncludeGuard()
+   let basename = substitute(bufname(""), '.*/', '', '')
+   let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
+   call append(0, "#ifndef " . guard)
+   call append(1, "#define " . guard)
+   call append( line("$"), "#endif // for #ifndef " . guard)
+endfun
+
 " =============================================================================
 "                          << 以下为常用工具配置 >>
 " =============================================================================
@@ -875,7 +971,7 @@ endfunction
 
 "ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
 "noremap <C-]> g<c-]>
-noremap <c-[> <c-t>
+"noremap <c-[> <c-t>
 
 " -----------------------------------------------------------------------------
 "  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
@@ -1993,6 +2089,7 @@ autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm 
 "autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
+
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
 "filetype plugin indent on
 "autocmd FileType c set omnifunc=ccomplete#Complete
@@ -2010,6 +2107,7 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
    "\   setlocal omnifunc=syntaxcomplete#Complete |
    "\ endif
 "endif
+"set cot-=preview "disable doc preview in omnicomplete
 
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)
