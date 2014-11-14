@@ -663,8 +663,8 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "Use arrow key to change buffer"
 " TODO: 如何跳转到确定的buffer?
 " :b 1 :b 2   :bf :bl
-"强制关闭当前缓存
-noremap <silent> <c-w> :bd!<CR>
+"alt+w强制关闭当前缓存
+noremap <silent> ÷ :bd!<CR>
 " normal模式下切换到确切的tab
 map <leader>1 :b 1<CR>
 map <leader>2 :b 2<CR>
@@ -708,8 +708,6 @@ set winaltkeys=no
 map gf :tabnew <cfile><cr>
 " alt+n 打开新tab
 map î  :tabnew<cr>
-"nnoremap <C-t>     :tabnew<CR>
-"inoremap <C-t>     <Esc>:tabnew<CR>
 " TODO: 配置成功这里, 切换更方便, 两个键
 nnoremap <C-S-tab> :tabprevious<CR>
 nnoremap <C-tab>   :tabnext<CR>
@@ -871,9 +869,12 @@ function! UpdateCtags()
 endfunction
 
 nmap <F10> :call UpdateCtags()<CR>
-map <s-f12> :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"map <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
+"map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
+"ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
+nmap <c-]> g<c-]>
+nmap <c-[> <c-t>
 " -----------------------------------------------------------------------------
 "  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
@@ -1375,7 +1376,7 @@ let g:ctrlp_match_window_reversed=0
 let g:ctrlp_mruf_max=500
 let g:ctrlp_follow_symlinks=1
 "定义切换目录
-let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_working_path_mode = 'ra'
 " -----------------------------------------------------------------------------
 "  < emmet-vim（前身为Zen coding） 插件配置 >
 " -----------------------------------------------------------------------------
