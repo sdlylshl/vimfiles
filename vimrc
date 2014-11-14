@@ -268,231 +268,6 @@ if g:islinux
         endif
     endif
 endif
-" =============================================================================
-"                          << 快捷键 >>
-" =============================================================================
-" 注：上面配置中的"<Leader>"在本软件中设置为"\"键（引号里的反斜杠），如<Leader>t
-" 指在常规模式下按"\"键加"t"键，这里不是同时按，而是先按"\"键后按"t"键，间隔在一
-" 秒内，而<Leader>cs是先按"\"键再按"c"又再按"s"键；如要修改"<leader>"键，可以把
-" 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
-
-" let mapleader = ";"
-
-" 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
-"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
-"从系统剪切板中复制，剪切，粘贴
-"map <F7> "+y
-"map <F8> "+x
-"map <F9> "+p
-"<F1> 查看Vim的runtime路径
-nmap <F1> :set rtp<CR>
-"nmap <F2> :NERDTreeToggle<CR>
-nmap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
-nmap <F3> :TagbarToggle<CR>
-nmap <F4> :SrcExplToggle<CR>
-
-" CTRL+ F4 强制关闭当前窗口
-nnoremap <C-F4> :close!<CR>
-inoremap <C-F4> <C-O>:close!<CR>
-
-"<F5> 一键分屏
-"nnoremap <F5> :vertical ba<CR>
-"<Ctrl + F5>显示可打印字符开关
-nnoremap <silent> <C-F5> :set list! list?<CR>
-
-"<Ctrl + F6> 切换行号显示模式
-nmap <silent> <C-F6> :set relativenumber!<CR>
-
-"<Ctrl + F7>自动换行
-nnoremap <silent> <C-F7> :set wrap!<CR>
-
-"<Ctrl + F8> 切换语法高亮
-nnoremap <silent> <C-F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
-
-" F10 to run python script
-nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
-
-"<F12>窗口最大化
-nnoremap <silent> <F12> <c-w>=
-nnoremap <silent> <C-F12> <c-w>_<c-w>\|
-
-nnoremap <silent> <F5> :cw<CR>
-nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
-nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
-nnoremap <silent> <F8> :cclose<CR>
-
-
-"--------------------------------------------------------------
-"搜索居中
-nnoremap <silent> n nzz
-nnoremap <silent> N Nzz
-nnoremap <silent> * *zz
-nnoremap <silent> # #zz
-nnoremap <silent> g* g*zz
-nnoremap <silent> g# g#zz
-
-" 去掉搜索高亮
-nmap  <leader>/ :nohls<CR>
-
-noremap <C-S-Up> ddkPk<CR>
-noremap <C-S-Down> ddpk<CR>
-
-"窗口切换<Alt+>
-"noremap <M-Up> <c-w>k
-"noremap <M-Down> <c-w>j
-"noremap <M-Left> <c-w>h
-"noremap <C-Right> <c-w>l
-noremap <C-Up> <c-w>k
-noremap <C-Down> <c-w>j
-noremap <C-Left> <c-w>h
-noremap <C-Right> <c-w>l
-noremap <C-k> <c-w>k
-noremap <C-j> <c-w>j
-noremap <C-h> <c-w>h
-noremap <C-l> <c-w>l
-"窗口切换并最大化
-"map <c-s-k> <c-w>k<c-w>_<c-w>\|
-"map <c-s-j> <c-w>j<c-w>_<c-w>\|
-"map <c-s-h> <c-w>h<c-w>_<c-w>\|
-"map <c-s-l> <c-w>l<c-w>_<c-w>\|
-
-" 把空格键映射成:
-nnoremap <space> :
-
-nnoremap <C-e> 5<C-e>
-nnoremap <C-y> 5<C-y>
-
-" 快速进入shell
-nnoremap <silent><leader>sh :shell<cr>
-
-" 常规模式下输入 cS 清除行尾空格
-nmap cS :%s/\s\+$//g<CR>:noh<CR>
-
-" 常规模式下输入 cM 清除行尾 ^M (CR)符号[^M$][$]
-nmap cM :%s/\\r$//g<CR>:noh<CR>
-
-" Ctrl + K 插入模式下光标向上移动
-imap <c-k> <Up>
-
-" Ctrl + J 插入模式下光标向下移动
-imap <c-j> <Down>
-
-" Ctrl + H 插入模式下光标向左移动
-imap <c-h> <Left>
-
-" Ctrl + L 插入模式下光标向右移动
-imap <c-l> <Right>
-
-"回车即选中当前项
-inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-"上下左右键的行为 会显示其他信息
-inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
-inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
-
-"系统默认自动补全 OmniCppComplete 配置
-"使用pumvisible()来判断下拉菜单是否显示
-"inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
-inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
-inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
-inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
-"如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
-"如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
-"如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
-"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
-
-" --------tab/buffer相关
-
-"Use arrow key to change buffer"
-" TODO: 如何跳转到确定的buffer?
-" :b 1 :b 2   :bf :bl
-"强制关闭当前缓存
-noremap <silent> <c-w> :bd!<CR>
-" normal模式下切换到确切的tab
-map <leader>1 :b 1<CR>
-map <leader>2 :b 2<CR>
-map <leader>3 :b 3<CR>
-map <leader>4 :b 4<CR>
-map <leader>5 :b 5<CR>
-map <leader>6 :b 6<CR>
-map <leader>7 :b 7<CR>
-map <leader>8 :b 8<CR>
-map <leader>9 :b 9<CR>
-map <leader>0 :blast<cr>
-" Buffer切换
-nnoremap [b :bprevious<cr>
-nnoremap ]b :bnext<cr>
-
-noremap <M-left> :bprevious<CR>
-noremap <M-right> :bnext<CR>
-" -----------------------------------------------------------------------------
-"  <  tab 操作 >
-" -----------------------------------------------------------------------------
-" TODO: ctrl + n 变成切换tab的方法
-" http://vim.wikia.com/wiki/Alternative_tab_navigation
-" http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
-"map <C-2> 2gt
-map <leader>th :tabfirst<cr>
-map <leader>tl :tablast<cr>
-
-"map <leader>tj :tabnext<cr>
-"map <leader>tk :tabprev<cr>
-"map <leader>tn :tabnext<cr>
-"map <leader>tp :tabprev<cr>
-
-"map <leader>te :tabedit<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabm<cr>
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
-set winaltkeys=no
-" 在文件名上按gf时，在新的tab中打开
-map gf :tabnew <cfile><cr>
-" alt+n 打开新tab
-map î  :tabnew<cr>
-"nnoremap <C-t>     :tabnew<CR>
-"inoremap <C-t>     <Esc>:tabnew<CR>
-" TODO: 配置成功这里, 切换更方便, 两个键
-nnoremap <C-S-tab> :tabprevious<CR>
-nnoremap <C-tab>   :tabnext<CR>
-" inoremap <C-S-tab> <Esc>:tabprevious<CR>i
-" inoremap <C-tab>   <Esc>:tabnext<CR>i
-" nnoremap <C-Left> :tabprevious<CR>
-" nnoremap <C-Right> :tabnext<CR>
-
-" normal模式下切换到确切的tab
-"映射alt+{num}
-map ± 1gt
-map ² 2gt
-map ³ 3gt
-map ´ 4gt
-map µ 5gt
-map ¶ 6gt
-map · 7gt
-map ¸ 8gt
-map ¹ 9gt
-map ° :tablast<cr>
-
-" toggles between the active and last active tab "
-" the first tab is always 1 "
-let g:last_active_tab = 1
-" nnoremap <leader>gt :execute 'tabnext ' . g:last_active_tab<cr>
-" nnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
-" vnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
-"nnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
-"vnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
-autocmd TabLeave * let g:last_active_tab = tabpagenr()
-
-"快捷键:
-"ctrl+j 选择下一个补全
-"ctrl+k 选择上一个补全
-"
-"ctrl+n 选择下一个补全
-"ctrl+p 选择上一个补全
-",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
-
 
 " =============================================================================
 "                     << windows 下解决 Quickfix 乱码问题 >>
@@ -742,7 +517,7 @@ if g:isGUI
     "导航栏
     set guioptions-=T
     "右边滚动条
-    set guioptions-=r
+    set guioptions+=r
     "左边滚动条
     set guioptions-=L
     "水平滚动条
@@ -765,8 +540,238 @@ endif
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
 " set vb t_vb=                                "关闭提示音
+" =============================================================================
+"                          << 快捷键 >>
+" =============================================================================
+" 注：上面配置中的"<Leader>"在本软件中设置为"\"键（引号里的反斜杠），如<Leader>t
+" 指在常规模式下按"\"键加"t"键，这里不是同时按，而是先按"\"键后按"t"键，间隔在一
+" 秒内，而<Leader>cs是先按"\"键再按"c"又再按"s"键；如要修改"<leader>"键，可以把
+" 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
+
+" let mapleader = ";"
+
+" 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
+"nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+"从系统剪切板中复制，剪切，粘贴
+"map <F7> "+y
+"map <F8> "+x
+"map <F9> "+p
+"<F1> 查看Vim的runtime路径
+nmap <F1> :set rtp<CR>
+"nmap <F2> :NERDTreeToggle<CR>
+nmap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
+nmap <F3> :TagbarToggle<CR>
+nmap <F4> :SrcExplToggle<CR>
+
+" CTRL+ F4 强制关闭当前窗口
+nnoremap <C-F4> :close!<CR>
+inoremap <C-F4> <C-O>:close!<CR>
+
+"<F5> 一键分屏
+"nnoremap <F5> :vertical ba<CR>
+"<Ctrl + F5>显示可打印字符开关
+nnoremap <silent> <C-F5> :set list! list?<CR>
+
+"<Ctrl + F6> 切换行号显示模式
+nmap <silent> <C-F6> :set relativenumber!<CR>
+
+"<Ctrl + F7>自动换行
+nnoremap <silent> <C-F7> :set wrap!<CR>
+
+"<Ctrl + F8> 切换语法高亮
+nnoremap <silent> <C-F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+
+" F10 to run python script
+nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
+
+"<F12>窗口最大化
+nnoremap <silent> <F12> <c-w>=
+nnoremap <silent> <C-F12> <c-w>_<c-w>\|
+
+nnoremap <silent> <F5> :cw<CR>
+nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
+nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
+nnoremap <silent> <F8> :cclose<CR>
 
 
+"--------------------------------------------------------------
+"搜索居中
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+nnoremap <silent> * *zz
+nnoremap <silent> # #zz
+nnoremap <silent> g* g*zz
+nnoremap <silent> g# g#zz
+
+" 去掉搜索高亮
+nmap  <leader>/ :nohls<CR>
+
+noremap <C-S-Up> ddkPk<CR>
+noremap <C-S-Down> ddpk<CR>
+
+"窗口切换<Alt+>
+"noremap <M-Up> <c-w>k
+"noremap <M-Down> <c-w>j
+"noremap <M-Left> <c-w>h
+"noremap <C-Right> <c-w>l
+noremap <C-Up> <c-w>k
+noremap <C-Down> <c-w>j
+noremap <C-Left> <c-w>h
+noremap <C-Right> <c-w>l
+noremap <C-k> <c-w>k
+noremap <C-j> <c-w>j
+noremap <C-h> <c-w>h
+noremap <C-l> <c-w>l
+"窗口切换并最大化
+"map <c-s-k> <c-w>k<c-w>_<c-w>\|
+"map <c-s-j> <c-w>j<c-w>_<c-w>\|
+"map <c-s-h> <c-w>h<c-w>_<c-w>\|
+"map <c-s-l> <c-w>l<c-w>_<c-w>\|
+
+" 把空格键映射成:
+nnoremap <space> :
+
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+
+" 快速进入shell
+nnoremap <silent><leader>sh :shell<cr>
+
+" 常规模式下输入 cS 清除行尾空格
+nmap cS :%s/\s\+$//g<CR>:noh<CR>
+
+" 常规模式下输入 cM 清除行尾 ^M (CR)符号[^M$][$]
+nmap cM :%s/\\r$//g<CR>:noh<CR>
+
+"回车即选中当前项
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+"上下左右键的行为 会显示其他信息
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+
+"系统默认自动补全 OmniCppComplete 配置
+"使用pumvisible()来判断下拉菜单是否显示
+"inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
+inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
+inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
+inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
+"如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
+"如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
+"如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
+"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
+
+" --------tab/buffer相关
+
+"Use arrow key to change buffer"
+" TODO: 如何跳转到确定的buffer?
+" :b 1 :b 2   :bf :bl
+"强制关闭当前缓存
+noremap <silent> <c-w> :bd!<CR>
+" normal模式下切换到确切的tab
+map <leader>1 :b 1<CR>
+map <leader>2 :b 2<CR>
+map <leader>3 :b 3<CR>
+map <leader>4 :b 4<CR>
+map <leader>5 :b 5<CR>
+map <leader>6 :b 6<CR>
+map <leader>7 :b 7<CR>
+map <leader>8 :b 8<CR>
+map <leader>9 :b 9<CR>
+map <leader>0 :blast<cr>
+" Buffer切换
+nnoremap [b :bprevious<cr>
+nnoremap ]b :bnext<cr>
+
+noremap <M-left> :bprevious<CR>
+noremap <M-right> :bnext<CR>
+" -----------------------------------------------------------------------------
+"  <  tab 操作 >
+" -----------------------------------------------------------------------------
+" TODO: ctrl + n 变成切换tab的方法
+" http://vim.wikia.com/wiki/Alternative_tab_navigation
+" http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
+"map <C-2> 2gt
+map <leader>th :tabfirst<cr>
+map <leader>tl :tablast<cr>
+
+"map <leader>tj :tabnext<cr>
+"map <leader>tk :tabprev<cr>
+"map <leader>tn :tabnext<cr>
+"map <leader>tp :tabprev<cr>
+
+"map <leader>te :tabedit<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabm<cr>
+" Opens a new tab with the current buffer's path
+" Super useful when editing files in the same directory
+map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+set winaltkeys=no
+" 在文件名上按gf时，在新的tab中打开
+map gf :tabnew <cfile><cr>
+" alt+n 打开新tab
+map î  :tabnew<cr>
+"nnoremap <C-t>     :tabnew<CR>
+"inoremap <C-t>     <Esc>:tabnew<CR>
+" TODO: 配置成功这里, 切换更方便, 两个键
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>
+" inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+" inoremap <C-tab>   <Esc>:tabnext<CR>i
+" nnoremap <C-Left> :tabprevious<CR>
+" nnoremap <C-Right> :tabnext<CR>
+
+" normal模式下切换到确切的tab
+"映射alt+{num}
+map ± 1gt
+map ² 2gt
+map ³ 3gt
+map ´ 4gt
+map µ 5gt
+map ¶ 6gt
+map · 7gt
+map ¸ 8gt
+map ¹ 9gt
+map ° :tablast<cr>
+
+" toggles between the active and last active tab "
+" the first tab is always 1 "
+let g:last_active_tab = 1
+" nnoremap <leader>gt :execute 'tabnext ' . g:last_active_tab<cr>
+" nnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
+" vnoremap <silent> <c-o> :execute 'tabnext ' . g:last_active_tab<cr>
+"nnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
+"vnoremap <silent> <leader>tt :execute 'tabnext ' . g:last_active_tab<cr>
+autocmd TabLeave * let g:last_active_tab = tabpagenr()
+
+"快捷键:
+"ctrl+j 选择下一个补全
+"ctrl+k 选择上一个补全
+"
+"ctrl+n 选择下一个补全
+"ctrl+p 选择上一个补全
+",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
+
+" alt + K 插入模式下光标向上移动
+imap ë <Up>
+
+" alt + J 插入模式下光标向下移动
+imap ê <Down>
+
+" alt + H 插入模式下光标向左移动
+imap è <Left>
+
+" alt + L 插入模式下光标向右移动
+imap ì <Right>
+
+imap {} {<CR>}<Up><End><CR>
+imap .> ->
+
+"alt+d 删除光标所在的单词
+imap ä <esc>ebdei
+" alt+s删除引号之间的字符串
+imap ó <esc>di"i
 " =============================================================================
 "                          << 以下为常用工具配置 >>
 " =============================================================================
