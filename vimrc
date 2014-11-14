@@ -232,31 +232,7 @@ if g:iswindows
     endfunction
 endif
 
-" -----------------------------------------------------------------------------
-"  < Linux Gvim/Vim 默认配置> 做了一点修改
-" -----------------------------------------------------------------------------
-if g:islinux
 
-    if g:isGUI
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/gvimrc.local")
-            source /etc/vim/gvimrc.local
-        endif
-    else
-        " This line should not be removed as it ensures that various options are
-        " properly set to work with the Vim-related packages available in Debian.
-		"此处会修改vim runtimepath rtp 所以放到Bundle前面
-        runtime! debian.vim
-
-        "set mouse=a                    " 在任何模式下启用鼠标
-        set t_Co=256                   " 在终端启用256色
-
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/vimrc.local")
-            source /etc/vim/vimrc.local
-        endif
-    endif
-endif
 
 
 "  -----------------------------------------------------------------------------
@@ -480,9 +456,10 @@ endif
 " -----------------------------------------------------------------------------
 " 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
 set encoding=utf-8                                    "设置gvim内部编码，默认不更改
-set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
-set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1     "设置支持打开的文件的编码
-set termencoding=chinese                              "解决gvim不乱码，但vim乱码
+set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）   
+
+"设置支持打开的文件的编码
+set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
 
 " 文件格式，默认 ffs=dos,unix
 set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
@@ -497,20 +474,44 @@ else
 endif
 
 "if (g:iswindows && g:isGUI)
-if (g:iswindows)
-    "解决菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
+if g:iswindows
 
-    "解决consle输出乱码
-    language messages zh_CN.utf-8
+        "解决菜单乱码
+        source $VIMRUNTIME/delmenu.vim
+        source $VIMRUNTIME/menu.vim
 
-    set langmenu=zh_CN.UTF-8
-    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-    if g:isGUI
+      "解决consle输出乱码
+      language messages zh_CN.utf-8
+
+      "解决gvim不乱码，但vim乱码
+      set termencoding=chinese
+    
+      set langmenu=zh_CN.UTF-8
+
         "colorscheme molokai
         "set term=xterm
-        set t_Co=256
+        "set t_Co=256
+
+else
+    if g:isGUI
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/gvimrc.local")
+            source /etc/vim/gvimrc.local
+        endif
+    else
+        " This line should not be removed as it ensures that various options are
+        " properly set to work with the Vim-related packages available in Debian.
+		"此处会修改vim runtimepath rtp 所以放到Bundle前面
+        runtime! debian.vim
+
+        set termencoding=utf-8          "解决Linux终端乱码
+        "set mouse=a                    " 在任何模式下启用鼠标
+        set t_Co=256                    " 在终端启用256色
+
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/vimrc.local")
+            source /etc/vim/vimrc.local
+        endif
     endif
 endif
 " -----------------------------------------------------------------------------
