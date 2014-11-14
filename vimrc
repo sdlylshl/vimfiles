@@ -236,10 +236,6 @@ endif
 "  < Linux Gvim/Vim 默认配置> 做了一点修改
 " -----------------------------------------------------------------------------
 if g:islinux
-    set hlsearch        "高亮搜索
-    set incsearch       "在输入要搜索的文字时，实时匹配
-
-
 
     if g:isGUI
         " Source a global configuration file if available
@@ -252,15 +248,8 @@ if g:islinux
 		"此处会修改vim runtimepath rtp 所以放到Bundle前面
         runtime! debian.vim
 
-        " Vim5 and later versions support syntax highlighting. Uncommenting the next
-        " line enables syntax highlighting by default.
-        if has("syntax")
-            syntax on
-        endif
-
         "set mouse=a                    " 在任何模式下启用鼠标
         set t_Co=256                   " 在终端启用256色
-        set backspace=2                " 设置退格键可用
 
         " Source a global configuration file if available
         if filereadable("/etc/vim/vimrc.local")
@@ -269,25 +258,7 @@ if g:islinux
     endif
 endif
 
-" =============================================================================
-"                     << windows 下解决 Quickfix 乱码问题 >>
-" =============================================================================
-" windows 默认编码为 cp936，而 Gvim(Vim) 内部编码为 utf-8，所以常常输出为乱码
-" 以下代码可以将编码为 cp936 的输出信息转换为 utf-8 编码，以解决输出乱码问题
-" 但好像只对输出信息全部为中文才有满意的效果，如果输出信息是中英混合的，那可能
-" 不成功，会造成其中一种语言乱码，输出信息全部为英文的好像不会乱码
-" 如果输出信息为乱码的可以试一下下面的代码，如果不行就还是给它注释掉
 
-" if g:iswindows
-"     function QfMakeConv()
-"         let qflist = getqflist()
-"         for i in qflist
-"            let i.text = iconv(i.text, "cp936", "utf-8")
-"         endfor
-"         call setqflist(qflist)
-"      endfunction
-"      autocmd QuickfixCmdPost make call QfMakeConv()
-" endif
 "  -----------------------------------------------------------------------------
 "  < :set 设置 >
 " -----------------------------------------------------------------------------
@@ -325,40 +296,10 @@ endif
 "   \r\n<P>(译注--这些选项在各种vi版本中都基本上大同小异,以SunOS带的vi为例,它没有这里列
 "   出来的open选项, scroll的参数值也不同,还多出来一些选项,如flash,modelines,
 "   novice,tagstack等等)
-" -----------------------------------------------------------------------------
-"  < 编码配置 >
-" -----------------------------------------------------------------------------
-" 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
-set encoding=utf-8                                    "设置gvim内部编码，默认不更改
-set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
-set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1     "设置支持打开的文件的编码
-set termencoding=chinese                              "解决gvim不乱码，但vim乱码
 
-" 文件格式，默认 ffs=dos,unix
-set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
-set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
-
-
-
-
-"if (g:iswindows && g:isGUI)
-if (g:iswindows)
-    "解决菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
-
-    "解决consle输出乱码
-    language messages zh_CN.utf-8
-
-    set langmenu=zh_CN.UTF-8
-    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
-    if g:isGUI
-    "colorscheme molokai
-    "set term=xterm
-    set t_Co=256
-    endif
-endif
-
+" =============================================================================
+"                            < 系统配置 >
+" =============================================================================
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
 " -----------------------------------------------------------------------------
@@ -450,7 +391,7 @@ match OverLength '\%81v.*'
 
 
 " -----------------------------------------------------------------------------
-"  < 界面配置 >
+"                       < 界面配置 >
 " -----------------------------------------------------------------------------
 set number                                            "显示行号
 set cmdheight=1                                       "设置命令行的高度为2，默认为1
@@ -498,9 +439,9 @@ set showmode            " 命令行显示vim当前模式
 
 " 设置 gvim 窗口初始位置及大小
 if g:isGUI
-    "autocmd guienter * simalt ~x                     "窗口启动时自动最大化
-    winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
-    set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
+    autocmd guienter * simalt ~x                     "窗口启动时自动最大化
+    "winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
+    "set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
 endif
 
 " 设置代码配色方案
@@ -525,7 +466,6 @@ if g:isGUI
     nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
         \set guioptions-=m <Bar>
         \set guioptions-=T <Bar>
-        \set guioptions-=r <Bar>
         \set guioptions-=L <Bar>
         \set guioptions-=b <Bar>
     \else <Bar>
@@ -533,9 +473,65 @@ if g:isGUI
         \set guioptions+=T <Bar>
         \set guioptions+=r <Bar>
         \set guioptions+=L <Bar>
-        \set guioptions+=b <Bar>
     \endif<CR>
 endif
+" -----------------------------------------------------------------------------
+"                        < 编码配置 >
+" -----------------------------------------------------------------------------
+" 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
+set encoding=utf-8                                    "设置gvim内部编码，默认不更改
+set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
+set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1     "设置支持打开的文件的编码
+set termencoding=chinese                              "解决gvim不乱码，但vim乱码
+
+" 文件格式，默认 ffs=dos,unix
+set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
+set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
+
+if g:iswindows
+"设置字体:字号（字体名称空格用下划线代替<N）
+    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
+"set guifont=Consolas_for_Powerline_FixedD:h9
+else
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+endif
+
+"if (g:iswindows && g:isGUI)
+if (g:iswindows)
+    "解决菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+
+    "解决consle输出乱码
+    language messages zh_CN.utf-8
+
+    set langmenu=zh_CN.UTF-8
+    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+    if g:isGUI
+        "colorscheme molokai
+        "set term=xterm
+        set t_Co=256
+    endif
+endif
+" -----------------------------------------------------------------------------
+"                     < windows 下解决 Quickfix 乱码问题 >
+" -----------------------------------------------------------------------------
+" windows 默认编码为 cp936，而 Gvim(Vim) 内部编码为 utf-8，所以常常输出为乱码
+" 以下代码可以将编码为 cp936 的输出信息转换为 utf-8 编码，以解决输出乱码问题
+" 但好像只对输出信息全部为中文才有满意的效果，如果输出信息是中英混合的，那可能
+" 不成功，会造成其中一种语言乱码，输出信息全部为英文的好像不会乱码
+" 如果输出信息为乱码的可以试一下下面的代码，如果不行就还是给它注释掉
+
+" if g:iswindows
+"     function QfMakeConv()
+"         let qflist = getqflist()
+"         for i in qflist
+"            let i.text = iconv(i.text, "cp936", "utf-8")
+"         endfor
+"         call setqflist(qflist)
+"      endfunction
+"      autocmd QuickfixCmdPost make call QfMakeConv()
+" endif
 " -----------------------------------------------------------------------------
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
@@ -1474,10 +1470,7 @@ let g:ctrlsf_auto_close = 0
 map <D-F> :CtrlSF<space>
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
-" -----------------------------------------------------------------------------
-"设置字体:字号（字体名称空格用下划线代替<N）
-set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
-"set guifont=Consolas_for_Powerline_FixedD:h9
+
 
 "启用标签栏[必备]Smarter tab line
 let g:airline#extensions#tabline#enabled = 1
