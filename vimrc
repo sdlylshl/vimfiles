@@ -1323,17 +1323,27 @@ autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAft
 " 一个全路径模糊文件，缓冲区，最近最多使用，... 检索插件；详细帮助见 :h ctrlp
 " 常规模式下输入：Ctrl + p 调用插件
 "let g:ctrlp_map = '<leader>p'
-"let g:ctrlp_cmd = 'CtrlP'
+"let g:ctrlp_cmd = 'CtrlPMixed'
 "map <leader>f :CtrlPMRU<CR>
-"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/<a href="http://www.it165.net/os/oslin/" target="_blank" class="keylink">Linux</a>
-"let g:ctrlp_custom_ignore = {
-"    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
-"    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz)$',
-"    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-"    \ }
+" Press `<F5>` to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
+" Press `<c-f>` and `<c-b>` to cycle between modes.
+" Press `<c-d>` to switch to filename only search instead of full path.
+" Press `<c-r>` to switch to regexp mode.
+" Use `<c-j>`, `<c-k>` or the arrow keys to navigate the result list.
+" Use `<c-t>` or `<c-v>`, `<c-x>` to open the selected entry in a new tab or in a new split.
+" Use `<c-n>`, `<c-p>` to select the next/previous string in the prompt's history.
+" Use `<c-y>` to create a new file and its parent directories.
+" Use `<c-z>` to mark/unmark multiple files and `<c-o>` to open them.
+if g:iswindows
+   " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+endif
 let g:ctrlp_custom_ignore = {
-\ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|lib|out|png|img|bak|db|o)'
-\ }
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'file': '\v\.(txt|exe|so|dll|zip|tar|tar.gz)$',
+    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+    \ }
+
 " 在每次进行切换分支或者重新设定custome_ignore选项的时候,必须手动清除CtrlP的缓存,
 " 也可以使用下句不让它进行缓存处理，但扫描时间会比较耗时
 "let g:ctrlp_use_caching = 0
@@ -1343,8 +1353,8 @@ let g:ctrlp_max_height=15
 let g:ctrlp_match_window_reversed=0
 let g:ctrlp_mruf_max=500
 let g:ctrlp_follow_symlinks=1
-nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <leader>d :CtrlPDir<CR>
+"定义切换目录
+let g:ctrlp_working_path_mode = 'r'
 " -----------------------------------------------------------------------------
 "  < emmet-vim（前身为Zen coding） 插件配置 >
 " -----------------------------------------------------------------------------
