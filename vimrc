@@ -463,7 +463,7 @@ if g:isGUI
     set guioptions-=L
     "水平滚动条
     set guioptions-=b
-    nmap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
+    nnoremap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
         \set guioptions-=m <Bar>
         \set guioptions-=T <Bar>
         \set guioptions-=L <Bar>
@@ -549,15 +549,15 @@ endif
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 "从系统剪切板中复制，剪切，粘贴
-"map <F7> "+y
-"map <F8> "+x
-"map <F9> "+p
+"noremap <F7> "+y
+"noremap <F8> "+x
+"noremap <F9> "+p
 "<F1> 查看Vim的runtime路径
-nmap <F1> :set rtp<CR>
-"nmap <F2> :NERDTreeToggle<CR>
-nmap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
-nmap <F3> :TagbarToggle<CR>
-nmap <F4> :SrcExplToggle<CR>
+nnoremap <F1> :set rtp<CR>
+"nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
+nnoremap <F3> :TagbarToggle<CR>
+nnoremap <F4> :SrcExplToggle<CR>
 
 " CTRL+ F4 强制关闭当前窗口
 nnoremap <C-F4> :close!<CR>
@@ -569,7 +569,7 @@ inoremap <C-F4> <C-O>:close!<CR>
 nnoremap <silent> <C-F5> :set list! list?<CR>
 
 "<Ctrl + F6> 切换行号显示模式
-nmap <silent> <C-F6> :set relativenumber!<CR>
+nnoremap <silent> <C-F6> :set relativenumber!<CR>
 
 "<Ctrl + F7>自动换行
 nnoremap <silent> <C-F7> :set wrap!<CR>
@@ -577,6 +577,7 @@ nnoremap <silent> <C-F7> :set wrap!<CR>
 "<Ctrl + F8> 切换语法高亮
 nnoremap <silent> <C-F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
+nmap <F10> :call UpdateCtags()<CR>
 " F10 to run python script
 nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 
@@ -600,7 +601,7 @@ nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
 " 去掉搜索高亮
-nmap  <leader>/ :nohls<CR>
+nnoremap  <leader>/ :nohls<CR>
 
 noremap <C-S-Up> ddkPk<CR>
 noremap <C-S-Down> ddpk<CR>
@@ -619,10 +620,10 @@ noremap <C-j> <c-w>j
 noremap <C-h> <c-w>h
 noremap <C-l> <c-w>l
 "窗口切换并最大化
-"map <c-s-k> <c-w>k<c-w>_<c-w>\|
-"map <c-s-j> <c-w>j<c-w>_<c-w>\|
-"map <c-s-h> <c-w>h<c-w>_<c-w>\|
-"map <c-s-l> <c-w>l<c-w>_<c-w>\|
+"noremap <c-s-k> <c-w>k<c-w>_<c-w>\|
+"noremap <c-s-j> <c-w>j<c-w>_<c-w>\|
+"noremap <c-s-h> <c-w>h<c-w>_<c-w>\|
+"noremap <c-s-l> <c-w>l<c-w>_<c-w>\|
 
 " 把空格键映射成:
 nnoremap <space> :
@@ -634,10 +635,10 @@ nnoremap <C-y> 5<C-y>
 nnoremap <silent><leader>sh :shell<cr>
 
 " 常规模式下输入 cS 清除行尾空格
-nmap cS :%s/\s\+$//g<CR>:noh<CR>
+nnoremap cS :%s/\s\+$//g<CR>:noh<CR>
 
 " 常规模式下输入 cM 清除行尾 ^M (CR)符号[^M$][$]
-nmap cM :%s/\\r$//g<CR>:noh<CR>
+nnoremap cM :%s/\\r$//g<CR>:noh<CR>
 
 "回车即选中当前项
 inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
@@ -666,16 +667,16 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "alt+w强制关闭当前缓存
 noremap <silent> ÷ :bd!<CR>
 " normal模式下切换到确切的tab
-map <leader>1 :b 1<CR>
-map <leader>2 :b 2<CR>
-map <leader>3 :b 3<CR>
-map <leader>4 :b 4<CR>
-map <leader>5 :b 5<CR>
-map <leader>6 :b 6<CR>
-map <leader>7 :b 7<CR>
-map <leader>8 :b 8<CR>
-map <leader>9 :b 9<CR>
-map <leader>0 :blast<cr>
+noremap <leader>1 :b 1<CR>
+noremap <leader>2 :b 2<CR>
+noremap <leader>3 :b 3<CR>
+noremap <leader>4 :b 4<CR>
+noremap <leader>5 :b 5<CR>
+noremap <leader>6 :b 6<CR>
+noremap <leader>7 :b 7<CR>
+noremap <leader>8 :b 8<CR>
+noremap <leader>9 :b 9<CR>
+noremap <leader>0 :blast<cr>
 " Buffer切换
 nnoremap [b :bprevious<cr>
 nnoremap ]b :bnext<cr>
@@ -688,26 +689,26 @@ noremap <M-right> :bnext<CR>
 " TODO: ctrl + n 变成切换tab的方法
 " http://vim.wikia.com/wiki/Alternative_tab_navigation
 " http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
-"map <C-2> 2gt
-map <leader>th :tabfirst<cr>
-map <leader>tl :tablast<cr>
+"noremap <C-2> 2gt
+noremap <leader>th :tabfirst<cr>
+noremap <leader>tl :tablast<cr>
 
-"map <leader>tj :tabnext<cr>
-"map <leader>tk :tabprev<cr>
-"map <leader>tn :tabnext<cr>
-"map <leader>tp :tabprev<cr>
+"noremap <leader>tj :tabnext<cr>
+"noremap <leader>tk :tabprev<cr>
+"noremap <leader>tn :tabnext<cr>
+"noremap <leader>tp :tabprev<cr>
 
-"map <leader>te :tabedit<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabm<cr>
+"noremap <leader>te :tabedit<cr>
+noremap <leader>tc :tabclose<cr>
+noremap <leader>tm :tabm<cr>
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+noremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 set winaltkeys=no
 " 在文件名上按gf时，在新的tab中打开
-map gf :tabnew <cfile><cr>
+noremap gf :tabnew <cfile><cr>
 " alt+n 打开新tab
-map î  :tabnew<cr>
+noremap î  :tabnew<cr>
 " TODO: 配置成功这里, 切换更方便, 两个键
 nnoremap <C-S-tab> :tabprevious<CR>
 nnoremap <C-tab>   :tabnext<CR>
@@ -718,16 +719,16 @@ nnoremap <C-tab>   :tabnext<CR>
 
 " normal模式下切换到确切的tab
 "映射alt+{num}
-map ± 1gt
-map ² 2gt
-map ³ 3gt
-map ´ 4gt
-map µ 5gt
-map ¶ 6gt
-map · 7gt
-map ¸ 8gt
-map ¹ 9gt
-map ° :tablast<cr>
+noremap ± 1gt
+noremap ² 2gt
+noremap ³ 3gt
+noremap ´ 4gt
+noremap µ 5gt
+noremap ¶ 6gt
+noremap · 7gt
+noremap ¸ 8gt
+noremap ¹ 9gt
+noremap ° :tablast<cr>
 
 " toggles between the active and last active tab "
 " the first tab is always 1 "
@@ -748,24 +749,24 @@ autocmd TabLeave * let g:last_active_tab = tabpagenr()
 ",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
 
 " alt + K 插入模式下光标向上移动
-imap ë <Up>
+inoremap ë <Up>
 
 " alt + J 插入模式下光标向下移动
-imap ê <Down>
+inoremap ê <Down>
 
 " alt + H 插入模式下光标向左移动
-imap è <Left>
+inoremap è <Left>
 
 " alt + L 插入模式下光标向右移动
-imap ì <Right>
+inoremap ì <Right>
 
-imap {} {<CR>}<Up><End><CR>
-imap .> ->
+inoremap {} {<CR>}<Up><End><CR>
+inoremap .> ->
 
 "alt+d 删除光标所在的单词
-imap ä <esc>ebdei
+inoremap ä <esc>ebdei
 " alt+s删除引号之间的字符串
-imap ó <esc>di"i
+inoremap ó <esc>di"i
 " =============================================================================
 "                          << 以下为常用工具配置 >>
 " =============================================================================
@@ -831,21 +832,21 @@ if has("cscope")
 "    set cscopeverbose
 "    "快捷键设置
 "    " 查找符号
-"    nmap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
-"    nmap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
-"    nmap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
-"    nmap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
-"    nmap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
-"    nmap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
-"    nmap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
-"    nmap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
-"    nmap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
+"    nnoremap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
+"    nnoremap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
+"    nnoremap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
+"    nnoremap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
+"    nnoremap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
+"    nnoremap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
+"    nnoremap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
+"    nnoremap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
+"    nnoremap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
 "
-"    nmap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
-"    nmap <C-\>r :cs reset<CR>               "   重新初始化所有连接
+"    nnoremap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
+"    nnoremap <C-\>r :cs reset<CR>               "   重新初始化所有连接
 "
-"    "map <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
-"    nmap <F8> :call UpdateCscope()<CR>
+"    "noremap <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+"    nnoremap <F8> :call UpdateCscope()<CR>
 
 
 endif
@@ -868,20 +869,20 @@ function! UpdateCtags()
         !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
 endfunction
 
-nmap <F10> :call UpdateCtags()<CR>
-"map <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
-"map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+"noremap <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
+"noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 "ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
-nmap <c-]> g<c-]>
-nmap <c-[> <c-t>
+"noremap <C-]> g<c-]>
+noremap <c-[> <c-t>
+
 " -----------------------------------------------------------------------------
 "  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
 " 用于 Windows Gvim 全屏窗口，可用 F11 切换
 " 全屏后再隐藏菜单栏、工具栏、滚动条效果更好
 if (g:iswindows && g:isGUI)
-    map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
+    noremap <F11> <Esc>:call libcallnr("gvimfullscreen.dll","ToggleFullScreen",0)<CR>
 endif
 
 " -----------------------------------------------------------------------------
@@ -917,9 +918,9 @@ if (g:iswindows && g:isGUI)
     endfunc
 
     "快捷键设置
-    map <s-up> :call Alpha_add()<CR>
-    map <s-down> :call Alpha_sub()<CR>
-    map <leader>tw :call Top_window()<CR>
+    noremap <s-up> :call Alpha_add()<CR>
+    noremap <s-down> :call Alpha_sub()<CR>
+    noremap <leader>tw :call Top_window()<CR>
 endif
 
 
@@ -1165,11 +1166,11 @@ filetype plugin indent on                             "启用缩进
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
 " ----------------------------------------------------------------------------
-"nmap ]c <Plug>GitGutterNextHunk
-"nmap [c <Plug>GitGutterPrevHunk
+"nnoremap ]c <Plug>GitGutterNextHunk
+"nnoremap [c <Plug>GitGutterPrevHunk
 "暂存 <Leader>hs 和回退 <Leader>hr
-"nmap <Leader>hr <Plug>GitGutterStageHunk
-"nmap <Leader>hr <Plug>GitGutterRevertHunk
+"nnoremap <Leader>hr <Plug>GitGutterStageHunk
+"nnoremap <Leader>hr <Plug>GitGutterRevertHunk
 "显示diff差异<Leader>hp
 "
 
@@ -1177,22 +1178,22 @@ filetype plugin indent on                             "启用缩进
 "  < cscope 插件配置 >
 " ----------------------------------------------------------------------------
 " s: Find this C symbol
-"map <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+"noremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
 " g: Find this definition
-"map <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+"noremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
 " d: Find functions called by this function
-"map <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+"noremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
 " c: Find functions calling this function
-"map <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+"noremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
 " t: Find this text string
-"map <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+"noremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
 " e: Find this egrep pattern
-"map <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+"noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
 " f: Find this file
-"map <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+"noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
 " i: Find files #including this file
-"map <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
-"map <leader>l :call ToggleLocationList()<CR>
+"noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+"noremap <leader>l :call ToggleLocationList()<CR>
 "保留生成文件
 let g:cscope_files_kept = 1
 
@@ -1306,9 +1307,9 @@ let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../
 "  < tabular 插件配置 >
 " -----------------------------------------------------------------------------
 " \bb                 按=号对齐代码 [Tabular插件]
-"nmap <leader>bb :Tab /=<CR>
+"nnoremap <leader>bb :Tab /=<CR>
 " \bn                 自定义对齐    [Tabular插件]
-"nmap <leader>bn :Tab /
+"nnoremap <leader>bn :Tab /
 " -----------------------------------------------------------------------------
 "  < auto-pairs 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1346,7 +1347,7 @@ autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAft
 " 常规模式下输入：Ctrl + p 调用插件
 "let g:ctrlp_map = '<leader>p'
 "let g:ctrlp_cmd = 'CtrlPMixed'
-"map <leader>f :CtrlPMRU<CR>
+"noremap <leader>f :CtrlPMRU<CR>
 " Press `<F5>` to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
 " Press `<c-f>` and `<c-b>` to cycle between modes.
 " Press `<c-d>` to switch to filename only search instead of full path.
@@ -1388,7 +1389,7 @@ let g:ctrlp_working_path_mode = 'ra'
 " 用于显示对齐线，与 indent_guides 在显示方式上不同，根据自己喜好选择了
 " 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
 " 开启/关闭对齐线
-nmap <leader>il :IndentLinesToggle<CR>
+nnoremap <leader>il :IndentLinesToggle<CR>
 
 " 设置Gvim的对齐线样式
 if g:isGUI
@@ -1451,7 +1452,7 @@ let NERDTreeWinPos='right'
 let NERDTreeHighlightCursorline=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
 
-"nmap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
+"nnoremap <silent><leader>nt :exec("NERDTree ".expand('%:p:h'))<CR>
 
 " -----------------------------------------------------------------------------
 "  < FuzzyFinder 插件配置 >
@@ -1468,7 +1469,7 @@ nnoremap <leader>fuq :FufQuickfix<CR>
 " -----------------------------------------------------------------------------
 let g:ctrlsf_ackprg = 'ag'
 let g:ctrlsf_auto_close = 0
-map <D-F> :CtrlSF<space>
+noremap <D-F> :CtrlSF<space>
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 
@@ -1540,7 +1541,7 @@ let g:syntastic_always_populate_loc_list = 1
 " 相对 TagList 能更好的支持面向对象
 
 " 常规模式下输入 tb 调用插件，如果有打开 TagList 窗口则先将其关闭
-"nmap tb :TlistClose<CR>:TagbarToggle<CR>
+"nnoremap tb :TlistClose<CR>:TagbarToggle<CR>
 let g:tagbar_width=30                       "设置窗口宽度
 let g:tagbar_left=1                         "在左侧窗口中显示
 let g:tagbar_autofocus = 1
@@ -1554,8 +1555,8 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 " 那里面列出了当前文件中的所有宏,全局变量, 函数名等
 
 " 常规模式下输入 tl 调用插件，如果有打开 Tagbar 窗口则先将其关闭
-"nmap tl :TagbarClose<CR>:Tlist<CR>
-nmap tl :TlistToggle<CR>
+"nnoremap tl :TagbarClose<CR>:Tlist<CR>
+nnoremap tl :TlistToggle<CR>
 
 let Tlist_Show_One_File=1                   "只显示当前文件的tags
 " let Tlist_Enable_Fold_Column=0              "使taglist插件不显示左边的折叠行
@@ -1579,7 +1580,7 @@ autocmd BufRead,BufNewFile *.txt setlocal ft=txt
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
 "
-map <leader>td <Plug>TaskList
+noremap <leader>td <Plug>TaskList
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1612,7 +1613,7 @@ map <leader>td <Plug>TaskList
   " :let g:vimim_punctuation = 2
   " :let g:vimim_shuangpin = 0
   " :let g:vimim_toggle = 'pinyin,google,sogou'
-" imap<silent><C-L> <Plug>VimimChineseToggle
+" inoremap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 以下为软件默认配置 >>
 " =============================================================================
@@ -1621,16 +1622,16 @@ map <leader>td <Plug>TaskList
 "  < 编译、连接、运行配置 (目前只配置了C、C++、Java语言)>
 " -----------------------------------------------------------------------------
 " F9 一键保存、编译、连接存并运行
-nmap <F9> :call Run()<CR>
-imap <F9> <ESC>:call Run()<CR>
+nnoremap <F9> :call Run()<CR>
+inoremap <F9> <ESC>:call Run()<CR>
 
 " Ctrl + F9 一键保存并编译
-nmap <c-F9> :call Compile()<CR>
-imap <c-F9> <ESC>:call Compile()<CR>
+nnoremap <c-F9> :call Compile()<CR>
+inoremap <c-F9> <ESC>:call Compile()<CR>
 
 " Ctrl + F10 一键保存并连接
-nmap <c-F10> :call Link()<CR>
-imap <c-F10> <ESC>:call Link()<CR>
+nnoremap <c-F10> :call Link()<CR>
+inoremap <c-F10> <ESC>:call Link()<CR>
 
 let s:LastShellReturn_C = 0
 let s:LastShellReturn_L = 0
@@ -1861,22 +1862,22 @@ if g:iswindows
     "以下为只支持Windows系统的浏览器
 
     " 调用系统IE浏览器预览，如果已卸载可将其注释
-    nmap <F5>ie :call ViewInBrowser("ie")<cr>
-    imap <F5>ie <ESC>:call ViewInBrowser("ie")<cr>
+    nnoremap <F5>ie :call ViewInBrowser("ie")<cr>
+    inoremap <F5>ie <ESC>:call ViewInBrowser("ie")<cr>
 
     " 调用IETester(IE测试工具)预览，如果有安装可取消注释
-    " nmap <F5>ie6 :call ViewInBrowser("ie6")<cr>
-    " imap <F5>ie6 <ESC>:call ViewInBrowser("ie6")<cr>
-    " nmap <F5>ie7 :call ViewInBrowser("ie7")<cr>
-    " imap <F5>ie7 <ESC>:call ViewInBrowser("ie7")<cr>
-    " nmap <F5>ie8 :call ViewInBrowser("ie8")<cr>
-    " imap <F5>ie8 <ESC>:call ViewInBrowser("ie8")<cr>
-    " nmap <F5>ie9 :call ViewInBrowser("ie9")<cr>
-    " imap <F5>ie9 <ESC>:call ViewInBrowser("ie9")<cr>
-    " nmap <F5>ie10 :call ViewInBrowser("ie10")<cr>
-    " imap <F5>ie10 <ESC>:call ViewInBrowser("ie10")<cr>
-    " nmap <F5>iea :call ViewInBrowser("iea")<cr>
-    " imap <F5>iea <ESC>:call ViewInBrowser("iea")<cr>
+    " nnoremap <F5>ie6 :call ViewInBrowser("ie6")<cr>
+    " inoremap <F5>ie6 <ESC>:call ViewInBrowser("ie6")<cr>
+    " nnoremap <F5>ie7 :call ViewInBrowser("ie7")<cr>
+    " inoremap <F5>ie7 <ESC>:call ViewInBrowser("ie7")<cr>
+    " nnoremap <F5>ie8 :call ViewInBrowser("ie8")<cr>
+    " inoremap <F5>ie8 <ESC>:call ViewInBrowser("ie8")<cr>
+    " nnoremap <F5>ie9 :call ViewInBrowser("ie9")<cr>
+    " inoremap <F5>ie9 <ESC>:call ViewInBrowser("ie9")<cr>
+    " nnoremap <F5>ie10 :call ViewInBrowser("ie10")<cr>
+    " inoremap <F5>ie10 <ESC>:call ViewInBrowser("ie10")<cr>
+    " nnoremap <F5>iea :call ViewInBrowser("iea")<cr>
+    " inoremap <F5>iea <ESC>:call ViewInBrowser("iea")<cr>
 elseif g:islinux
     "以下为只支持Linux系统的浏览器
     "暂未配置，待有时间再弄了
@@ -1885,20 +1886,20 @@ endif
 "以下为支持Windows与Linux系统的浏览器
 
 " 调用Firefox浏览器预览，如果有安装可取消注释
-" nmap <F5>ff :call ViewInBrowser("ff")<cr>
-" imap <F5>ff <ESC>:call ViewInBrowser("ff")<cr>
+" nnoremap <F5>ff :call ViewInBrowser("ff")<cr>
+" inoremap <F5>ff <ESC>:call ViewInBrowser("ff")<cr>
 
 " 调用Maxthon(遨游)浏览器预览，如果有安装可取消注释
-" nmap <F5>ay :call ViewInBrowser("ay")<cr>
-" imap <F5>ay <ESC>:call ViewInBrowser("ay")<cr>
+" nnoremap <F5>ay :call ViewInBrowser("ay")<cr>
+" inoremap <F5>ay <ESC>:call ViewInBrowser("ay")<cr>
 
 " 调用Opera浏览器预览，如果有安装可取消注释
-" nmap <F5>op :call ViewInBrowser("op")<cr>
-" imap <F5>op <ESC>:call ViewInBrowser("op")<cr>
+" nnoremap <F5>op :call ViewInBrowser("op")<cr>
+" inoremap <F5>op <ESC>:call ViewInBrowser("op")<cr>
 
 " 调用Chrome浏览器预览，如果有安装可取消注释
-" nmap <F5>cr :call ViewInBrowser("cr")<cr>
-" imap <F5>cr <ESC>:call ViewInBrowser("cr")<cr>
+" nnoremap <F5>cr :call ViewInBrowser("cr")<cr>
+" inoremap <F5>cr <ESC>:call ViewInBrowser("cr")<cr>
 
 " 浏览器调用函数
 function! ViewInBrowser(name)
@@ -2012,14 +2013,14 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)
     if exists('$HOME/vimfiles/*vimrc')
-	    map <leader>e :e $HOME/vimfiles/*vimrc<CR>
+	    noremap <leader>e :e $HOME/vimfiles/*vimrc<CR>
     else
-        map <leader>e :e $VIM/*vimrc<CR>
+        noremap <leader>e :e $VIM/*vimrc<CR>
     endif
 
     autocmd! bufwritepost *vimrc source %
 else
-	map <leader>e :e $HOME/.vimrc<cr>
+	noremap <leader>e :e $HOME/.vimrc<cr>
 	autocmd! bufwritepost .vimrc source %
 endif
 
