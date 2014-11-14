@@ -569,7 +569,14 @@ endif
 " 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
 
 " let mapleader = ";"
-
+" 
+" :marks
+" :reg
+" :buffers :ls
+" :tabs
+" :tags
+" :clist :cw
+"
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 "从系统剪切板中复制，剪切，粘贴
