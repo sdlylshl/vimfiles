@@ -649,9 +649,11 @@ nnoremap <silent> g# g#zz
 
 " 去掉搜索高亮
 nnoremap  <leader>/ :nohls<CR>
-
-noremap <C-S-Up> ddkPk<CR>
-noremap <C-S-Down> ddpk<CR>
+" 上下移动一行文字
+nnoremap <C-S-Up> mz:m-2<cr>`z
+nnoremap <C-S-Down> mz:m+<cr>`z
+vnoremap <C-S-Down> :m'>+<cr>`<my`>mzgv`yo`z
+vnoremap <C-S-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 
 "窗口切换<Alt+>
 "noremap <M-Up> <c-w>k
