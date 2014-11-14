@@ -415,7 +415,7 @@ set showmode            " 命令行显示vim当前模式
 
 " 设置 gvim 窗口初始位置及大小
 if g:isGUI
-    autocmd guienter * simalt ~x                     "窗口启动时自动最大化
+    "autocmd guienter * simalt ~x                     "窗口启动时自动最大化
     "winpos 100 10                                     "指定窗口出现的位置，坐标原点在屏幕左上角
     "set lines=38 columns=120                          "指定窗口大小，lines为高度，columns为宽度
 endif
