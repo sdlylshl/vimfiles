@@ -1,164 +1,4 @@
-"   # 在vim的正则表达式中， + 和 | 都必须加转义符 \\
-"   # 小心，这和perl不一样！
-"   /fred\\+/      : 匹配fred或freddy但是不匹配free
-"   ----------------------------------------
-"   # \\v ，或叫做very magic (通常都是这么叫)可以取消转义符
-"   /codes\\(\\n\\|\\s\\)*where  : 普通的正则表达式
-"   /\\vcodes(\\n|\\s)*where   : very magic，| 不用加 \\ 了！\r\n----------------------------------------
-"   # 把东西送到命令行/搜索行
-"   <C-R><C-W>              : 送一个狭义词
-"   <C-R><C-A>              : 送一个广义词
-"   <C-R>-                  : 送一个小型删除寄存器register
-"   <C-R>[0-9a-z]           : 送一个命名寄存器register
-"   <C-R>%                  : 送文件名过去 (#也行)
-"
-"   ) 下一句
-"   ( 上一句
-"   } 下一段
-"   { 上一段
-"   ]] 下一节
-"   [[ 上一节
-"   0 行的开头
-"   $ 行的末尾
-"   ^ 行的第一个非空白字符
-"   + 下一行的开头
-"   - 上一行的开
-"   (空格) 下一个字符
-"   (回车) 下一行
-"   / 向前搜索
-"   ? 向后搜索
-"   % 查找当前小(中,大)括号的匹配字符
-"   , 逆向重复上一个f,F,t或T操作
-"   ; 重复上一个f,F,t或T操作
-"   . 重复上一个操作
-"   ` 转到标记处
-"   \' 转到标记所在行的开头
-"   `` 查找前回到上一个做标记的地方
-"   \'\' 查找前回到上一个做标记所在行的开头
-"   ~ 切换字符的大小写
-"   \" 保存到寄存器中
-"   !! 重复上一次SHELL命令
-"   ! 把后面的文本送给命令, 取代输出(例如, !}fmt把当前的段落
-"   送给命令fmt处理,然后用fmt返回的东西替换输出.)
-"   &gt;&gt; 右移当前段落一个移动宽度(shiftwidth)
-"   &lt;&lt; 左移当前段落一个移动宽(shiftwidth)
-"   &gt;% 从当前到匹配小(中,大)括号之间的文本右移
-"   &lt;% 从当前到匹配小(中,大)括号之间的文本左移
-"   (似乎漏了一个符号|, 移动到某一列----译注)
-"   pl:显示文件结构 fl:显示目录结构
-"   viw 选中一个单词 yiw 复制一个单词
-"   :reg 显示剪贴板
-"   + 是系统剪切板
-"   a 在当前位置之后添加
-"   A 在当前行的末尾添加
-"   ^a 没有使用
-"   b 上一个单词的开头
-"   B 上一个单词的开头,忽略标点符号
-"   ^b 上移一屏
-"   c 覆盖...
-"   C 覆盖到行末尾
-"   ^c 终止插入模式,在命令模式没有用
-"   d 删除...
-"   D 删除到行末尾
-"   \r\n<P>^d 下移半屏，如果在插入模式下则移到上一个移动宽度（ShiftTab)处
-"   e 单词的末尾
-"   E 单词的末尾,忽略标点符号
-"   ^e 屏幕下卷一行
-"   f 查找...
-"   F 向后查找...
-"   ^f 下移一屏
-"   g 未用
-"   G ...跳至[缺省是到文件末尾]
-"   ^g 显示状态栏
-"   h 左移
-"   H 屏幕上的第一行
-"   ^h 在插入模式下是退格,命令模式下是左移
-"   i 在当前的位置前面插入
-"   I 在本行的第一个非空白字符前面插入
-"   ^i 插入模式下是制表键,命令模式下未用
-"   j 下移
-"   J 把下一行合并到本行
-"   ^j 命令模式下是下移,插入模式下是建一个新行
-"   k 上移
-"   K 未用
-"   ^k 未用
-"   l 右移
-"   L 屏幕中的最后一行
-"   ^l 重绘屏
-"   m 把当前位置标记到寄存器中
-"   M 屏幕的中间行
-"   ^m 回车
-"   n 重复上次查找
-"   N 逆向重复上次查找
-"   ^n 命令模式下是下移
-"   o 在当前行的下面建一个新行
-"   O 在当前行的上面建一个新行
-"   ^o 未用
-"   p 在当前行的下面粘贴
-"   (译注--应为在当前位置的后面粘贴)
-"   P 在当前行的上面粘贴
-"   (译注--应为在当前位置的前面粘贴)
-"   ^p 命令模式下是上移
-"   q 未用
-"   Q 退出并且启动ex
-"   ^q 未用
-"   r 覆盖当前的字符
-"   R 在插入模式下一直覆盖字符
-"   ^r 在命令模式下面重绘屏幕
-"   s 替换
-"   S 替换整行
-"   t 到...
-"   T 向后到...
-"   ^t 移到下一个移动宽度(shifttab)处
-"   u 撤消上一次操
-"   U 撤消对本行的所有修改
-"   ^u 上移半屏
-"   v 未用
-"   V 未用
-"   ^v 未用
-"   w 下一个单词的开头
-"   W 下一个单词的开头,忽略标点符号
-"   ^w 命令模式下未用,在插入模式下是到上一个单词的开头处
-"   x 删除当前字符
-"   X 删除前一个字符
-"   ^x 未用
-"   y 复制...
-"   Y 复制整行
-"   ^y 屏幕上卷一行
-"   z 重新配置当前行周围的屏幕
-"   ZZ 保存之后退出
-"   ^z 未用
-"   (译注--在命令模式下,^z执行了UNIX暂停操作)
-"   6.1 - 命令模式的输入选项(:命令)
-"   (注: 这不是一个规范的列表,, 我只是列出了一些最重要的命令)
-"   :r &lt;文件&gt; 把&lt;文件&gt;读入到当前文档
-"   :r !&lt;命令&gt; 把&lt;命令&gt;的输出插入到当前文本中
-"   :nr &lt;文件&gt; 把&lt;文件&gt;插入到第n行
-"   :!&lt;命令&gt; 运行&lt;命令&gt;,然后返回
-"   :sh 转到SHELL
-"   :so &lt;文件&gt; 读取&lt;文件&gt;,再执行文件里面的命令
-"   (译注--文件中的命令应该都是一些ex命令)
-"   保存之后退出
-"   :wq 保存之后退出
-"   :l1,l2w &lt;文件&gt;把第l1和第l2行之间的文本写到&lt;文件&gt;中去,如果没有指定&lt;文件&gt;,
-"   vi就假定是当前文件,如果没有指定l1,l2,就假定是整个文件(就成了:w)
-"   :w &gt;&gt; &lt;文&gt; 添加到&lt;文件&gt;末尾. 也可以使用行号
-"   :w! 覆盖当前文件
-"   :q 退出
-"   :q! 不存盘就退出
-"   :e &lt;文件&gt; 不离开vi编辑&lt;文件&gt;
-"   :e! 重新编辑当前文件,忽略所有的修改
-"   :n 编辑下一个文件
-"   :e +n &lt;文件&gt; 从第n行开始编辑&lt;文件&gt;,如果超过了末尾,就从末尾开始编辑
-"   :e# 编辑替换文件(如果使用了命令:e&lt;文件&gt;,替换文件就指的是原始文件)
-"   :args 显示所有要编辑的文件
-"   :rew 重新回到第一个编辑的文档
-"   :map m n 创建一个宏(使 m 做 n)
-"   :map! m n 创建一个插入模式的宏(使 m 做 n)
-"   :unmap m 删除宏m
-"   :unmap! m 删除插入模式的宏m
-"   :ab &lt;1&gt; &lt;2&gt; 缩写,敲&lt;1&gt;的时候&lt;2&gt;取代
-"   :unab &lt;1&gt; 取消缩写&lt;1&gt;
+
 " -----------------------------------------------------------------------------
 "  < 判断操作系统是否是 Windows 还是 Linux >
 " -----------------------------------------------------------------------------
@@ -356,8 +196,8 @@ set browsedir=current    "设置文件浏览使用的目录
 " Remember info about open buffers on close"
 set viminfo^=%
 
-" 保存全局变量
-"set viminfo+=!
+" 保存全局变量 Marks
+set viminfo+=!
 
 " 与windows共享剪贴板  yank to the system register (*)
 set clipboard+=unnamed
@@ -561,6 +401,72 @@ endif
 "  < 其它配置 >
 " -----------------------------------------------------------------------------
 " set vb t_vb=                                "关闭提示音
+"
+"   # 在vim的正则表达式中， + 和 | 都必须加转义符 \\
+"   # 小心，这和perl不一样！
+"   /fred\\+/      : 匹配fred或freddy但是不匹配free
+"   ----------------------------------------
+"   # \\v ，或叫做very magic (通常都是这么叫)可以取消转义符
+"   /codes\\(\\n\\|\\s\\)*where  : 普通的正则表达式
+"   /\\vcodes(\\n|\\s)*where   : very magic，| 不用加 \\ 了！\r\n----------------------------------------
+"   # 把东西送到命令行/搜索行
+"   <C-R><C-W>              : 送一个狭义词
+"   <C-R><C-A>              : 送一个广义词
+"   <C-R>-                  : 送一个小型删除寄存器register
+"   <C-R>[0-9a-z]           : 送一个命名寄存器register
+"   <C-R>%                  : 送文件名过去 (#也行)
+"
+"   ) 下一句
+"   ( 上一句
+"   } 下一段
+"   { 上一段
+"   ]] 下一节
+"   [[ 上一节
+
+"   , 逆向重复上一个f,F,t或T操作
+"   ; 重复上一个f,F,t或T操作
+
+"  marks
+"	.   	最近编辑的位置
+"	0-9  	最近使用的文件
+"	∧   	最近插入的位置 gi
+"	'   	上一次跳转或m前的位置
+"	"   	上一次离开缓冲区的位置
+"	[   	上一次修改的开始处
+"	]   	上一次修改的结尾处
+
+"   ` 转到标记处
+"   \' 转到标记所在行的开头
+"   `` 查找前回到上一个做标记的地方
+"   \'\' 查找前回到上一个做标记所在行的开头
+"   ~ 切换字符的大小写
+"   \" 保存到寄存器中
+
+
+"   viw 选中一个单词 yiw 复制一个单词
+
+"   ^l 重绘屏
+"   ^m 回车
+
+"   ^n 命令模式下是下移
+"   ^p 命令模式下是上移
+
+"   :sh 转到SHELL
+"   !! 重复上一次SHELL命令
+"   ! 把后面的文本送给命令, 取代输出(例如, !}fmt把当前的段落
+"   送给命令fmt处理,然后用fmt返回的东西替换输出.)
+
+"   :n 编辑下一个文件
+"   :rew    重新回到第一个编辑的文档
+
+"   :args   显示所有要编辑的文件
+"   :marks
+"   :reg
+"   :buffers :ls
+"   :tabs
+"   :tags
+"   :clist :cw
+"
 " =============================================================================
 "                          << 快捷键 >>
 " =============================================================================
@@ -571,13 +477,7 @@ endif
 
 " let mapleader = ";"
 "
-" :marks
-" :reg
-" :buffers :ls
-" :tabs
-" :tags
-" :clist :cw
-"
+
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 "从系统剪切板中复制，剪切，粘贴
@@ -616,7 +516,9 @@ nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 "<F12>窗口最大化
 nnoremap <silent> <F12> <c-w>=
 nnoremap <silent> <C-F12> <c-w>_<c-w>\|
-
+" -----------------------------------------------------------------------------
+"  <  QuickFix 操作 >
+" ----------------------------------------------------------------------------
 nnoremap <silent> <F5> :cw<CR>      "有错误打开QuickFix
 nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
 nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
@@ -638,6 +540,10 @@ nnoremap <silent> # #zz
 nnoremap <silent> g* g*zz
 nnoremap <silent> g# g#zz
 
+nnoremap <silent> gd gD
+nnoremap <silent> gD gd
+
+",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
 " 去掉搜索高亮
 nnoremap  <leader>/ :nohls<CR>
 
@@ -650,7 +556,7 @@ vnoremap <M-Down> :m'>+<cr>`<my`>mzgv`yo`z
 vnoremap <M-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 
 "insert复制当前行
-inoremap <C-D> <ESC>yyP<cr>
+inoremap <C-D> <ESC>yyPA
 
 
 " 把空格键映射成:
@@ -686,7 +592,7 @@ cnoremap cd. lcd %:p:h
 nnoremap <leader>p :set paste!<BAR>set paste?<CR>
 
 " 快速进入shell
-nnoremap <silent><leader>sh :shell<cr>
+nnoremap <silent><leader>s :shell<cr>
 
 " 常规模式下输入 cS 清除行尾空格
 "nnoremap cS :%s/\s\+$//g<CR>:noh<CR>
@@ -712,18 +618,11 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
 "如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
 "如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
+
 " -----------------------------------------------------------------------------
 "  <  窗口 操作 >
 " -----------------------------------------------------------------------------
 "窗口切换<Alt+>
-"noremap <M-Up> <c-w>k
-"noremap <M-Down> <c-w>j
-"noremap <M-Left> <c-w>h
-"noremap <C-Right> <c-w>l
-noremap <C-Up> <c-w>k
-noremap <C-Down> <c-w>j
-noremap <C-Left> <c-w>h
-noremap <C-Right> <c-w>l
 noremap <C-k> <c-w>k
 noremap <C-j> <c-w>j
 noremap <C-h> <c-w>h
@@ -756,37 +655,24 @@ noremap <leader>8 :b 8<CR>
 noremap <leader>9 :b 9<CR>
 noremap <leader>0 :blast<cr>
 
-noremap <M-left> :bprevious<CR>
-noremap <M-right> :bnext<CR>
+noremap <C-left> :bprevious<CR>
+noremap <C-right> :bnext<CR>
 " -----------------------------------------------------------------------------
 "  <  tab 操作 >
 " -----------------------------------------------------------------------------
 " http://vim.wikia.com/wiki/Alternative_tab_navigation
 " http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
-" new tab
-noremap <C-t><C-t> :tabnew<CR>
-" close tab
-noremap <C-t><C-w> :tabclose<CR>
-noremap <leader>th :tabfirst<cr>
-noremap <leader>tl :tablast<cr>
 
-"noremap <leader>tj :tabnext<cr>
-"noremap <leader>tk :tabprev<cr>
-"noremap <leader>tn :tabnext<cr>
-"noremap <leader>tp :tabprev<cr>
-
-noremap <leader>tc :tabclose<cr>
-noremap <leader>tm :tabm<cr>
-
-noremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+"noremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 set winaltkeys=no
 " 在文件名上按gf时，在新的tab中打开
 noremap gf :tabnew <cfile><cr>
 " alt+n 打开新tab
 noremap î  :tabnew<cr>
 " TODO: 配置成功这里, 切换更方便, 两个键
-nnoremap <C-S-tab> :tabprevious<CR>
-nnoremap <C-tab>   :tabnext<CR>
+
+nnoremap <M-Left>   :tabprevious<CR>
+nnoremap <M-Right>  :tabnext<CR>
 
 " normal模式下切换到确切的tab
 "映射alt+{num}
@@ -817,7 +703,6 @@ autocmd TabLeave * let g:last_active_tab = tabpagenr()
 "
 "ctrl+n 选择下一个补全
 "ctrl+p 选择上一个补全
-",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
 
 " alt + K 插入模式下光标向上移动
 inoremap ë <Up>
@@ -1016,7 +901,7 @@ if (g:iswindows && g:isGUI)
     "快捷键设置
     noremap <s-up> :call Alpha_add()<CR>
     noremap <s-down> :call Alpha_sub()<CR>
-    noremap <leader>tw :call Top_window()<CR>
+"    noremap <leader>tw :call Top_window()<CR>
 endif
 
 
@@ -1077,8 +962,8 @@ Bundle 'motemen/git-vim'
 "Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制
 "Plugin 'exvim/ex-tagbar'
 
-Bundle 'a.vim'
-Bundle 'std_c.zip'
+"Bundle 'a.vim'
+"Bundle 'std_c.zip'
 	"--- 自动生成tags与cscope文件并连接
 	"More convenience way to use ctags and cscope in vim
 "Bundle 'ccvext.vim'
@@ -1194,9 +1079,11 @@ Bundle 'scrooloose/nerdtree'
 
 "Bundle 'jlanzarotta/bufexplorer'
 "Bundle 'vim-scripts/minibufexplorerpp'
+"
 "Bundle 'ShowMarks'
 "Bundle 'Mark--Karkat'
-
+"--- 左侧显示marks
+Bundle 'kshenoy/vim-signature'
 
     "--- 模糊查找 依赖:vim-L9库
 "Bundle 'clones/vim-l9'
@@ -1270,37 +1157,77 @@ let Grep_OpenQuickfixWindow = 0
 "let Grep_Find_Use_Xargs = 0
 let Grep_Default_Filelist = '*.[chS]'
 let Grep_Skip_Files = '*.bak *~'
+
+nnoremap <Leader>gd  :GitDiff
+nnoremap <Leader>gD  :GitDiff –cached
+nnoremap <Leader>gs  :GitStatus
+nnoremap <Leader>gl  :GitLog
+nnoremap <Leader>ga  :GitAdd
+nnoremap <Leader>gA  :GitAdd <cfile>
+nnoremap <Leader>gc  :GitCommit
+nnoremap <Leader>gb  :GitBlame
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
-" ----------------------------------------------------------------------------
-"nnoremap ]c <Plug>GitGutterNextHunk
-"nnoremap [c <Plug>GitGutterPrevHunk
+" -----------------------------------------------------------------------------
+nnoremap ]c <Plug>GitGutterNextHunk
+nnoremap [c <Plug>GitGutterPrevHunk
+
+nnoremap <leader>hp <Plug>GitGutterPreviewHunk
+nnoremap <leader>hr <Plug>GitGutterRevertHunk
+nnoremap <leader>hs <Plug>GitGutterStageHunk
+
 "暂存 <Leader>hs 和回退 <Leader>hr
 "nnoremap <Leader>hr <Plug>GitGutterStageHunk
 "nnoremap <Leader>hr <Plug>GitGutterRevertHunk
 "显示diff差异<Leader>hp
+
+" -----------------------------------------------------------------------------
+"  < vim-signature 插件配置 >
+" -----------------------------------------------------------------------------
+
+  " m[a-zA-Z]    : Toggle mark
+  " m,           : Place the next available mark
+  " m.           : If no mark on line, place the next available mark. Otherwise, remove (first) existing mark.
+  " m-           : Delete all marks from the current line
+  " m<Space>     : Delete all marks from the current buffer
+  " ]`           : Jump to next mark
+  " [`           : Jump to prev mark
+  " ]'           : Jump to start of next line containing a mark
+  " ['           : Jump to start of prev line containing a mark
+  " `]           : Jump by alphabetical order to next mark
+  " `[           : Jump by alphabetical order to prev mark
+  " ']           : Jump by alphabetical order to start of next line containing a mark
+  " '[           : Jump by alphabetical order to start of prev line containing a mark
+  " '?           : Open location list and display local marks
 "
+  " m[0-9]       : Toggle the corresponding marker !@#$%^&*()
+  " m<S-[0-9]>   : Remove all markers of the same type
+  " ]-           : Jump to next line having same marker
+  " [-           : Jump to prev line having same marker
+  " ]=           : Jump to next line having any marker
+  " [=           : Jump to prev line having any marker
+  " m<BackSpace> : Remove all markers
 
 " -----------------------------------------------------------------------------
 "  < cscope 插件配置 >
 " ----------------------------------------------------------------------------
 " s: Find this C symbol
-"noremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+noremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
 " g: Find this definition
-"noremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+noremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
 " d: Find functions called by this function
-"noremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+noremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
 " c: Find functions calling this function
-"noremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+noremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
 " t: Find this text string
-"noremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+noremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
 " e: Find this egrep pattern
-"noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
 " f: Find this file
-"noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
 " i: Find files #including this file
-"noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
-"noremap <leader>l :call ToggleLocationList()<CR>
+noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+noremap <leader>l :call ToggleLocationList()<CR>
 "保留生成文件
 let g:cscope_files_kept = 1
 
@@ -1314,21 +1241,22 @@ let g:cscope_files_kept = 1
 "  < YouCompleteMe 插件配置 >
 " -----------------------------------------------------------------------------
 
-"let g:ycm_key_list_select_completion=['<c-n>']
-"let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
-let g:ycm_collect_indentifiers_from_tags_files=1
-let g:ycm_seed_identifiers_with_syntax=1
-" 避免YCM每次加载都对用户提示是否加载
-let g:ycm_confirm_extra_conf=0
-let g:ycm_autoclose_preview_window_after_completion=1
-let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
-let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-" 跳到定义或声明
-"nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR>
-" 强制进行编译
-"nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
+"   "let g:ycm_key_list_select_completion=['<c-n>']
+"   "let g:ycm_key_list_previous_completion=['<c-p>']
+"   let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+"   let g:ycm_collect_indentifiers_from_tags_files=1
+"   let g:ycm_seed_identifiers_with_syntax=1
+"   " 避免YCM每次加载都对用户提示是否加载
+"   let g:ycm_confirm_extra_conf=0
+"   let g:ycm_autoclose_preview_window_after_completion=1
+"   let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+"   let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+"   let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+"   " 跳到定义或声明
+"   "nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"   " 强制进行编译
+"   "nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
+
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1359,21 +1287,21 @@ let OmniCpp_DisplayMode=1
 "  < neocomplcache 插件配置 >
 " -----------------------------------------------------------------------------
 " 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
-let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
-let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
-" 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
-"默认快捷键<C-x><C-u>
+"   let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
+"   let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
+"   " 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
+"   "默认快捷键<C-x><C-u>
 
 " -----------------------------------------------------------------------------
 "  < supertab 插件配置 >
 " -----------------------------------------------------------------------------
 "let g:SuperTabDefaultCompletionType = '<C-N>' "neo
-let g:SuperTabMappingForward = '<S-space>'
+"let g:SuperTabMappingForward = '<S-space>'
 "                将向前mapping的键设为 <shift+space>。
-let g:SuperTabMappingBackward = '<s-tab>'
+"let g:SuperTabMappingBackward = '<s-tab>'
 "                将向后mapping的键设为 <shift+tab>。默认为<tab>
-let g:SuperTabRetainCompletionType=2
-let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+"let g:SuperTabRetainCompletionType=2
+"let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 "                mapping的模式设为<c-x><c-o>。默认为<c-p>
 " -----------------------------------------------------------------------------
 "  < vim-javacompleteex（也就是 javacomplete 增强版）插件配置 >
@@ -1391,10 +1319,10 @@ let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 "5. :imap <C-\>
 
 " avoid key conflict
-let g:SuperTabMappingForward = '<Plug>supertabKey'
+"let g:SuperTabMappingForward = '<Plug>supertabKey'
 
 " if nothing matched in xpt, try supertab
-let g:xptemplate_fallback = '<Plug>supertabKey'
+"let g:xptemplate_fallback = '<Plug>supertabKey'
 
 " xpt uses <Tab> as trigger key
 let g:xptemplate_key = '<Tab>'
@@ -1404,7 +1332,7 @@ let g:xptemplate_key = '<Tab>'
 
 " " xpt triggers only when you typed whole name of a snippet. Optional
 " let g:xptemplate_minimal_prefix = 'full'
-"
+
 " -----------------------------------------------------------------------------
 "  < snipMate 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1412,7 +1340,7 @@ let g:xptemplate_key = '<Tab>'
 " 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
 " 侠有什么其它解决方法希望不要保留呀
 " let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/
-"
+
 " -----------------------------------------------------------------------------
 "  < a.vim 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1433,8 +1361,9 @@ let g:xptemplate_key = '<Tab>'
 "<Leader>is 切换至光标所在处(单词所指)文件的配对文件(如光标所在处为foo.h，则切换至foo.c/foo.cpp...)
 "<Leader>ihn 在多个匹配文件间循环切换
 
-let g:alternateRelativeFiles = 1
-let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
+"   let g:alternateRelativeFiles = 1
+"   let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
+
 " -----------------------------------------------------------------------------
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1572,13 +1501,37 @@ let g:indentLine_color_term = 239
 " -----------------------------------------------------------------------------
 " 我主要用于C/C++代码注释(其它的也行)
 " 以下为插件默认快捷键，其中的说明是以C/C++为例的，其它语言类似
-" <Leader>ci 以每行一个 /* */ 注释选中行(选中区域所在行)，再输入则取消注释
-" <Leader>cm 以一个 /* */ 注释选中行(选中区域所在行)，再输入则称重复注释
-" <Leader>cc 以每行一个 /* */ 注释选中行或区域，再输入则称重复注释
-" <Leader>cu 取消选中区域(行)的注释，选中区域(行)内至少有一个 /* */
-" <Leader>ca 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
-" <Leader>cA 行尾注释
-let NERDSpaceDelims = 1                     "在左注释符之后，右注释符之前留有空格
+nnoremap <Leader>c$ "ToEOL
+nnoremap <Leader>c<space> <Plug>NERDCommenterToggle "启用
+nnoremap <Leader>cA "添加行尾注释
+nnoremap <Leader>ca <Plug>NERDCommenterUncomment "选择注释方式 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
+nnoremap <Leader>cc <Plug>NERDCommentercomment   "以每行一个 /* */ 注释选中行或区域，再输入则称重复注释
+nnoremap <Leader>ci <Plug>NERDCommenterInvert    "以每行一个 /* */ 注释选中行(选中区域所在行)，再输入则取消注释
+nnoremap <Leader>cl <Plug>NERDCommenterAlignLeft "左对齐
+nnoremap <Leader>cm <Plug>NERDCommenterMinimal   "以一个 /* */ 注释选中行(选中区域所在行)，再输入则称重复注释
+nnoremap <Leader>cn <Plug>NERDCommenterNested    "
+nnoremap <Leader>cs <Plug>NERDCommenterSexy      "左对齐
+nnoremap <Leader>cu <Plug>NERDCommenterUncomment "取消注释 选中区域(行)的注释，选中区域(行)内至少有一个 /* */
+nnoremap <Leader>cy <Plug>NERDCommenterYank      "复制注释
+
+"   let NERDSpaceDelims = 1                     "在左注释符之后，右注释符之前留有空格
+"   call s:CreateMaps('nx', 'Comment',    'Comment', 'cc')
+"   call s:CreateMaps('nx', 'Toggle',     'Toggle', 'c<space>')
+"   call s:CreateMaps('nx', 'Minimal',    'Minimal', 'cm')
+"   call s:CreateMaps('nx', 'Nested',     'Nested', 'cn')
+"   call s:CreateMaps('n',  'ToEOL',      'To EOL', 'c$')
+"   call s:CreateMaps('nx', 'Invert',     'Invert', 'ci')
+"   call s:CreateMaps('nx', 'Sexy',       'Sexy', 'cs')
+"   call s:CreateMaps('nx', 'Yank',       'Yank then comment', 'cy')
+"   call s:CreateMaps('',   ':',          '-Sep-', '')
+"   call s:CreateMaps('nx', 'AlignLeft',  'Left aligned', 'cl')
+"   call s:CreateMaps('nx', 'AlignBoth',  'Left and right aligned', 'cb')
+"   call s:CreateMaps('',   ':',          '-Sep2-', '')
+"   call s:CreateMaps('nx', 'Uncomment',  'Uncomment', 'cu')
+"   call s:CreateMaps('n',  'AltDelims',  'Switch Delimiters', 'ca')
+"   call s:CreateMaps('i',  'Insert',     'Insert Comment Here', '')
+"   call s:CreateMaps('',   ':',          '-Sep3-', '')
+"   call s:CreateMaps('',   ':help NERDCommenterContents<CR>', 'Help', '')
 
 " -----------------------------------------------------------------------------
 "  < nerdtree 插件配置 >
@@ -1700,33 +1653,33 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 " 高效地浏览源码, 其功能就像vc中的workpace
 " 那里面列出了当前文件中的所有宏,全局变量, 函数名等
 
-" 常规模式下输入 tl 调用插件，如果有打开 Tagbar 窗口则先将其关闭
+"   " 常规模式下输入 tl 调用插件，如果有打开 Tagbar 窗口则先将其关闭
 "nnoremap tl :TagbarClose<CR>:Tlist<CR>
-nnoremap tl :TlistToggle<CR>
-
-let Tlist_Show_One_File=1                   "只显示当前文件的tags
-" let Tlist_Enable_Fold_Column=0              "使taglist插件不显示左边的折叠行
-let Tlist_Exit_OnlyWindow=1                 "如果Taglist窗口是最后一个窗口则退出Vim
-"let Tlist_File_Fold_Auto_Close=1            "自动折叠
-let Tlist_WinWidth=30                       "设置窗口宽度
-let Tlist_Use_Right_Window=1                "在右侧窗口中显示
-"let g:Tlist_Use_Left_Window=1              "在左侧窗口中显示
-let g:Tlist_Process_File_Always=1
-let g:Tlist_Sort_Type='name'                " 按照名称排序
-let g:Tlist_Inc_Winwidth=0
-let g:Tlist_Compart_Format = 1 " 压缩方式
+"   nnoremap tl :TlistToggle<CR>
+"
+"   let Tlist_Show_One_File=1                   "只显示当前文件的tags
+"   " let Tlist_Enable_Fold_Column=0              "使taglist插件不显示左边的折叠行
+"   let Tlist_Exit_OnlyWindow=1                 "如果Taglist窗口是最后一个窗口则退出Vim
+"   "let Tlist_File_Fold_Auto_Close=1            "自动折叠
+"   let Tlist_WinWidth=30                       "设置窗口宽度
+"   let Tlist_Use_Right_Window=1                "在右侧窗口中显示
+"   "let g:Tlist_Use_Left_Window=1              "在左侧窗口中显示
+"   let g:Tlist_Process_File_Always=1
+"   let g:Tlist_Sort_Type='name'                " 按照名称排序
+"   let g:Tlist_Inc_Winwidth=0
+"   let g:Tlist_Compart_Format = 1 " 压缩方式
 
 " -----------------------------------------------------------------------------
 "  < txtbrowser 插件配置 >
 " -----------------------------------------------------------------------------
 " 用于文本文件生成标签与与语法高亮（调用TagList插件生成标签，如果可以）
-autocmd BufRead,BufNewFile *.txt setlocal ft=txt
+"   autocmd BufRead,BufNewFile *.txt setlocal ft=txt
 
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
 "
-noremap <leader>td <Plug>TaskList
+noremap <leader>t <Plug>TaskList
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1997,104 +1950,6 @@ func! Run()
     endif
 endfunc
 
-
-" -----------------------------------------------------------------------------
-"  < 在浏览器中预览 Html 或 PHP 文件 >
-" -----------------------------------------------------------------------------
-" 修改前请先通读此模块，明白了再改以避免错误
-
-" F5 加浏览器名称缩写调用浏览器预览，启用前先确定有安装相应浏览器，并在下面的配置好其安装目录
-if g:iswindows
-    "以下为只支持Windows系统的浏览器
-
-    " 调用系统IE浏览器预览，如果已卸载可将其注释
-    "nnoremap <F5>ie :call ViewInBrowser("ie")<cr>
-    "inoremap <F5>ie <ESC>:call ViewInBrowser("ie")<cr>
-
-    " 调用IETester(IE测试工具)预览，如果有安装可取消注释
-    " nnoremap <F5>ie6 :call ViewInBrowser("ie6")<cr>
-    " inoremap <F5>ie6 <ESC>:call ViewInBrowser("ie6")<cr>
-    " nnoremap <F5>ie7 :call ViewInBrowser("ie7")<cr>
-    " inoremap <F5>ie7 <ESC>:call ViewInBrowser("ie7")<cr>
-    " nnoremap <F5>ie8 :call ViewInBrowser("ie8")<cr>
-    " inoremap <F5>ie8 <ESC>:call ViewInBrowser("ie8")<cr>
-    " nnoremap <F5>ie9 :call ViewInBrowser("ie9")<cr>
-    " inoremap <F5>ie9 <ESC>:call ViewInBrowser("ie9")<cr>
-    " nnoremap <F5>ie10 :call ViewInBrowser("ie10")<cr>
-    " inoremap <F5>ie10 <ESC>:call ViewInBrowser("ie10")<cr>
-    " nnoremap <F5>iea :call ViewInBrowser("iea")<cr>
-    " inoremap <F5>iea <ESC>:call ViewInBrowser("iea")<cr>
-elseif g:islinux
-    "以下为只支持Linux系统的浏览器
-    "暂未配置，待有时间再弄了
-endif
-
-"以下为支持Windows与Linux系统的浏览器
-
-" 调用Firefox浏览器预览，如果有安装可取消注释
-" nnoremap <F5>ff :call ViewInBrowser("ff")<cr>
-" inoremap <F5>ff <ESC>:call ViewInBrowser("ff")<cr>
-
-" 调用Maxthon(遨游)浏览器预览，如果有安装可取消注释
-" nnoremap <F5>ay :call ViewInBrowser("ay")<cr>
-" inoremap <F5>ay <ESC>:call ViewInBrowser("ay")<cr>
-
-" 调用Opera浏览器预览，如果有安装可取消注释
-" nnoremap <F5>op :call ViewInBrowser("op")<cr>
-" inoremap <F5>op <ESC>:call ViewInBrowser("op")<cr>
-
-" 调用Chrome浏览器预览，如果有安装可取消注释
-" nnoremap <F5>cr :call ViewInBrowser("cr")<cr>
-" inoremap <F5>cr <ESC>:call ViewInBrowser("cr")<cr>
-
-" 浏览器调用函数
-function! ViewInBrowser(name)
-    if expand("%:e") == "php" || expand("%:e") == "html"
-        exe ":update"
-        if g:iswindows
-            "获取要预览的文件路径，并将路径中的'\'替换为'/'，同时将路径文字的编码转换为gbk（同cp936）
-            let file = iconv(substitute(expand("%:p"), '\', '/', "g"), "utf-8", "gbk")
-
-            "浏览器路径设置，路径中使用'/'斜杠，更改路径请更改双引号里的内容
-            "下面只启用了系统IE浏览器，如需启用其它的可将其取消注释（得先安装，并配置好安装路径），也可按需增减
-            let SystemIE = "C:/progra~1/intern~1/iexplore.exe"  "系统自带IE目录
-            " let IETester = "F:/IETester/IETester.exe"           "IETester程序目录（可按实际更改）
-            " let Chrome = "F:/Chrome/Chrome.exe"                 "Chrome程序目录（可按实际更改）
-            " let Firefox = "F:/Firefox/Firefox.exe"              "Firefox程序目录（可按实际更改）
-            " let Opera = "F:/Opera/opera.exe"                    "Opera程序目录（可按实际更改）
-            " let Maxthon = "C:/Progra~2/Maxthon/Bin/Maxthon.exe" "Maxthon程序目录（可按实际更改）
-
-            "本地虚拟服务器设置，我测试的是phpStudy2014，可根据自己的修改，更改路径请更改双引号里的内容
-            let htdocs ="F:/phpStudy2014/WWW/"                  "虚拟服务器地址或目录（可按实际更改）
-            let url = "localhost"                               "虚拟服务器网址（可按实际更改）
-        elseif g:islinux
-            "暂时还没有配置，有时间再弄了。
-        endif
-
-        "浏览器调用缩写，可根据实际增减，注意，上面浏览器路径中没有定义过的变量（等号右边为变量）不能出现在下面哟（可将其注释或删除）
-        let l:browsers = {}                             "定义缩写字典变量，此行不能删除或注释
-        " let l:browsers["cr"] = Chrome                   "Chrome浏览器缩写
-        " let l:browsers["ff"] = Firefox                  "Firefox浏览器缩写
-        " let l:browsers["op"] = Opera                    "Opera浏览器缩写
-        " let l:browsers["ay"] = Maxthon                  "遨游浏览器缩写
-        let l:browsers["ie"] = SystemIE                 "系统IE浏览器缩写
-        " let l:browsers["ie6"] = IETester."-ie6"         "调用IETESTER工具以IE6预览缩写（变量加参数）
-        " let l:browsers["ie7"] = IETester."-ie7"         "调用IETESTER工具以IE7预览缩写（变量加参数）
-        " let l:browsers["ie8"] = IETester."-ie8"         "调用IETESTER工具以IE8预览缩写（变量加参数）
-        " let l:browsers["ie9"] = IETester."-ie9"         "调用IETESTER工具以IE9预览缩写（变量加参数）
-        " let l:browsers["ie10"] = IETester."-ie10"       "调用IETESTER工具以IE10预览缩写（变量加参数）
-        " let l:browsers["iea"] = IETester."-al"          "调用IETESTER工具以支持的所有IE版本预览缩写（变量加参数）
-
-        if stridx(file, htdocs) == -1   "文件不在本地虚拟服务器目录，则直接预览（但不能解析PHP文件）
-           exec ":silent !start ". l:browsers[a:name] ." file://" . file
-        else    "文件在本地虚拟服务器目录，则调用本地虚拟服务器解析预览（先启动本地虚拟服务器）
-            let file = substitute(file, htdocs, "http://".url."/", "g")    "转换文件路径为虚拟服务器网址路径
-            exec ":silent !start ". l:browsers[a:name] file
-        endif
-    else
-        echohl WarningMsg | echo " please choose the correct source file"
-    endif
-endfunction
 " =============================================================================
 "                          << 自动命令 >>
 " =============================================================================
@@ -2130,8 +1985,8 @@ autocmd BufEnter * silent! %s/[\r \t]\+$//
 "autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
-set viminfo='10,\"100,:20,%,n~/.viminfo
-autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+"set viminfo='10,\"100,:20,%,n~/.viminfo
+"autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 " 自动跳转当上次结束编辑的位置
 "autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 "离开插入模式后 自动关闭预览窗口
