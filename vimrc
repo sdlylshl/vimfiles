@@ -963,7 +963,7 @@ set tags+=$VIM,$VIMRUNTIME
 
 function! UpdateCtags()
         call ToGitDir()
-        !ctags -R --sort=yes --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
+        !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
 endfunction
 
 "noremap <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
@@ -1585,6 +1585,7 @@ let NERDSpaceDelims = 1                     "在左注释符之后，右注释�
 "  < nerdtree 插件配置 >
 " -----------------------------------------------------------------------------
 " 有目录村结构的文件浏览插件
+let NERDTreeQuitOnOpen = 1
 let NERDTreeWinPos='right'
 let NERDTreeHighlightCursorline=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
