@@ -302,9 +302,8 @@ autocmd! FileType Makefile set noexpandtab
 set smartindent                                       "为C程序提供 智能自动缩进
 set autoindent        " 继承前一行的缩进方式 设置自动对齐(缩进) 使用 noautoindent 取消设置
 set cindent            " 使用 C/C++ 语言的自动缩进方式
-set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
-" C/C++ specific settings
-autocmd FileType c,cpp  set cindent comments=sr:/*,mb:*,el:*/,:// cino=>s,e0,n0,f0,{0,}0,^-1s,:0,=s,g0,h1s,p2,t0,+2,(2,)20,*30
+"set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s     "设置C/C++语言的具体缩进方式
+":h cinoptions-values
 
 " 补全时忽略这些忽略文件
 set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
@@ -431,7 +430,7 @@ endif
 
 " 设置代码配色方案
 if g:isGUI
-    colorscheme Tomorrow-Night              "gvim配色方案
+    colorscheme Tomorrow-Night-Eighties               "gvim配色方案
 else
     colorscheme Tomorrow-Night-Eighties               "终端配色方案
 endif
@@ -1372,7 +1371,7 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 let g:SuperTabMappingForward = '<S-space>'
 "                将向前mapping的键设为 <shift+space>。
 let g:SuperTabMappingBackward = '<s-tab>'
-"                将向后mapping的键设为 <shift+tab>。默认为<tab> 
+"                将向后mapping的键设为 <shift+tab>。默认为<tab>
 let g:SuperTabRetainCompletionType=2
 let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 "                mapping的模式设为<c-x><c-o>。默认为<c-p>
@@ -1389,7 +1388,7 @@ let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 "2. :filetype
 "3. :scriptnames
 "4. :help 'runtimepath'
-"5. :imap <C-\> 
+"5. :imap <C-\>
 
 " avoid key conflict
 let g:SuperTabMappingForward = '<Plug>supertabKey'
@@ -2009,8 +2008,8 @@ if g:iswindows
     "以下为只支持Windows系统的浏览器
 
     " 调用系统IE浏览器预览，如果已卸载可将其注释
-    nnoremap <F5>ie :call ViewInBrowser("ie")<cr>
-    inoremap <F5>ie <ESC>:call ViewInBrowser("ie")<cr>
+    "nnoremap <F5>ie :call ViewInBrowser("ie")<cr>
+    "inoremap <F5>ie <ESC>:call ViewInBrowser("ie")<cr>
 
     " 调用IETester(IE测试工具)预览，如果有安装可取消注释
     " nnoremap <F5>ie6 :call ViewInBrowser("ie6")<cr>
@@ -2127,7 +2126,7 @@ endfunction
 "autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 
 " 自动删除行尾 Dos回车符和空格
-"autocmd BufRead * silent! %s/[\r \t]\+$//
+autocmd BufEnter * silent! %s/[\r \t]\+$//
 "autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
