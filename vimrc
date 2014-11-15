@@ -840,7 +840,7 @@ inoremap ä <esc>ebdei
 inoremap ó <esc>di"i
 
 " Ctrl-[ jump out of the tag stack (undo Ctrl-])
-noremap <C-[> <ESC>:po<CR>
+"noremap <C-[> <ESC>:po<CR>
 
 "   插入头文件定义
 noremap <leader>g :call IncludeGuard()<CR>
