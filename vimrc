@@ -179,20 +179,20 @@ endif
 
 "查找并切换到.git目录
 let g:isGit = 0
-function! ToGitDir() 
+function! ToGitDir()
         cd %:p:h
         let l:deeps = 5
         while l:deeps > 1
             let l:deeps = l:deeps -1
             if filereadable("./.git/config")
                 let g:isGit = 1
-                break          
+                break
             else
                 cd ..
-            endif           
+            endif
         endwhile
 
-        if l:deeps <=1          
+        if l:deeps <=1
             cd %:p:h
             let g:isGit = 0
         endif
@@ -465,7 +465,7 @@ endif
 " -----------------------------------------------------------------------------
 " 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
 set encoding=utf-8                                    "设置gvim内部编码，默认不更改
-set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）   
+set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
 
 "设置支持打开的文件的编码
 set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
@@ -496,7 +496,7 @@ if g:iswindows
 
       "解决gvim不乱码，但vim乱码
       set termencoding=chinese
-    
+
       set langmenu=zh_CN.UTF-8
 
         "colorscheme molokai
@@ -520,15 +520,15 @@ else
         set t_Co=256                    " 在终端启用256色
         " fixed the arrow key problems caused by AutoClose
         set term=linux
-        "imap OA <ESC>ki
-        "imap OB <ESC>ji
-        "imap OC <ESC>li
-        "imap OD <ESC>hi
+        "inoremap OA <ESC>ki
+        "inoremap OB <ESC>ji
+        "inoremap OC <ESC>li
+        "imnoreap OD <ESC>hi
 
-        nmap OA k
-        nmap OB j
-        nmap OC l
-        nmap OD h 
+        nnoremap OA k
+        nnoremap OB j
+        nnoremap OC l
+        nnoremap OD h
 
         " Source a global configuration file if available
         if filereadable("/etc/vim/vimrc.local")
@@ -537,7 +537,7 @@ else
     endif
 endif
 
-" --- AutoClose - Inserts matching bracket, paren, brace or quote 
+" --- AutoClose - Inserts matching bracket, paren, brace or quote
 
 " -----------------------------------------------------------------------------
 "                     < windows 下解决 Quickfix 乱码问题 >
@@ -571,7 +571,7 @@ endif
 " 下面的设置取消注释，并修改双引号中的键为你想要的，如修改为逗号键。
 
 " let mapleader = ";"
-" 
+"
 " :marks
 " :reg
 " :buffers :ls
@@ -618,29 +618,19 @@ nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 nnoremap <silent> <F12> <c-w>=
 nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 
-nnoremap <silent> <F5> :cw<CR>
+nnoremap <silent> <F5> :cw<CR>      "有错误打开QuickFix
 nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
 nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
 nnoremap <silent> <F8> :cclose<CR>
 " open the error console
-map <leader>cc :botright cope<CR> 
+noremap <leader>cp :botright copen<CR>
 " move to next error
-map <leader>] :cn<CR>
+noremap <leader>] :cn<CR>
 " move to the prev error
-map <leader>[ :cp<CR
-"--------------------------------------------------------------------------- 
-" Tip #382: Search for <cword> and replace with input() in all open buffers 
-"--------------------------------------------------------------------------- 
-fun! Replace() 
-    let s:word = input("Replace " . expand('<cword>') . " with:") 
-    :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge' 
-    :unlet! s:word 
-endfun 
-
-"replace the current word in all opened buffers
-map <leader>r :call Replace()<CR>
+noremap <leader>[ :cp<CR>
 
 "--------------------------------------------------------------
+
 "搜索居中
 nnoremap <silent> n nzz
 nnoremap <silent> N Nzz
@@ -651,43 +641,18 @@ nnoremap <silent> g# g#zz
 
 " 去掉搜索高亮
 nnoremap  <leader>/ :nohls<CR>
-" 上下移动一行文字
-nnoremap <C-S-Up> mz:m-2<cr>`z
-nnoremap <C-S-Down> mz:m+<cr>`z
-vnoremap <C-S-Down> :m'>+<cr>`<my`>mzgv`yo`z
-vnoremap <C-S-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 
-"窗口切换<Alt+>
-"noremap <M-Up> <c-w>k
-"noremap <M-Down> <c-w>j
-"noremap <M-Left> <c-w>h
-"noremap <C-Right> <c-w>l
-noremap <C-Up> <c-w>k
-noremap <C-Down> <c-w>j
-noremap <C-Left> <c-w>h
-noremap <C-Right> <c-w>l
-noremap <C-k> <c-w>k
-noremap <C-j> <c-w>j
-noremap <C-h> <c-w>h
-noremap <C-l> <c-w>l
-"窗口切换并最大化
-"noremap <c-s-k> <c-w>k<c-w>_<c-w>\|
-"noremap <c-s-j> <c-w>j<c-w>_<c-w>\|
-"noremap <c-s-h> <c-w>h<c-w>_<c-w>\|
-"noremap <c-s-l> <c-w>l<c-w>_<c-w>\|
+" 移动一行文字
+inoremap <M-Up> <ESC>mz:m-2<cr>`z
+inoremap <M-Down> <ESC>mz:m+<cr>`z
+nnoremap <M-Up> mz:m-2<cr>`z
+nnoremap <M-Down> mz:m+<cr>`z
+vnoremap <M-Down> :m'>+<cr>`<my`>mzgv`yo`z
+vnoremap <M-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 
-" --- move around splits {
-" move to and maximize the below split 
-nnoremap <C-J> <C-W>j<C-W>_
-" move to and maximize the above split 
-nnoremap <C-K> <C-W>k<C-W>_
-" move to and maximize the left split 
-nnoremap <c-h> <c-w>h<c-w><bar>
-" move to and maximize the right split  
-nnoremap <c-l> <c-w>l<c-w><bar>
-set wmw=0                     " set the min width of a window to 0 so we can maximize others 
-set wmh=0                     " set the min height of a window to 0 so we can maximize others
-" }
+"insert复制当前行
+inoremap <C-D> <ESC>yyP<cr>
+
 
 " 把空格键映射成:
 nnoremap <space> :
@@ -700,37 +665,35 @@ vnoremap < <gv
 vnoremap > >gv
 
 " :cd. change working directory to that of the current file
-cmap cd. lcd %:p:h
+cnoremap cd. lcd %:p:h
 
-" Writing Restructured Text (Sphinx Documentation) {
    " Ctrl-u 1:    underline Parts w/ #'s
-   noremap  <C-u>1 yyPVr#yyjp
-   inoremap <C-u>1 <esc>yyPVr#yyjpA
+"   noremap  <C-u>1 yyPVr#yyjp
+"   inoremap <C-u>1 <esc>yyPVr#yyjpA
    " Ctrl-u 2:    underline Chapters w/ *'s
-   noremap  <C-u>2 yyPVr*yyjp
-   inoremap <C-u>2 <esc>yyPVr*yyjpA
+"   noremap  <C-u>2 yyPVr*yyjp
+"   inoremap <C-u>2 <esc>yyPVr*yyjpA
    " Ctrl-u 3:    underline Section Level 1 w/ ='s
-   noremap  <C-u>3 yypVr=
-   inoremap <C-u>3 <esc>yypVr=A
+"   noremap  <C-u>3 yypVr=
+"   inoremap <C-u>3 <esc>yypVr=A
    " Ctrl-u 4:    underline Section Level 2 w/ -'s
-   noremap  <C-u>4 yypVr-
-   inoremap <C-u>4 <esc>yypVr-A
+"   noremap  <C-u>4 yypVr-
+"   inoremap <C-u>4 <esc>yypVr-A
    " Ctrl-u 5:    underline Section Level 3 w/ ^'s
-   noremap  <C-u>5 yypVr^
-   inoremap <C-u>5 <esc>yypVr^A
-"}
+"   noremap  <C-u>5 yypVr^
+"   inoremap <C-u>5 <esc>yypVr^A
 
 " ,p toggles paste mode
-nmap <leader>p :set paste!<BAR>set paste?<CR>
+nnoremap <leader>p :set paste!<BAR>set paste?<CR>
 
 " 快速进入shell
 nnoremap <silent><leader>sh :shell<cr>
 
 " 常规模式下输入 cS 清除行尾空格
-nnoremap cS :%s/\s\+$//g<CR>:noh<CR>
+"nnoremap cS :%s/\s\+$//g<CR>:noh<CR>
 
 " 常规模式下输入 cM 清除行尾 ^M (CR)符号[^M$][$]
-nnoremap cM :%s/\\r$//g<CR>:noh<CR>
+"nnoremap cM :%s/\\r$//g<CR>:noh<CR>
 
 "回车即选中当前项
 inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
@@ -750,15 +713,39 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
 "如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
 "如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
-
-" --------tab/buffer相关
-
+" -----------------------------------------------------------------------------
+"  <  窗口 操作 >
+" -----------------------------------------------------------------------------
+"窗口切换<Alt+>
+"noremap <M-Up> <c-w>k
+"noremap <M-Down> <c-w>j
+"noremap <M-Left> <c-w>h
+"noremap <C-Right> <c-w>l
+noremap <C-Up> <c-w>k
+noremap <C-Down> <c-w>j
+noremap <C-Left> <c-w>h
+noremap <C-Right> <c-w>l
+noremap <C-k> <c-w>k
+noremap <C-j> <c-w>j
+noremap <C-h> <c-w>h
+noremap <C-l> <c-w>l
+"窗口最大化
+"noremap <C-F12> <c-w>_<c-w>\|
+"nnoremap <c-s-j> <C-W>j<C-W>_
+"nnoremap <c-s-k> <C-W>k<C-W>_
+"nnoremap <c-s-h> <c-w>h<c-w><bar>
+"nnoremap <c-s-l> <c-w>l<c-w><bar>
+set wmw=0                     " set the min width of a window to 0 so we can maximize others
+set wmh=0                     " set the min height of a window to 0 so we can maximize others
+" -----------------------------------------------------------------------------
+"  <  buffer 操作 >
+" -----------------------------------------------------------------------------
 "Use arrow key to change buffer"
 " TODO: 如何跳转到确定的buffer?
 " :b 1 :b 2   :bf :bl
 "alt+w强制关闭当前缓存
 noremap <silent> ÷ :bd!<CR>
-" normal模式下切换到确切的tab
+" normal模式下切换到确切的buffer
 noremap <leader>1 :b 1<CR>
 noremap <leader>2 :b 2<CR>
 noremap <leader>3 :b 3<CR>
@@ -769,9 +756,6 @@ noremap <leader>7 :b 7<CR>
 noremap <leader>8 :b 8<CR>
 noremap <leader>9 :b 9<CR>
 noremap <leader>0 :blast<cr>
-" Buffer切换
-nnoremap [b :bprevious<cr>
-nnoremap ]b :bnext<cr>
 
 noremap <M-left> :bprevious<CR>
 noremap <M-right> :bnext<CR>
@@ -781,9 +765,9 @@ noremap <M-right> :bnext<CR>
 " http://vim.wikia.com/wiki/Alternative_tab_navigation
 " http://stackoverflow.com/questions/2005214/switching-to-a-particular-tab-in-vim
 " new tab
-map <C-t><C-t> :tabnew<CR>
+noremap <C-t><C-t> :tabnew<CR>
 " close tab
-map <C-t><C-w> :tabclose<CR> 
+noremap <C-t><C-w> :tabclose<CR>
 noremap <leader>th :tabfirst<cr>
 noremap <leader>tl :tablast<cr>
 
@@ -792,11 +776,9 @@ noremap <leader>tl :tablast<cr>
 "noremap <leader>tn :tabnext<cr>
 "noremap <leader>tp :tabprev<cr>
 
-"noremap <leader>te :tabedit<cr>
 noremap <leader>tc :tabclose<cr>
 noremap <leader>tm :tabm<cr>
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
+
 noremap <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 set winaltkeys=no
 " 在文件名上按gf时，在新的tab中打开
@@ -806,10 +788,6 @@ noremap î  :tabnew<cr>
 " TODO: 配置成功这里, 切换更方便, 两个键
 nnoremap <C-S-tab> :tabprevious<CR>
 nnoremap <C-tab>   :tabnext<CR>
-" inoremap <C-S-tab> <Esc>:tabprevious<CR>i
-" inoremap <C-tab>   <Esc>:tabnext<CR>i
-" nnoremap <C-Left> :tabprevious<CR>
-" nnoremap <C-Right> :tabnext<CR>
 
 " normal模式下切换到确切的tab
 "映射alt+{num}
@@ -865,8 +843,8 @@ inoremap ó <esc>di"i
 " Ctrl-[ jump out of the tag stack (undo Ctrl-])
 noremap <C-[> <ESC>:po<CR>
 
-" ,g generates the header guard
-map <leader>g :call IncludeGuard()<CR>
+"   插入头文件定义
+noremap <leader>g :call IncludeGuard()<CR>
 fun! IncludeGuard()
    let basename = substitute(bufname(""), '.*/', '', '')
    let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
@@ -874,6 +852,17 @@ fun! IncludeGuard()
    call append(1, "#define " . guard)
    call append( line("$"), "#endif // for #ifndef " . guard)
 endfun
+"---------------------------------------------------------------------------
+" Tip #382: Search for <cword> and replace with input() in all open buffers
+"---------------------------------------------------------------------------
+fun! Replace()
+    let s:word = input("Replace " . expand('<cword>') . " with:")
+    :exe 'bufdo! %s/\<' . expand('<cword>') . '\>/' . s:word . '/ge'
+    :unlet! s:word
+endfun
+
+"replace the current word in all opened buffers
+noremap <leader>r :call Replace()<CR>
 
 " =============================================================================
 "                          << 以下为常用工具配置 >>
@@ -911,7 +900,7 @@ endfun
 "    -C: 在搜索时忽略大小写
 "    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
 
-if has("cscope") 
+if has("cscope")
 "    "set csprg=/usr/bin/cscope   " 制定cscope命令
 "    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
 "    "set csto=0
@@ -1105,7 +1094,7 @@ Bundle 'sdlylshl/cscope.vim'
 "Bundle 'wesleyche/SrcExpl'
 
 	"--- 高亮C函数
-Bundle 'cSyntaxAfter'
+"Bundle 'cSyntaxAfter'
 
 
 "Python
@@ -1165,6 +1154,7 @@ Bundle 'OmniCppComplete'
 " Bundle 'Shougo/neosnippet.vim'
 " Bundle 'msanders/snipmate.vim'
 " Bundle 'spf13/snipmate-snippets'
+Bundle 'drmingdrmer/xptemplate'
 "
 "代码
 "Bundle 'taglist.vim'
@@ -1275,12 +1265,12 @@ filetype plugin indent on                             "启用缩进
 " -----------------------------------------------------------------------------
 "  < Grep 插件配置 >
 " ----------------------------------------------------------------------------
-":cwindow 
-let Grep_OpenQuickfixWindow = 0 
+":cwindow
+let Grep_OpenQuickfixWindow = 0
 "循环查找
-"let Grep_Find_Use_Xargs = 0 
+"let Grep_Find_Use_Xargs = 0
 let Grep_Default_Filelist = '*.[chS]'
-let Grep_Skip_Files = '*.bak *~' 
+let Grep_Skip_Files = '*.bak *~'
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
 " ----------------------------------------------------------------------------
@@ -1337,9 +1327,9 @@ let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
 let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
 " 跳到定义或声明
-nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"nnoremap <leader><yg> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " 强制进行编译
-nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
+"nnoremap <leader>yc :YcmForceCompileAndDiagnostics<CR>
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1379,14 +1369,43 @@ let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
 "  < supertab 插件配置 >
 " -----------------------------------------------------------------------------
 "let g:SuperTabDefaultCompletionType = '<C-N>' "neo
-
+let g:SuperTabMappingForward = '<S-space>'
+"                将向前mapping的键设为 <shift+space>。
+let g:SuperTabMappingBackward = '<s-tab>'
+"                将向后mapping的键设为 <shift+tab>。默认为<tab> 
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+"                mapping的模式设为<c-x><c-o>。默认为<c-p>
 " -----------------------------------------------------------------------------
 "  < vim-javacompleteex（也就是 javacomplete 增强版）插件配置 >
 " -----------------------------------------------------------------------------
 " java 补全插件
+"
+" -----------------------------------------------------------------------------
+"  < xptemplate 插件配置 >
+" -----------------------------------------------------------------------------
+"1. :set compatible?
+"set nocompatible "必须
+"2. :filetype
+"3. :scriptnames
+"4. :help 'runtimepath'
+"5. :imap <C-\> 
 
+" avoid key conflict
+let g:SuperTabMappingForward = '<Plug>supertabKey'
 
+" if nothing matched in xpt, try supertab
+let g:xptemplate_fallback = '<Plug>supertabKey'
 
+" xpt uses <Tab> as trigger key
+let g:xptemplate_key = '<Tab>'
+
+" " use <tab>/<S-tab> to navigate through pum. Optional
+" let g:xptemplate_pum_tab_nav = 1
+
+" " xpt triggers only when you typed whole name of a snippet. Optional
+" let g:xptemplate_minimal_prefix = 'full'
+"
 " -----------------------------------------------------------------------------
 "  < snipMate 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1456,7 +1475,7 @@ let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../
 "  < cSyntaxAfter 插件配置 >
 " -----------------------------------------------------------------------------
 " 高亮括号与运算符等
-autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
+"autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
 
 " -----------------------------------------------------------------------------
 "  < ctrlp.vim 插件配置 >
@@ -1597,6 +1616,9 @@ let g:airline#extensions#tabline#enabled = 1
 "启用powerline字体[必备]
 let g:airline_powerline_fonts = 1
 
+"set laststatus=2
+set ttimeoutlen=50
+
 "状态栏修改
 "显示时间/默认显示Git分支
 "let g:airline_section_b = '%{strftime("%c")}'
@@ -1640,18 +1662,24 @@ let c_cpp_comments = 0
 " -----------------------------------------------------------------------------
 " 用于保存文件时查检语法
 " 在打开文件的时候检查
-let g:syntastic_check_on_open = 1
-let g:syntastic_cpp_include_dirs = ['/usr/include/']
-let g:syntastic_cpp_remove_include_errors = 1
-let g:syntastic_cpp_check_header = 1
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
-"set error or warning signs
-let g:syntastic_error_symbol = '?'
-let g:syntastic_warning_symbol = '?'
+"let g:syntastic_cpp_checkers =['cppcheck','gcc']
+"let g:syntastic_aggregate_errors = 1
+"let g:syntastic_cpp_include_dirs = ['/usr/include/']
+"let g:syntastic_cpp_remove_include_errors = 1
+"let g:syntastic_cpp_check_header = 1
+"let g:syntastic_cpp_compiler = 'clang++'
+"let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
 "whether to show balloons
 let g:syntastic_enable_balloons = 1
 let g:syntastic_always_populate_loc_list = 1
+
+"let g:syntastic_auto_jump=1
+let g:syntastic_check_on_open = 1
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_loc_list_height = 0
+let g:syntastic_enable_highlighting = 0
 
 " -----------------------------------------------------------------------------
 "  < Tagbar 插件配置 >
@@ -2102,7 +2130,7 @@ endfunction
 "autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
-"set viminfo='10,\"100,:20,%,n~/.viminfo
+set viminfo='10,\"100,:20,%,n~/.viminfo
 autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 " 自动跳转当上次结束编辑的位置
 "autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -2133,7 +2161,7 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 " 快捷打开编辑vimrc文件的键盘绑定
 if (g:iswindows)
     if exists('$HOME/vimfiles/*vimrc')
-	    noremap <leader>e :e $HOME/vimfiles/*vimrc<CR>
+        noremap <leader>e :e $HOME/vimfiles/*vimrc<CR>
     else
         noremap <leader>e :e $VIM/*vimrc<CR>
     endif
@@ -2143,4 +2171,3 @@ else
 	noremap <leader>e :e $HOME/.vimrc<cr>
 	autocmd! bufwritepost .vimrc source %
 endif
-
