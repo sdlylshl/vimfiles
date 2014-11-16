@@ -544,6 +544,8 @@ nnoremap <silent> gd gD
 nnoremap <silent> gD gd
 
 ",gd  跳到声明位置, 仅 filetypes: c, cpp, objc, objcpp, python 有效(比较少用)
+"从环境变量path里面查找
+set path=.,./**,./include
 " 去掉搜索高亮
 nnoremap  <leader>/ :nohls<CR>
 
@@ -557,8 +559,10 @@ vnoremap <M-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 
 "insert复制当前行
 inoremap <C-D> <ESC>yyPA
-
-
+"删除当前行
+noremap - dd 
+"选中当前单词
+nnoremap <M-Space> viw
 " 把空格键映射成:
 nnoremap <space> :
 
@@ -1981,7 +1985,7 @@ endfunc
 "autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
 
 " 自动删除行尾 Dos回车符和空格
-autocmd BufEnter * silent! %s/[\r \t]\+$//
+"autocmd BufEnter * silent! %s/[\r \t]\+$//
 "autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
 " 恢复上次文件打开位置
