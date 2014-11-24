@@ -1084,7 +1084,8 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'jistr/vim-nerdtree-tabs'
-
+"tab/buffer导航增强
+Bundle 'szw/vim-ctrlspace'
 
 "Bundle 'jlanzarotta/bufexplorer'
 "Bundle 'vim-scripts/minibufexplorerpp'
@@ -1158,6 +1159,28 @@ filetype plugin indent on                             "启用缩进
 " =============================================================================
 "                          << 以下为常用插件配置 >>
 " =============================================================================
+
+" ----------------------------------------------------------------------------
+"  < ctrlspace 插件配置 >
+" ----------------------------------------------------------------------------
+let g:ctrlspace_default_mapping_key="<S-Space>"
+"  ctrl+<space> 得到当前tab的buffer列表
+"  j/k     上下移动
+"  回车     跳转到
+"  v/V     vsp分屏打开, v会进入对应文件, V会保留在ctrlspace区域
+"  s/S     sp分屏打开
+"
+"  l       展示/关闭tab列表
+"      j/k 或 [/] 上下移动
+"      =   给tab命名
+"      -   Move the current tab to the left (decrease its number)
+"      +   Move the current tab to the right (increase its number)
+"      Backspace Go back to Buffer List
+"
+"  L   Jump to Tab List in Search Mode
+"
+"  esc/q   close the list
+
 " ----------------------------------------------------------------------------
 "  < Undotree 插件配置 >
 " ----------------------------------------------------------------------------
