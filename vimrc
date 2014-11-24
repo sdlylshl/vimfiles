@@ -336,7 +336,7 @@ if g:iswindows
       "解决gvim不乱码，但vim乱码
       set termencoding=chinese
 
-      set langmenu=zh_CN.UTF-8
+      set langmenu=zh_CN.utf-8
 
         "colorscheme molokai
         "set term=xterm
