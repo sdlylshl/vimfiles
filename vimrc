@@ -146,7 +146,7 @@ set cindent            " 使用 C/C++ 语言的自动缩进方式
 ":h cinoptions-values
 
 " 补全时忽略这些忽略文件
-set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe
+set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe,.svn,.git
 
 set copyindent		" copy the previous indentation on autoindenting
 
@@ -195,9 +195,16 @@ set browsedir=current    "设置文件浏览使用的目录
 
 " Remember info about open buffers on close"
 set viminfo^=%
-
 " 保存全局变量 Marks
 set viminfo+=!
+
+"create undo file
+if has('persistent_undo')
+    set undolevels=1000         " How many undos
+    set undoreload=10000        " number of lines to save for undo
+    set undofile                " So is persistent undo ...
+    set undodir=$HOME/vimundo/
+endif
 
 " 与windows共享剪贴板  yank to the system register (*)
 set clipboard+=unnamed
@@ -207,6 +214,19 @@ let g:LargeFile=10
 
 "历史记录
 set history=50        " set command history to 50    "历史记录50条
+
+
+"设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
+"好处：误删什么的，如果以前屏幕打开，可以找回
+set t_ti= t_te=
+
+
+
+
+" 修复ctrl+m 多光标操作选择的bug，但是改变了ctrl+v进行字符选中时将包含光标下的字符
+"set selection=exclusive
+set selection=inclusive
+set selectmode=mouse,key
 
 
 " 高亮字符，让其不受80列限制
@@ -248,7 +268,7 @@ set splitright                  " 新分割窗口在右边
 set fillchars=vert:\ ,stl:\ ,stlnc:\ " 在被分割的窗口间显示空白，便于阅读
 
 " 光标移动到buffer的顶部和底部时保持3行距离
-set scrolloff=3
+set scrolloff=10
 
 "--状态行设置--
 set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
@@ -534,6 +554,11 @@ noremap <leader>] :cn<CR>
 noremap <leader>[ :cp<CR>
 
 "--------------------------------------------------------------
+" 命令行模式增强，ctrl - a到行首， -e 到行尾
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
 
 "搜索居中
 nnoremap <silent> n nzz
@@ -563,16 +588,27 @@ vnoremap <M-Up> :m'<-2<cr>`>my`<mzgv`yo`z
 "insert复制当前行
 inoremap <C-D> <ESC>yyPA
 "删除当前行
-noremap - dd 
+noremap - dd
 "选中当前单词
 nnoremap <M-Space> viw
 " 把空格键映射成:
-nnoremap <space> :
+" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
+noremap <space> /
+" 进入搜索Use sane regexes"
+nnoremap / /\v
+vnoremap / /\v
+
+" 一键进入命令行
+nnoremap ; :
+
+nnoremap ' `
+nnoremap ` '
 
 nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " allow multiple indentation/deindentation in visual mode
+"调整缩进后自动选中，方便再次操作
 vnoremap < <gv
 vnoremap > >gv
 
@@ -602,7 +638,7 @@ nnoremap <leader>p :set paste!<BAR>set paste?<CR>
 nnoremap <silent><leader>s :shell<cr>
 
 " 常规模式下输入 cS 清除行尾空格
-"nnoremap cS :%s/\s\+$//g<CR>:noh<CR>
+nnoremap cS :%s/\s\+$//g<CR>:noh<CR>;
 
 " 常规模式下输入 cM 清除行尾 ^M (CR)符号[^M$][$]
 "nnoremap cM :%s/\\r$//g<CR>:noh<CR>
@@ -1306,8 +1342,11 @@ let g:cscope_files_kept = 1
 "--extra=+q : 为类成员标签添加类标识
 " 我使用上面的参数生成标签后，对函数使用跳转时会出现多个选择
 " 所以我就将--c++-kinds=+p参数给去掉了，如果大侠有什么其它解决方法希望不要保留呀
-set completeopt=menu                        "关闭预览窗口
+"set completeopt=menu                        "关闭预览窗口
 "set completeopt=menu,longest,menuone
+"让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
+set completeopt=longest,menu
+
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
