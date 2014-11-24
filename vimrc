@@ -20,22 +20,22 @@ endif
 "查找并切换到.git目录
 let g:isGit = 0
 function! ToGitDir()
-        cd %:p:h
-        let l:deeps = 5
-        while l:deeps > 1
-            let l:deeps = l:deeps -1
-            if filereadable("./.git/config")
-                let g:isGit = 1
-                break
-            else
-                cd ..
-            endif
-        endwhile
-
-        if l:deeps <=1
-            cd %:p:h
-            let g:isGit = 0
+    cd %:p:h
+    let l:deeps = 5
+    while l:deeps > 1
+        let l:deeps = l:deeps -1
+        if filereadable("./.git/config")
+            let g:isGit = 1
+            break
+        else
+            cd ..
         endif
+    endwhile
+
+    if l:deeps <=1
+        cd %:p:h
+        let g:isGit = 0
+    endif
 endfunction
 
 " -----------------------------------------------------------------------------
@@ -288,16 +288,16 @@ if g:isGUI
     "水平滚动条
     set guioptions-=b
     nnoremap <silent> <c-F11> :if &guioptions =~# 'm' <Bar>
-        \set guioptions-=m <Bar>
-        \set guioptions-=T <Bar>
-        \set guioptions-=L <Bar>
-        \set guioptions-=b <Bar>
-    \else <Bar>
-        \set guioptions+=m <Bar>
-        \set guioptions+=T <Bar>
-        \set guioptions+=r <Bar>
-        \set guioptions+=L <Bar>
-    \endif<CR>
+                \set guioptions-=m <Bar>
+                \set guioptions-=T <Bar>
+                \set guioptions-=L <Bar>
+                \set guioptions-=b <Bar>
+                \else <Bar>
+                \set guioptions+=m <Bar>
+                \set guioptions+=T <Bar>
+                \set guioptions+=r <Bar>
+                \set guioptions+=L <Bar>
+                \endif<CR>
 endif
 " -----------------------------------------------------------------------------
 "                        < 编码配置 >
@@ -305,9 +305,9 @@ endif
 " 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
 set encoding=utf-8                                    "设置gvim内部编码，默认不更改
 set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
-
+"set fileencoding=chinese                             "解决中文乱码问题
 "设置支持打开的文件的编码
-set fileencodings=ucs-bom,utf-8,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
+set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
 
 " 文件格式，默认 ffs=dos,unix
 set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
@@ -316,9 +316,9 @@ set fileformats=unix,dos,mac                          "给出文件的<EOL>格�
 set ambiwidth=double
 
 if g:iswindows
-"设置字体:字号（字体名称空格用下划线代替<N）
+    "设置字体:字号（字体名称空格用下划线代替<N）
     set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
-"set guifont=Consolas_for_Powerline_FixedD:h9
+    "set guifont=Consolas_for_Powerline_FixedD:h9
 else
     set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
 endif
@@ -326,21 +326,22 @@ endif
 "if (g:iswindows && g:isGUI)
 if g:iswindows
 
-        "解决菜单乱码
-        source $VIMRUNTIME/delmenu.vim
-        source $VIMRUNTIME/menu.vim
 
-      "解决consle输出乱码
-      language messages zh_CN.utf-8
+    set langmenu=zh_CN.utf-8
 
-      "解决gvim不乱码，但vim乱码
-      set termencoding=chinese
+    "colorscheme molokai
+    "set term=xterm
+    "set t_Co=256
 
-      set langmenu=zh_CN.utf-8
+    "处理菜单及右键菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
 
-        "colorscheme molokai
-        "set term=xterm
-        "set t_Co=256
+    "处理consle输出乱码
+    language messages zh_CN.utf-8
+
+    "解决gvim不乱码，但vim乱码
+    set termencoding=chinese
 
 else
     if g:isGUI
@@ -351,7 +352,7 @@ else
     else
         " This line should not be removed as it ensures that various options are
         " properly set to work with the Vim-related packages available in Debian.
-		"此处会修改vim runtimepath rtp 所以放到Bundle前面
+        "此处会修改vim runtimepath rtp 所以放到Bundle前面
         runtime! debian.vim
 
         set termencoding=utf-8          "解决Linux终端乱码
@@ -442,6 +443,8 @@ endif
 "   ~ 切换字符的大小写
 "   \" 保存到寄存器中
 
+"   gU 转换大写
+"   gu 转换小写
 
 "   viw 选中一个单词 yiw 复制一个单词
 
@@ -576,19 +579,19 @@ vnoremap > >gv
 " :cd. change working directory to that of the current file
 cnoremap cd. lcd %:p:h
 
-   " Ctrl-u 1:    underline Parts w/ #'s
+" Ctrl-u 1:    underline Parts w/ #'s
 "   noremap  <C-u>1 yyPVr#yyjp
 "   inoremap <C-u>1 <esc>yyPVr#yyjpA
-   " Ctrl-u 2:    underline Chapters w/ *'s
+" Ctrl-u 2:    underline Chapters w/ *'s
 "   noremap  <C-u>2 yyPVr*yyjp
 "   inoremap <C-u>2 <esc>yyPVr*yyjpA
-   " Ctrl-u 3:    underline Section Level 1 w/ ='s
+" Ctrl-u 3:    underline Section Level 1 w/ ='s
 "   noremap  <C-u>3 yypVr=
 "   inoremap <C-u>3 <esc>yypVr=A
-   " Ctrl-u 4:    underline Section Level 2 w/ -'s
+" Ctrl-u 4:    underline Section Level 2 w/ -'s
 "   noremap  <C-u>4 yypVr-
 "   inoremap <C-u>4 <esc>yypVr-A
-   " Ctrl-u 5:    underline Section Level 3 w/ ^'s
+" Ctrl-u 5:    underline Section Level 3 w/ ^'s
 "   noremap  <C-u>5 yypVr^
 "   inoremap <C-u>5 <esc>yypVr^A
 
@@ -734,11 +737,11 @@ inoremap ó <esc>di"i
 "   插入头文件定义
 noremap <leader>g :call IncludeGuard()<CR>
 fun! IncludeGuard()
-   let basename = substitute(bufname(""), '.*/', '', '')
-   let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
-   call append(0, "#ifndef " . guard)
-   call append(1, "#define " . guard)
-   call append( line("$"), "#endif // for #ifndef " . guard)
+    let basename = substitute(bufname(""), '.*/', '', '')
+    let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
+    call append(0, "#ifndef " . guard)
+    call append(1, "#define " . guard)
+    call append( line("$"), "#endif // for #ifndef " . guard)
 endfun
 "---------------------------------------------------------------------------
 " Tip #382: Search for <cword> and replace with input() in all open buffers
@@ -789,49 +792,49 @@ noremap <leader>r :call Replace()<CR>
 "    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
 
 if has("cscope")
-"    "set csprg=/usr/bin/cscope   " 制定cscope命令
-"    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
-"    "set csto=0
-"    "优先查找Ctags数据库
-"    set cscopetagorder=1
-"    "把Cscope的查找结果 输出到quickfix窗口
-"    set cscopequickfix=s-,c-,d-,i-,t-,e-
-"    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
-"    set cscopetag
-"    " 同时搜索tag文件和cscope数据库
-"    " set cst
-"    set nocsverb
-"    "如果当前目录下有cscope.out则加载进Vim
-"    "if filereadable("cscope.out")
-"    "    cs add cscope.out
-"    "否则添加数据库环境中所指定的数据库到Vim
-"    "elseif $cscope_db != ""
-"    "    cs add $cscope_db
-"    "endif
-"    function! UpdateCscope()
-"        call ToGitDir()
-"        !cscope -Rbkq
-"        cs add cscope.out
-"        cs reset
-"    endfunction
-"    set cscopeverbose
-"    "快捷键设置
-"    " 查找符号
-"    nnoremap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
-"    nnoremap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
-"    nnoremap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
-"    nnoremap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
-"    nnoremap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
-"    nnoremap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
-"    nnoremap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
-"    nnoremap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
-"    nnoremap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
-"
-"    nnoremap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
-"    nnoremap <C-\>r :cs reset<CR>               "   重新初始化所有连接
-"
-"    "noremap <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
-"    nnoremap <F8> :call UpdateCscope()<CR>
+    "    "set csprg=/usr/bin/cscope   " 制定cscope命令
+    "    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
+    "    "set csto=0
+    "    "优先查找Ctags数据库
+    "    set cscopetagorder=1
+    "    "把Cscope的查找结果 输出到quickfix窗口
+    "    set cscopequickfix=s-,c-,d-,i-,t-,e-
+    "    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
+    "    set cscopetag
+    "    " 同时搜索tag文件和cscope数据库
+    "    " set cst
+    "    set nocsverb
+    "    "如果当前目录下有cscope.out则加载进Vim
+    "    "if filereadable("cscope.out")
+    "    "    cs add cscope.out
+    "    "否则添加数据库环境中所指定的数据库到Vim
+    "    "elseif $cscope_db != ""
+    "    "    cs add $cscope_db
+    "    "endif
+    "    function! UpdateCscope()
+    "        call ToGitDir()
+    "        !cscope -Rbkq
+    "        cs add cscope.out
+    "        cs reset
+    "    endfunction
+    "    set cscopeverbose
+    "    "快捷键设置
+    "    " 查找符号
+    "    nnoremap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
+    "    nnoremap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
+    "    nnoremap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
+    "    nnoremap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
+    "    nnoremap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
+    "    nnoremap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
+    "    nnoremap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
+    "    nnoremap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
+    "    nnoremap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
+    "
+    "    nnoremap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
+    "    nnoremap <C-\>r :cs reset<CR>               "   重新初始化所有连接
+    "
+    "    "noremap <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+    "    nnoremap <F8> :call UpdateCscope()<CR>
 
 
 endif
@@ -850,8 +853,8 @@ endif
 set tags+=$VIM,$VIMRUNTIME
 
 function! UpdateCtags()
-        call ToGitDir()
-        !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
+    call ToGitDir()
+    !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
 endfunction
 
 "noremap <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
@@ -905,7 +908,7 @@ if (g:iswindows && g:isGUI)
     "快捷键设置
     noremap <s-up> :call Alpha_add()<CR>
     noremap <s-down> :call Alpha_sub()<CR>
-"    noremap <leader>tw :call Top_window()<CR>
+    "    noremap <leader>tw :call Top_window()<CR>
 endif
 
 
@@ -924,13 +927,13 @@ if g:islinux
     set rtp+=~/.vim/bundle/vundle/
     call vundle#rc()
 else
-	if exists('$HOME/vimfiles')
-		set rtp+=$HOME/vimfiles/bundle/vundle/
-		call vundle#rc('$HOME/vimfiles/bundle/')
-	else
-		set rtp+=$VIM/vimfiles/bundle/vundle/
-		call vundle#rc('$VIM/vimfiles/bundle/')
-	endif
+    if exists('$HOME/vimfiles')
+        set rtp+=$HOME/vimfiles/bundle/vundle/
+        call vundle#rc('$HOME/vimfiles/bundle/')
+    else
+        set rtp+=$VIM/vimfiles/bundle/vundle/
+        call vundle#rc('$VIM/vimfiles/bundle/')
+    endif
 endif
 
 " 使用Vundle来管理插件，这个必须要有。
@@ -940,9 +943,9 @@ Bundle 'gmarik/vundle'
 
 "GIT
 "Bundle 'tpope/vim-git'
-    "--- 状态栏显示git分支(master)
+"--- 状态栏显示git分支(master)
 Bundle 'tpope/vim-fugitive'
-    "--- 状态栏显示fit分支号
+"--- 状态栏显示fit分支号
 Bundle 'airblade/vim-gitgutter'
 
 Bundle 'motemen/git-vim'
@@ -950,7 +953,7 @@ Bundle 'motemen/git-vim'
 
 "C/C++
 "---
-    "--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。
+"--- ex-project 和 nerdtree可以一起使用，两者可以无缝切换，用于项目树管理，各自有各自存在的理由。
 "Bundle 'exvim/main'
 "Plugin 'exvim/ex-config'
 "Plugin 'exvim/ex-utility'
@@ -968,20 +971,20 @@ Bundle 'motemen/git-vim'
 
 "Bundle 'a.vim'
 "Bundle 'std_c.zip'
-	"--- 自动生成tags与cscope文件并连接
-	"More convenience way to use ctags and cscope in vim
+"--- 自动生成tags与cscope文件并连接
+"More convenience way to use ctags and cscope in vim
 "Bundle 'ccvext.vim'
-	"--- create cscope database and connect to existing proper database automatically.
+"--- create cscope database and connect to existing proper database automatically.
 Bundle 'sdlylshl/cscope.vim'
 
-	"--- 显示层次的功能或使用cscope数据库文件调用树
-	"--- 依赖::Cscope, Vim 7.xx
+"--- 显示层次的功能或使用cscope数据库文件调用树
+"--- 依赖::Cscope, Vim 7.xx
 "Bundle 'vim-scripts/CCTree'
 
-	"--- VIM 下的Source Insight
+"--- VIM 下的Source Insight
 "Bundle 'wesleyche/SrcExpl'
 
-	"--- 高亮C函数
+"--- 高亮C函数
 "Bundle 'cSyntaxAfter'
 
 
@@ -1010,26 +1013,26 @@ Bundle 'sdlylshl/cscope.vim'
 
 "自动补全
 
-    "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
+"--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
 "Bundle 'Valloric/YouCompleteMe'
 
 "Bundle 'exvim/ex-autocomplpop'
 
-    "--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
+"--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
 "Bundle 'Shougo/neocomplcache.vim'
-    "--- lua
+"--- lua
 "Bundle 'Shougo/neocomplete.vim'
 
 "--- [与系统omni重复]在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
 "Bundle 'supertab'
 
-	"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
+"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
 Bundle 'OmniCppComplete'
-	"--- Omni Completion for JAVA 依赖:Ctags
+"--- Omni Completion for JAVA 依赖:Ctags
 "Bundle 'vim-javacompleteex'
 
 
-	"--- 自动括号补全
+"--- 自动括号补全
 "Bundle 'Raimondi/delimitMate'
 "Bundle 'docunext/closetag.vim'
 
@@ -1038,7 +1041,7 @@ Bundle 'OmniCppComplete'
 "--- 宏定义补全 依赖:: Python 3.x
 "Bundle 'SirVer/ultisnips'
 "Bundle 'honza/vim-snippets'
-    "--- Snippet 的几个方案 (单选)
+"--- Snippet 的几个方案 (单选)
 " Bundle 'Shougo/neosnippet.vim'
 " Bundle 'msanders/snipmate.vim'
 " Bundle 'spf13/snipmate-snippets'
@@ -1062,11 +1065,11 @@ endif
 "Bundle 'tpope/vim-repeat'
 
 "移动
-	"--- 跳转到光标后任意位置
+"--- 跳转到光标后任意位置
 "Bundle 'Lokaltog/vim-easymotion'
-	"--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
-    " % 正向匹配      g% 反向匹配
-    " [% 定位块首     ]% 定位块尾
+"--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
+" % 正向匹配      g% 反向匹配
+" [% 定位块首     ]% 定位块尾
 "Bundle 'vim-scripts/matchit.zip'
 
 "选中
@@ -1075,7 +1078,7 @@ endif
 Bundle 'terryma/vim-multiple-cursors'
 
 "文件浏览
-    "---  快速注释
+"---  快速注释
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'jistr/vim-nerdtree-tabs'
@@ -1089,10 +1092,10 @@ Bundle 'scrooloose/nerdtree'
 "--- 左侧显示marks
 Bundle 'kshenoy/vim-signature'
 
-    "--- 模糊查找 依赖:vim-L9库
+"--- 模糊查找 依赖:vim-L9库
 "Bundle 'clones/vim-l9'
 "Bundle 'FuzzyFinder'
-    "--- 依赖:python
+"--- 依赖:python
 "Bundle 'troydm/asyncfinder.vim'
 "Bundle 'Shougo/unite.vim'
 Bundle 'kien/ctrlp.vim'
@@ -1100,27 +1103,27 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'yegappan/grep'
 
 if g:islinux
-"--- 依赖: ACK2.x
-"Bundle 'mileszs/ack.vim'
-"Bundle 'petdance/ack2'
+    "--- 依赖: ACK2.x
+    "Bundle 'mileszs/ack.vim'
+    "Bundle 'petdance/ack2'
     "--- 依赖:ACK AG
-"Bundle 'dyng/ctrlsf.vim'
+    "Bundle 'dyng/ctrlsf.vim'
 endif
 "中文帮助
 Bundle 'asins/vimcdoc'
 "其他
-    "--- VIM 中文输入法(不会用)
+"--- VIM 中文输入法(不会用)
 "Bundle 'vim-scripts/VimIM'
 "--- 括号显示增强
 "Bundle 'kien/rainbow_parentheses.vim'
-    "--- 括号自动配对
+"--- 括号自动配对
 "Bundle 'jiangmiao/auto-pairs'
 
 "Bundle 'Align'
-	"--- 代码对齐
+"--- 代码对齐
 "Bundle 'godlygeek/tabular'
 
-	"--- 快速跳转到TODO列表
+"--- 快速跳转到TODO列表
 Bundle 'vim-scripts/TaskList.vim'
 
 
@@ -1130,9 +1133,9 @@ Bundle 'vim-scripts/TaskList.vim'
 "Bundle 'sjl/gundo.vim'
 
 "Bundle 'Yggdroot/indentLine'
-    "--- 显示文本文件的目录树和语法高亮
+"--- 显示文本文件的目录树和语法高亮
 "Bundle 'TxtBrowser'
-	"--- <c-w>o 在最大化与还原间切换
+"--- <c-w>o 在最大化与还原间切换
 "Bundle 'ZoomWin'
 
 "主题color scheme
@@ -1189,28 +1192,28 @@ nnoremap <leader>hs <Plug>GitGutterStageHunk
 "  < vim-signature 插件配置 >
 " -----------------------------------------------------------------------------
 
-  " m[a-zA-Z]    : Toggle mark
-  " m,           : Place the next available mark
-  " m.           : If no mark on line, place the next available mark. Otherwise, remove (first) existing mark.
-  " m-           : Delete all marks from the current line
-  " m<Space>     : Delete all marks from the current buffer
-  " ]`           : Jump to next mark
-  " [`           : Jump to prev mark
-  " ]'           : Jump to start of next line containing a mark
-  " ['           : Jump to start of prev line containing a mark
-  " `]           : Jump by alphabetical order to next mark
-  " `[           : Jump by alphabetical order to prev mark
-  " ']           : Jump by alphabetical order to start of next line containing a mark
-  " '[           : Jump by alphabetical order to start of prev line containing a mark
-  " '?           : Open location list and display local marks
+" m[a-zA-Z]    : Toggle mark
+" m,           : Place the next available mark
+" m.           : If no mark on line, place the next available mark. Otherwise, remove (first) existing mark.
+" m-           : Delete all marks from the current line
+" m<Space>     : Delete all marks from the current buffer
+" ]`           : Jump to next mark
+" [`           : Jump to prev mark
+" ]'           : Jump to start of next line containing a mark
+" ['           : Jump to start of prev line containing a mark
+" `]           : Jump by alphabetical order to next mark
+" `[           : Jump by alphabetical order to prev mark
+" ']           : Jump by alphabetical order to start of next line containing a mark
+" '[           : Jump by alphabetical order to start of prev line containing a mark
+" '?           : Open location list and display local marks
 "
-  " m[0-9]       : Toggle the corresponding marker !@#$%^&*()
-  " m<S-[0-9]>   : Remove all markers of the same type
-  " ]-           : Jump to next line having same marker
-  " [-           : Jump to prev line having same marker
-  " ]=           : Jump to next line having any marker
-  " [=           : Jump to prev line having any marker
-  " m<BackSpace> : Remove all markers
+" m[0-9]       : Toggle the corresponding marker !@#$%^&*()
+" m<S-[0-9]>   : Remove all markers of the same type
+" ]-           : Jump to next line having same marker
+" [-           : Jump to prev line having same marker
+" ]=           : Jump to next line having any marker
+" [=           : Jump to prev line having any marker
+" m<BackSpace> : Remove all markers
 
 " -----------------------------------------------------------------------------
 "  < cscope 插件配置 >
@@ -1427,14 +1430,14 @@ let g:xptemplate_key = '<Tab>'
 " Use `<c-y>` to create a new file and its parent directories.
 " Use `<c-z>` to mark/unmark multiple files and `<c-o>` to open them.
 if g:iswindows
-   " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
     set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 endif
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
-    \ 'file': '\v\.(txt|exe|so|dll|zip|tar|tar.gz)$',
-    \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-    \ }
+            \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+            \ 'file': '\v\.(txt|exe|so|dll|zip|tar|tar.gz)$',
+            \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+            \ }
 
 " 在每次进行切换分支或者重新设定custome_ignore选项的时候,必须手动清除CtrlP的缓存,
 " 也可以使用下句不让它进行缓存处理，但扫描时间会比较耗时
@@ -1708,14 +1711,14 @@ noremap <leader>t <Plug>TaskList
 "正常模式： 　n      　   无菜单窗中文搜索   Repeat the latest "/" or "?" ...
 "插入模式： i_CTRL-_   开关中文输入法      Switch between languages ...
 "插入模式： i_CTRL-^    切换中文输入法      Toggle the use of language ...　
-    :let g:vimim_cloud = 'google,sogou,baidu,qq'
-    :let g:vimim_map = 'tab_as_gi'
-  " :let g:vimim_mode = 'dynamic'
-  " :let g:vimim_mycloud = 0
-  " :let g:vimim_plugin = 'C:/var/mobile/vim/vimfiles/plugin'
-  " :let g:vimim_punctuation = 2
-  " :let g:vimim_shuangpin = 0
-  " :let g:vimim_toggle = 'pinyin,google,sogou'
+:let g:vimim_cloud = 'google,sogou,baidu,qq'
+:let g:vimim_map = 'tab_as_gi'
+" :let g:vimim_mode = 'dynamic'
+" :let g:vimim_mycloud = 0
+" :let g:vimim_plugin = 'C:/var/mobile/vim/vimfiles/plugin'
+" :let g:vimim_punctuation = 2
+" :let g:vimim_shuangpin = 0
+" :let g:vimim_toggle = 'pinyin,google,sogou'
 " inoremap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 以下为软件默认配置 >>
@@ -2010,10 +2013,10 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 "autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 "autocmd FileType java set omnifunc=javacomplete#Complete
 "if has("autocmd") && exists("+omnifunc")
-     "autocmd Filetype *
-   "\ if &omnifunc == "" |
-   "\   setlocal omnifunc=syntaxcomplete#Complete |
-   "\ endif
+"autocmd Filetype *
+"\ if &omnifunc == "" |
+"\   setlocal omnifunc=syntaxcomplete#Complete |
+"\ endif
 "endif
 "set cot-=preview "disable doc preview in omnicomplete
 
@@ -2027,6 +2030,6 @@ if (g:iswindows)
 
     autocmd! bufwritepost *vimrc source %
 else
-	noremap <leader>e :e $HOME/.vimrc<cr>
-	autocmd! bufwritepost .vimrc source %
+    noremap <leader>e :e $HOME/.vimrc<cr>
+    autocmd! bufwritepost .vimrc source %
 endif
