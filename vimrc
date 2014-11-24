@@ -1102,7 +1102,14 @@ endif
 
 "移动
 "--- 跳转到光标后任意位置
-"Bundle 'Lokaltog/vim-easymotion'
+"
+", + w  跳转
+", + fe  查找'e',快速跳转定位到某个字符位置
+",j      快速决定移动到下面哪行(比用行号/j移动快)
+",k      快速移动到上面哪行
+",l      本行, 向后快速移动
+",h      本行, 向前快速移动
+Bundle 'Lokaltog/vim-easymotion'
 "--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
 " % 正向匹配      g% 反向匹配
 " [% 定位块首     ]% 定位块尾
@@ -1129,6 +1136,7 @@ Bundle 'szw/vim-ctrlspace'
 "Bundle 'ShowMarks'
 "Bundle 'Mark--Karkat'
 "--- 左侧显示marks
+"m<space>    去除所有标签
 Bundle 'kshenoy/vim-signature'
 
 "--- 模糊查找 依赖:vim-L9库
@@ -1161,12 +1169,16 @@ Bundle 'asins/vimcdoc'
 "Bundle 'Align'
 "--- 代码对齐
 "Bundle 'godlygeek/tabular'
+"可以选中多行,不选中默认操作当前行
+",a= 对齐等号表达
+",a: 对齐冒号表达式(json/map等)
+",a<space>  首个空格对齐
+",a2<space> 第二个空格对齐
+",a*<space> 所有空格依次对齐
+Bundle 'junegunn/vim-easy-align'
 
 "--- 快速跳转到TODO列表
 Bundle 'vim-scripts/TaskList.vim'
-
-
-
 
 "--- 撤销树Gundo.vim 依赖:python
 "Bundle 'sjl/gundo.vim'
