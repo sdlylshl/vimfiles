@@ -510,7 +510,7 @@ endif
 "<F1> 查看Vim的runtime路径
 nnoremap <F1> :set rtp<CR>
 "nnoremap <F2> :NERDTreeToggle<CR>
-nnoremap <silent> <F2> :exec("NERDTree ".expand('%:h'))<CR>
+nnoremap <silent> <F2> :exec("NERDTreeToggle ".expand('%:h'))<CR>
 nnoremap <F3> :TagbarToggle<CR>
 nnoremap <F4> :SrcExplToggle<CR>
 
