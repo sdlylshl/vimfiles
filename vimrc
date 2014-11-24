@@ -735,7 +735,7 @@ inoremap ó <esc>di"i
 "noremap <C-[> <ESC>:po<CR>
 
 "   插入头文件定义
-noremap <leader>g :call IncludeGuard()<CR>
+noremap <leader>i :call IncludeGuard()<CR>
 fun! IncludeGuard()
     let basename = substitute(bufname(""), '.*/', '', '')
     let guard = '_' . substitute(toupper(basename), '\.', '_', "H")
@@ -1070,10 +1070,12 @@ endif
 "--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
 " % 正向匹配      g% 反向匹配
 " [% 定位块首     ]% 定位块尾
-"Bundle 'vim-scripts/matchit.zip'
+Bundle 'vim-scripts/matchit.zip'
 
 "选中
-"Bundle 'terryma/vim-expand-region'
+"+ 增加选中范围(+/=按键)
+"_ 减少选中范围(_/-按键)
+Bundle 'terryma/vim-expand-region'
 "多光标多行编辑
 Bundle 'terryma/vim-multiple-cursors'
 
@@ -1131,6 +1133,7 @@ Bundle 'vim-scripts/TaskList.vim'
 
 "--- 撤销树Gundo.vim 依赖:python
 "Bundle 'sjl/gundo.vim'
+Bundle 'mbbill/undotree'
 
 "Bundle 'Yggdroot/indentLine'
 "--- 显示文本文件的目录树和语法高亮
@@ -1155,6 +1158,10 @@ filetype plugin indent on                             "启用缩进
 " =============================================================================
 "                          << 以下为常用插件配置 >>
 " =============================================================================
+" ----------------------------------------------------------------------------
+"  < Undotree 插件配置 >
+" ----------------------------------------------------------------------------
+nnoremap <Leader>h :UndotreeToggle<cr>
 " -----------------------------------------------------------------------------
 "  < Grep 插件配置 >
 " ----------------------------------------------------------------------------
@@ -1179,9 +1186,9 @@ nnoremap <Leader>gb  :GitBlame
 nnoremap ]c <Plug>GitGutterNextHunk
 nnoremap [c <Plug>GitGutterPrevHunk
 
-nnoremap <leader>hp <Plug>GitGutterPreviewHunk
-nnoremap <leader>hr <Plug>GitGutterRevertHunk
-nnoremap <leader>hs <Plug>GitGutterStageHunk
+nnoremap <leader>gp <Plug>GitGutterPreviewHunk
+nnoremap <leader>gr <Plug>GitGutterRevertHunk
+nnoremap <leader>gt <Plug>GitGutterStageHunk
 
 "暂存 <Leader>hs 和回退 <Leader>hr
 "nnoremap <Leader>hr <Plug>GitGutterStageHunk
