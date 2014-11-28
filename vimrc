@@ -268,7 +268,7 @@ set splitright                  " 新分割窗口在右边
 set fillchars=vert:\ ,stl:\ ,stlnc:\ " 在被分割的窗口间显示空白，便于阅读
 
 " 光标移动到buffer的顶部和底部时保持3行距离
-set scrolloff=10
+set scrolloff=5
 
 "--状态行设置--
 set laststatus=2     " 总显示最后一个窗口的状态行；设为1则窗口数多于一个的时候显示最后一个窗口的状态行；0不显示最后一个窗口的状态行
@@ -593,7 +593,7 @@ noremap - dd
 nnoremap <M-Space> viw
 " 把空格键映射成:
 " Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-noremap <space> /
+noremap <space> :
 " 进入搜索Use sane regexes"
 nnoremap / /\v
 vnoremap / /\v
@@ -613,7 +613,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 " :cd. change working directory to that of the current file
-cnoremap cd. lcd %:p:h
+"cnoremap cd. lcd %:p:h
 
 " Ctrl-u 1:    underline Parts w/ #'s
 "   noremap  <C-u>1 yyPVr#yyjp
@@ -984,7 +984,7 @@ Bundle 'tpope/vim-fugitive'
 "--- 状态栏显示fit分支号
 Bundle 'airblade/vim-gitgutter'
 
-Bundle 'motemen/git-vim'
+"Bundle 'motemen/git-vim'
 "Bundle 'mhinz/vim-signify'
 
 "C/C++
