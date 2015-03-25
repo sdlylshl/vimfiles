@@ -156,11 +156,11 @@ else
         "此处会修改vim runtimepath rtp 所以放到Bundle前面
         runtime! debian.vim
 
+        set term=linux
         set termencoding=utf-8          "解决Linux终端乱码
         "set mouse=a                    " 在任何模式下启用鼠标
         set t_Co=256                    " 在终端启用256色
         " fixed the arrow key problems caused by AutoClose
-        set term=linux
         "inoremap OA <ESC>ki
         "inoremap OB <ESC>ji
         "inoremap OC <ESC>li
