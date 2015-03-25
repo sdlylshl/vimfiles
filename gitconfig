@@ -2,7 +2,7 @@
 [core]
   symlinks = false
   autocrlf = false
-  editor = Notepad2
+  editor = vim
   whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
   #没有这一条，$git status输出中文会显示为UNICODE编码。
   quotepath = false
