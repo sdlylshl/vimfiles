@@ -1,0 +1,289 @@
+#1.3
+[core]
+  symlinks = false
+  autocrlf = false
+  editor = Notepad2
+  whitespace = trailing-space,space-before-tab,indent-with-non-tab,cr-at-eol
+  #没有这一条，$git status输出中文会显示为UNICODE编码。
+  quotepath = false
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = true
+  ui = true
+[gui]
+  encoding = utf-8
+[i18n]
+  #如果没有这一条，虽然我们在本地用$ git log看自己的中文修订没问题，
+  #一、我们的log推到服务器后会变成乱码；
+  #二、别人在Linux下推的中文log我们pull过来之后看起来也是乱码。
+  #这是因为，我们的commit log会被先存放在项目的.git/COMMIT_EDITMSG文件中；在中文Windows里，新建文件用的是GB2312的编码；但是Git不知道，当成默认的utf-8的送出去了，所以就乱码了。有了这条之后，Git会先将其转换成utf-8，再发出去，于是就没问题了。
+  #commitencoding = GB2312
+[push]
+  #仅推送当前分支
+  #default = simple
+  #推送所有改动的分支
+  default = matching
+[diff]
+  #external = BComp.exe $2 $5  
+	tool = bc3
+[difftool "bc3"]
+	cmd = \"D:/Program Files/Beyond Compare 3/bcomp.exe\" \"$LOCAL\" \"$REMOTE\"
+	prompt = false	
+[merge]
+	tool = bc3
+[mergetool "bc3"]
+	cmd = \"D:/Program Files/Beyond Compare 3/bcomp.exe\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
+	
+[help]
+  format = html
+  #autocorrect =true
+[pack]
+  windowMemory = 512m
+  packSizeLimit = 512m
+  deltaChaseSize = 128m
+  SizeLimit = 512m
+  threads = 1
+[http]
+  proxy = 127.0.0.1:8087
+  postBuffer = 536870912
+  sslVerify = false
+[https]
+  proxy = 127.0.01:8087
+[sendemail]
+  smtpserver = /bin/msmtp.exe
+[receive]
+  #没有这一条无法提交到版本库
+  denyCurrentBranch = ignore
+[diff "astextplain"]
+  textconv = astextplain
+[rebase]
+  autosquash = true
+[credential]
+  helper = store
+[include]
+#    path = ~/gitconfig/gitconfig
+[alias]
+  k = !gitk
+  e = !notepad2
+  cleans = clean -dfx
+  #用版本库内容清空暂存区
+  unstage = reset --hard
+  # undo last commit
+  undo = reset --soft HEAD^
+  # last commit info
+  last-commit = log -1 HEAD
+  last = !git show --name-status
+  last-files = !git last --pretty=format:"" 
+  #将文件从暂存区stage移除
+  rmc = rm --cached
+  count = shortlog -sn
+  tags = tag -l
+  
+  # cleanup repo: from https://github.com/gregschoen/awesome-git-config
+  cleanup = !git remote prune origin && git gc && git clean -dfx   
+  
+  # update current branch
+  update = !sh -c 'git fetch origin && git rebase -p origin/${1-master}' -
+  
+  # `git sync`: from https://github.com/gregschoen/awesome-git-config
+  # update current branch and master
+  sync = !git update && \
+      git co master && \
+      git pull && \
+      git co @{-1}  
+      
+  # `git spawn my-new-branch`: from https://github.com/gregschoen/awesome-git-config
+  # make new branch based on master no matter which branch is checked out
+  spawn = !sh -c 'git checkout -b $1 ${2-master} && git config branch.$1.localmerge ${2-master}' - 
+  
+  # `git save`: from https://github.com/gregschoen/awesome-git-config
+  # saves a commit in current branch: local branches you will be rebasing
+  save = !git commit -am \"save game\"
+  
+  # list files changed by last commit in absolute location
+  list = !git show --pretty=format:"" --name-only | sed '/^$/d' | sed 's|^|/var/www/|g'
+
+  # give a count of dirty files
+  dirty = !git status --porcelain -uno | wc -l
+
+  # identity
+  user = config user.name
+  email = config user.email
+  #用户提交数量
+  who = shortlog -s --
+  # number of non-merge commits 
+  peeps = !git log --pretty=format:%aN --no-merges | sort | uniq -c | sort -rn  
+   
+  s = status
+  ss = status --short
+  st = status -sb
+  
+  b =  branch
+  #查看当前所有分支
+  ba = branch -a
+  branchs = branch -a
+  #列出当前所有分支的清单
+  bav = branch -av
+  #查看远程分支
+  br = branch -r
+  #重命名本地分支 develop --> dev
+  bmv = branch -m
+  bmvd = branch -m develop dev
+  #删除分支
+  bd = branch -d
+  #查看各个分支最后一个提交对象的信息
+  bv = branch -v
+  #查看已经与当前分支合并的分支
+  bm = branch --merged
+  #查看已经与当前分支未合并的分支
+  bnm= branch --no-merged
+  #设置跟踪远程库和本地库
+  bum = branch --set-upstream master origin/master  
+  bud = branch --set-upstream develop origin/develop  
+  
+   # creates a diff of current branch against supplied branch, usage: git export-branch [refbranch]
+   branch-name = !git for-each-ref --format='%(refname:short)' `git symbolic-ref HEAD`
+   export-branch = !git format-patch --stdout $1 > ~/branches/`git branch-name`.diff
+    
+  #比较工作目录和[staged]Index中的代码  当前修改===当前暂存区(staged)[git add .]
+  d = diff --color
+  #比较[staged]index和本地仓库中的代码  当前暂存区(staged)===上次提交[git commit]
+  dc =diff --color --cached
+  ds =diff --color --staged
+  d0 =diff --color --unified=0
+  
+  # files different from master on current branch
+  fdm = !git diff --name-status origin/master.. 
+    
+  m = merge
+  #查看两分支共同的祖先 git merge-base samsung/master android/2.6.29
+  mb =merge-base
+  
+  f = fetch origin 
+  #获取远程 tag 更新到本地
+  ftag = fetch origin tag
+  
+  #同步远程服务器上的数据 merge 到本地 
+  pl = pull
+  #同步远程服务器上的数据 rebase 到本地
+  plr = pull --rebase
+  
+  #推送当前分支到服务器
+  p = push
+  #创建远程分支---即把本地分支推送到远程
+  pm = push origin master
+  pd = push origin develop
+  #把本地 tag 推送到远程
+  pt = push --tags
+  #删除远程分支
+  prmd = push origin :develop
+  pdeld = push --delete origin develop
+  #提交本地分支数据到远程服务器
+  pdd=push origin develop:develop
+  pmm=push origin master:master 
+    
+  c = commit
+  ca = commit -a
+  commits = commit -a
+  cv= commit --verbose
+  
+  #在clone项目时同时clone关联的submodules
+  clr = clone --recursive
+
+  co = checkout
+  cot = checkout --track
+  com = checkout master
+  cod = checkout develop
+  #跟踪远程分支---从远程拉取develop分支到本地，并切换到develop分支
+  cotm = checkout --track origin/master
+  cotd = checkout --track origin/develop  
+  #从远程拉取develop分支到本地,命名为dev，并切换到develop分支
+  cotdrn = checkout -b dev origin/develop 
+ 
+ #怎样保证fork（上游项目）同步更新？ 
+ #1.添加上游代码库的 remote 源
+ #git remote add upstream https://github.scm.corp.ebay.com/montage/frontend-ui-workspace
+ #2. 在每次 Pull Request 前做如下操作
+ #git remote update upstream
+ #git checkout {branch name}
+ #git rebase upstream/{branch name}
+ #3.提交
+ #git push
+ 
+  r = remote
+  remotes = remote -v
+  #添加远端仓库并重命名 git remote add android git://android.git.kernel.org/kernel/common.git
+  ra  = remote add 
+  rmv = remote rename
+  rrm = remote remove
+  rsu = remote set-url
+  rup = remote update
+  #查看服务器分支
+  rso = remote show origin
+  
+  #rebase -i <>修改历史提交
+  #1. git rebase -i HEAD~3
+  #2. 修改pick -> edit
+  #3. git commit -amend
+  #4. git rebase --continue
+  #5. git push -f
+  
+  #将master分支 rebase到当前分支
+  rbm = rebase master
+  #修改历史
+  rbi = rebase -i
+  #继续合并
+  rbc = rebase --continue
+  #跳过冲突
+  rbs = rebase --skip
+  #放弃修改
+  rba = rebase --abort
+  
+  stash = stash                        # 暂存  
+  stashl =stash list                   # 列所有stash  
+  stasha = stash apply                 # 恢复暂存的内容
+  stashp = stash pop                   # 恢复暂存的内容    
+  stashd = stash drop                  # 删除暂存区  
+  
+  #submodule
+  #1.使用submodule时最好只有一级子模块，因为当子模块更新后，执行sbp更新过来后也需要提交一次更新。
+  #当层级过深时导致，每一级都需要更新，不方便。
+  sb = submodule
+  sbs = submodule status
+  #1.添加一个子模块 需要注意 [欲放置的位置] 不能以 / 結尾（會造成修改不生效）、也不能已經是現有的路徑喔（不能順利 Clone）
+  #git submodule add git@github.com:josephj/javascript-platform-yui.git static/platform
+  sba = submodule add
+  #2.在.git/config中注册子模块的信息
+  sbi = submodule init
+  #3.更新子模块仓库 必须先init
+  sbu = submodule update
+  sbp = submodule foreach git pull
+  sbcm = submodule foreach git checkout master
+  sbcd = submodule foreach git checkout develop
+  
+  mlog = !git log --committer=\"`git user`\"
+  # show all files current user has ever edited
+  mfiles = !git log --no-merges --stat --author=\"`git user`\" --name-only --pretty=format:"" | sort -u
+  # all commits that aren't merges on all branches
+  all = !git log --pretty=oneline --abbrev-commit --all --no-merges
+  # all commits today for only user
+  today = !git all --since='12am' --committer=\"`git user`\"
+  
+  
+  l = log --pretty=oneline -n 20 --graph --abbrev-commit
+  ll= log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
+  l = log --color --graph --decorate --pretty=oneline --abbrev-commit
+  l0= log --color --graph --decorate --pretty=oneline --abbrev-commit -U0
+  la= log --color --graph --decorate --pretty=oneline --abbrev-commit --all
+  lb= log --color --graph --decorate --pretty=oneline --abbrev-commit --all --simplify-by-decoration
+  lg= log --color --graph --decorate
+  dl= log --date-order --color --graph --decorate --pretty=oneline --abbrev-commit
+  dla=log --date-order --color --graph --decorate --pretty=oneline --abbrev-commit --all
+  dlb=log --date-order --color --graph --decorate --pretty=oneline --abbrev-commit --all --simplify-by-decoration
+  dlg=log --date-order --color --graph --decorate
+[user]
+	name = sdlylshl
+	email = sdlylshl@163.com

@@ -1,11 +1,12 @@
 # [gmarik](http://github.com/gmarik)'s [Vim configuration](http://github.com/gmarik/vimfiles)
 
 ##Linux
-    1. git clone --recursive git@github.com:sdlylshl/vimfiles
-    2. ln -s vimfiles/ .vim
-    3. ln -s vimfiles/vimrc .vimrc
+    1. git clone --recursive git@github.com:sdlylshl/vimfiles .vim
+    2. ln -s .vim/gitconfig .gitconfig
+    3. ln -s .vim/vimrc .vimrc
     4. ./powerline-fonts/install.sh
-    
+
+        
     {测试未通过 禁用
     sudo chmod 766 /usr/share/fonts
     cp -r vimfile/bundle/powerline-fonts /usr/share/fonts/
