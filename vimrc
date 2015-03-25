@@ -117,6 +117,66 @@ endif
 " =============================================================================
 "                            < 系统配置 >
 " =============================================================================
+if g:iswindows
+    "设置字体:字号（字体名称空格用下划线代替<N）
+    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
+    "set guifont=Consolas_for_Powerline_FixedD:h9
+else
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+endif
+
+"if (g:iswindows && g:isGUI)
+if g:iswindows
+
+    set langmenu=zh_CN.utf-8
+
+    "colorscheme molokai
+    "set term=xterm
+    "set t_Co=256
+
+    "处理菜单及右键菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+
+    "处理consle输出乱码
+    language messages zh_CN.utf-8
+
+    "解决gvim不乱码，但vim乱码
+    set termencoding=chinese
+
+else
+    if g:isGUI
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/gvimrc.local")
+            source /etc/vim/gvimrc.local
+        endif
+    else
+        " This line should not be removed as it ensures that various options are
+        " properly set to work with the Vim-related packages available in Debian.
+        "此处会修改vim runtimepath rtp 所以放到Bundle前面
+        runtime! debian.vim
+
+        set termencoding=utf-8          "解决Linux终端乱码
+        "set mouse=a                    " 在任何模式下启用鼠标
+        set t_Co=256                    " 在终端启用256色
+        " fixed the arrow key problems caused by AutoClose
+        set term=linux
+        "inoremap OA <ESC>ki
+        "inoremap OB <ESC>ji
+        "inoremap OC <ESC>li
+        "imnoreap OD <ESC>hi
+
+        nnoremap OA k
+        nnoremap OB j
+        nnoremap OC l
+        nnoremap OD h
+
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/vimrc.local")
+            source /etc/vim/vimrc.local
+        endif
+    endif
+endif
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
 " -----------------------------------------------------------------------------
@@ -335,67 +395,7 @@ set fileformats=unix,dos,mac                          "给出文件的<EOL>格�
 "不明字符用双字节表示
 set ambiwidth=double
 
-if g:iswindows
-    "设置字体:字号（字体名称空格用下划线代替<N）
-    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
-    "set guifont=Consolas_for_Powerline_FixedD:h9
-else
-    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
-endif
 
-"if (g:iswindows && g:isGUI)
-if g:iswindows
-
-
-    set langmenu=zh_CN.utf-8
-
-    "colorscheme molokai
-    "set term=xterm
-    "set t_Co=256
-
-    "处理菜单及右键菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
-
-    "处理consle输出乱码
-    language messages zh_CN.utf-8
-
-    "解决gvim不乱码，但vim乱码
-    set termencoding=chinese
-
-else
-    if g:isGUI
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/gvimrc.local")
-            source /etc/vim/gvimrc.local
-        endif
-    else
-        " This line should not be removed as it ensures that various options are
-        " properly set to work with the Vim-related packages available in Debian.
-        "此处会修改vim runtimepath rtp 所以放到Bundle前面
-        runtime! debian.vim
-
-        set termencoding=utf-8          "解决Linux终端乱码
-        "set mouse=a                    " 在任何模式下启用鼠标
-        set t_Co=256                    " 在终端启用256色
-        " fixed the arrow key problems caused by AutoClose
-        set term=linux
-        "inoremap OA <ESC>ki
-        "inoremap OB <ESC>ji
-        "inoremap OC <ESC>li
-        "imnoreap OD <ESC>hi
-
-        nnoremap OA k
-        nnoremap OB j
-        nnoremap OC l
-        nnoremap OD h
-
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/vimrc.local")
-            source /etc/vim/vimrc.local
-        endif
-    endif
-endif
 
 " --- AutoClose - Inserts matching bracket, paren, brace or quote
 
