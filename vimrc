@@ -528,7 +528,7 @@ inoremap <C-F4> <C-O>:close!<CR>
 "<F5> 一键分屏
 "nnoremap <F5> :vertical ba<CR>
 "<Ctrl + F5>显示可打印字符开关
-nnoremap <silent> <F5> :set list! list?<CR>
+nnoremap <silent> <C-F5> :set list! list?<CR>
 
 "<Ctrl + F6> 切换行号显示模式
 nnoremap <silent> <F6> :set relativenumber!<CR>
@@ -549,7 +549,7 @@ nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 " -----------------------------------------------------------------------------
 "  <  QuickFix 操作 >
 " ----------------------------------------------------------------------------
-nnoremap <silent> <C-F5> :cw<CR>      "有错误打开QuickFix
+nnoremap <silent> <F5> :cw<CR>      "有错误打开QuickFix
 nnoremap <silent> <C-F6> :cp<CR>      "QuickFix窗口中上一条记录
 nnoremap <silent> <C-F7> :cn<CR>      "QuickFix窗口中下一条记录
 nnoremap <silent> <C-F8> :cclose<CR>
