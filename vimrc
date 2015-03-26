@@ -528,18 +528,18 @@ inoremap <C-F4> <C-O>:close!<CR>
 "<F5> 一键分屏
 "nnoremap <F5> :vertical ba<CR>
 "<Ctrl + F5>显示可打印字符开关
-nnoremap <silent> <C-F5> :set list! list?<CR>
+nnoremap <silent> <F5> :set list! list?<CR>
 
 "<Ctrl + F6> 切换行号显示模式
-nnoremap <silent> <C-F6> :set relativenumber!<CR>
+nnoremap <silent> <F6> :set relativenumber!<CR>
 
 "<Ctrl + F7>自动换行
-nnoremap <silent> <C-F7> :set wrap!<CR>
+nnoremap <silent> <F7> :set wrap!<CR>
 
 "<Ctrl + F8> 切换语法高亮
-nnoremap <silent> <C-F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
+nnoremap <silent> <F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
-nmap <F10> :call UpdateCtags()<CR>
+"nmap <F10> :call UpdateCtags()<CR>
 " F10 to run python script
 nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 
@@ -549,10 +549,10 @@ nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 " -----------------------------------------------------------------------------
 "  <  QuickFix 操作 >
 " ----------------------------------------------------------------------------
-nnoremap <silent> <F5> :cw<CR>      "有错误打开QuickFix
-nnoremap <silent> <F6> :cp<CR>      "QuickFix窗口中上一条记录
-nnoremap <silent> <F7> :cn<CR>      "QuickFix窗口中下一条记录
-nnoremap <silent> <F8> :cclose<CR>
+nnoremap <silent> <C-F5> :cw<CR>      "有错误打开QuickFix
+nnoremap <silent> <C-F6> :cp<CR>      "QuickFix窗口中上一条记录
+nnoremap <silent> <C-F7> :cn<CR>      "QuickFix窗口中下一条记录
+nnoremap <silent> <C-F8> :cclose<CR>
 " open the error console
 noremap <leader>cp :botright copen<CR>
 " move to next error
@@ -1808,243 +1808,6 @@ noremap <leader>t <Plug>TaskList
 " :let g:vimim_shuangpin = 0
 " :let g:vimim_toggle = 'pinyin,google,sogou'
 " inoremap<silent><C-L> <Plug>VimimChineseToggle
-" =============================================================================
-"                          << 以下为软件默认配置 >>
-" =============================================================================
-
-" -----------------------------------------------------------------------------
-"  < 编译、连接、运行配置 (目前只配置了C、C++、Java语言)>
-" -----------------------------------------------------------------------------
-" F9 一键保存、编译、连接存并运行
-nnoremap <F9> :call Run()<CR>
-inoremap <F9> <ESC>:call Run()<CR>
-
-" Ctrl + F9 一键保存并编译
-nnoremap <c-F9> :call Compile()<CR>
-inoremap <c-F9> <ESC>:call Compile()<CR>
-
-" Ctrl + F10 一键保存并连接
-nnoremap <c-F10> :call Link()<CR>
-inoremap <c-F10> <ESC>:call Link()<CR>
-
-let s:LastShellReturn_C = 0
-let s:LastShellReturn_L = 0
-let s:ShowWarning = 1
-let s:Obj_Extension = '.o'
-let s:Exe_Extension = '.exe'
-let s:Class_Extension = '.class'
-let s:Sou_Error = 0
-
-let s:windows_CFlags = 'gcc\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CFlags = 'gcc\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-
-let s:windows_CPPFlags = 'g++\ -fexec-charset=gbk\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-let s:linux_CPPFlags = 'g++\ -Wall\ -g\ -O0\ -c\ %\ -o\ %<.o'
-
-let s:JavaFlags = 'javac\ %'
-
-func! Compile()
-    exe ":ccl"
-    exe ":update"
-    let s:Sou_Error = 0
-    let s:LastShellReturn_C = 0
-    let Sou = expand("%:p")
-    let v:statusmsg = ''
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let Obj = expand("%:p:r").s:Obj_Extension
-        let Obj_Name = expand("%:p:t:r").s:Obj_Extension
-        if !filereadable(Obj) || (filereadable(Obj) && (getftime(Obj) < getftime(Sou)))
-            redraw!
-            if expand("%:e") == "c"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                if g:iswindows
-                    exe ":setlocal makeprg=".s:windows_CPPFlags
-                else
-                    exe ":setlocal makeprg=".s:linux_CPPFlags
-                endif
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            endif
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_C = v:shell_error
-            endif
-            if g:iswindows
-                if s:LastShellReturn_C != 0
-                    exe ":bo cope"
-                    echohl WarningMsg | echo " compilation failed"
-                else
-                    if s:ShowWarning
-                        exe ":bo cw"
-                    endif
-                    echohl WarningMsg | echo " compilation successful"
-                endif
-            else
-                if empty(v:statusmsg)
-                    echohl WarningMsg | echo " compilation successful"
-                else
-                    exe ":bo cope"
-                endif
-            endif
-        else
-            echohl WarningMsg | echo ""Obj_Name"is up to date"
-        endif
-    elseif expand("%:e") == "java"
-        let class = expand("%:p:r").s:Class_Extension
-        let class_Name = expand("%:p:t:r").s:Class_Extension
-        if !filereadable(class) || (filereadable(class) && (getftime(class) < getftime(Sou)))
-            redraw!
-            exe ":setlocal makeprg=".s:JavaFlags
-            echohl WarningMsg | echo " compiling..."
-            silent make
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_C = v:shell_error
-            endif
-            if g:iswindows
-                if s:LastShellReturn_C != 0
-                    exe ":bo cope"
-                    echohl WarningMsg | echo " compilation failed"
-                else
-                    if s:ShowWarning
-                        exe ":bo cw"
-                    endif
-                    echohl WarningMsg | echo " compilation successful"
-                endif
-            else
-                if empty(v:statusmsg)
-                    echohl WarningMsg | echo " compilation successful"
-                else
-                    exe ":bo cope"
-                endif
-            endif
-        else
-            echohl WarningMsg | echo ""class_Name"is up to date"
-        endif
-    else
-        let s:Sou_Error = 1
-        echohl WarningMsg | echo " please choose the correct source file"
-    endif
-    exe ":setlocal makeprg=make"
-endfunc
-
-func! Link()
-    call Compile()
-    if s:Sou_Error || s:LastShellReturn_C != 0
-        return
-    endif
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let s:LastShellReturn_L = 0
-        let Sou = expand("%:p")
-        let Obj = expand("%:p:r").s:Obj_Extension
-        if g:iswindows
-            let Exe = expand("%:p:r").s:Exe_Extension
-            let Exe_Name = expand("%:p:t:r").s:Exe_Extension
-        else
-            let Exe = expand("%:p:r")
-            let Exe_Name = expand("%:p:t:r")
-        endif
-        let v:statusmsg = ''
-        if filereadable(Obj) && (getftime(Obj) >= getftime(Sou))
-            redraw!
-            if !executable(Exe) || (executable(Exe) && getftime(Exe) < getftime(Obj))
-                if expand("%:e") == "c"
-                    setlocal makeprg=gcc\ -o\ %<\ %<.o
-                    echohl WarningMsg | echo " linking..."
-                    silent make
-                elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                    setlocal makeprg=g++\ -o\ %<\ %<.o
-                    echohl WarningMsg | echo " linking..."
-                    silent make
-                endif
-                redraw!
-                if v:shell_error != 0
-                    let s:LastShellReturn_L = v:shell_error
-                endif
-                if g:iswindows
-                    if s:LastShellReturn_L != 0
-                        exe ":bo cope"
-                        echohl WarningMsg | echo " linking failed"
-                    else
-                        if s:ShowWarning
-                            exe ":bo cw"
-                        endif
-                        echohl WarningMsg | echo " linking successful"
-                    endif
-                else
-                    if empty(v:statusmsg)
-                        echohl WarningMsg | echo " linking successful"
-                    else
-                        exe ":bo cope"
-                    endif
-                endif
-            else
-                echohl WarningMsg | echo ""Exe_Name"is up to date"
-            endif
-        endif
-        setlocal makeprg=make
-    elseif expand("%:e") == "java"
-        return
-    endif
-endfunc
-
-func! Run()
-    let s:ShowWarning = 0
-    call Link()
-    let s:ShowWarning = 1
-    if s:Sou_Error || s:LastShellReturn_C != 0 || s:LastShellReturn_L != 0
-        return
-    endif
-    let Sou = expand("%:p")
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let Obj = expand("%:p:r").s:Obj_Extension
-        if g:iswindows
-            let Exe = expand("%:p:r").s:Exe_Extension
-        else
-            let Exe = expand("%:p:r")
-        endif
-        if executable(Exe) && getftime(Exe) >= getftime(Obj) && getftime(Obj) >= getftime(Sou)
-            redraw!
-            echohl WarningMsg | echo " running..."
-            if g:iswindows
-                exe ":!%<.exe"
-            else
-                if g:isGUI
-                    exe ":!gnome-terminal -x bash -c './%<; echo; echo 请按 Enter 键继续; read'"
-                else
-                    exe ":!clear; ./%<"
-                endif
-            endif
-            redraw!
-            echohl WarningMsg | echo " running finish"
-        endif
-    elseif expand("%:e") == "java"
-        let class = expand("%:p:r").s:Class_Extension
-        if getftime(class) >= getftime(Sou)
-            redraw!
-            echohl WarningMsg | echo " running..."
-            if g:iswindows
-                exe ":!java %<"
-            else
-                if g:isGUI
-                    exe ":!gnome-terminal -x bash -c 'java %<; echo; echo 请按 Enter 键继续; read'"
-                else
-                    exe ":!clear; java %<"
-                endif
-            endif
-            redraw!
-            echohl WarningMsg | echo " running finish"
-        endif
-    endif
-endfunc
-
 " =============================================================================
 "                          << 自动命令 >>
 " =============================================================================
