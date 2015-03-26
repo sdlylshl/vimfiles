@@ -117,66 +117,22 @@ endif
 " =============================================================================
 "                            < 系统配置 >
 " =============================================================================
-if g:iswindows
-    "设置字体:字号（字体名称空格用下划线代替<N）
-    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
-    "set guifont=Consolas_for_Powerline_FixedD:h9
-else
-    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
-endif
+" -----------------------------------------------------------------------------
+"                        < 编码配置 >
+" -----------------------------------------------------------------------------
+" 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
+set encoding=utf-8                                    "设置gvim内部编码，默认不更改
+set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
+"set fileencoding=chinese                             "解决中文乱码问题
+"设置支持打开的文件的编码
+set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
 
-"if (g:iswindows && g:isGUI)
-if g:iswindows
+" 文件格式，默认 ffs=dos,unix
+set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
+set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
+"不明字符用双字节表示
+set ambiwidth=double
 
-    set langmenu=zh_CN.utf-8
-
-    "colorscheme molokai
-    "set term=xterm
-    "set t_Co=256
-
-    "处理菜单及右键菜单乱码
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
-
-    "处理consle输出乱码
-    language messages zh_CN.utf-8
-
-    "解决gvim不乱码，但vim乱码
-    set termencoding=chinese
-
-else
-    if g:isGUI
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/gvimrc.local")
-            source /etc/vim/gvimrc.local
-        endif
-    else
-        " This line should not be removed as it ensures that various options are
-        " properly set to work with the Vim-related packages available in Debian.
-        "此处会修改vim runtimepath rtp 所以放到Bundle前面
-        runtime! debian.vim
-
-        set term=linux
-        set termencoding=utf-8          "解决Linux终端乱码
-        "set mouse=a                    " 在任何模式下启用鼠标
-        set t_Co=256                    " 在终端启用256色
-        " fixed the arrow key problems caused by AutoClose
-        "inoremap OA <ESC>ki
-        "inoremap OB <ESC>ji
-        "inoremap OC <ESC>li
-        "imnoreap OD <ESC>hi
-
-        nnoremap OA k
-        nnoremap OB j
-        nnoremap OC l
-        nnoremap OD h
-
-        " Source a global configuration file if available
-        if filereadable("/etc/vim/vimrc.local")
-            source /etc/vim/vimrc.local
-        endif
-    endif
-endif
 " -----------------------------------------------------------------------------
 "  < 编写文件时的配置 >
 " -----------------------------------------------------------------------------
@@ -378,24 +334,67 @@ if g:isGUI
                 \set guioptions+=r <Bar>
                 \set guioptions+=L <Bar>
                 \endif<CR>
+
 endif
-" -----------------------------------------------------------------------------
-"                        < 编码配置 >
-" -----------------------------------------------------------------------------
-" 注：使用utf-8格式后，软件与程序源码、文件路径不能有中文，否则报错
-set encoding=utf-8                                    "设置gvim内部编码，默认不更改
-set fileencoding=utf-8                                "设置当前文件编码，可以更改，如：gbk（同cp936）
-"set fileencoding=chinese                             "解决中文乱码问题
-"设置支持打开的文件的编码
-set fileencodings=utf-8,ucs-bom,gbk,cp936,latin-1,gb18030,big5,euc-jp,euc-kr
+if g:iswindows
+    "设置字体:字号（字体名称空格用下划线代替<N）
+    set guifont=DejaVu_Sans_Mono_for_Powerline:h12:cANSI
+    "set guifont=Consolas_for_Powerline_FixedD:h9
+else
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+endif
 
-" 文件格式，默认 ffs=dos,unix
-set fileformat=unix                                   "设置新（当前）文件的<EOL>格式，可以更改，如：dos（windows系统常用）
-set fileformats=unix,dos,mac                          "给出文件的<EOL>格式类型
-"不明字符用双字节表示
-set ambiwidth=double
+"if (g:iswindows && g:isGUI)
+if g:iswindows
 
+    set langmenu=zh_CN.utf-8
 
+    "colorscheme molokai
+    "set term=xterm
+    "set t_Co=256
+
+    "处理菜单及右键菜单乱码
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
+    "处理consle输出乱码
+    language messages zh_CN.utf-8
+
+    "解决gvim不乱码，但vim乱码
+    set termencoding=chinese
+
+else
+    if g:isGUI
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/gvimrc.local")
+            source /etc/vim/gvimrc.local
+        endif
+    else
+        " This line should not be removed as it ensures that various options are
+        " properly set to work with the Vim-related packages available in Debian.
+        "此处会修改vim runtimepath rtp 所以放到Bundle前面
+        runtime! debian.vim
+
+        set term=linux
+        set termencoding=utf-8          "解决Linux终端乱码
+        "set mouse=a                    " 在任何模式下启用鼠标
+        set t_Co=256                    " 在终端启用256色
+        " fixed the arrow key problems caused by AutoClose
+        "inoremap OA <ESC>ki
+        "inoremap OB <ESC>ji
+        "inoremap OC <ESC>li
+        "imnoreap OD <ESC>hi
+
+        nnoremap OA k
+        nnoremap OB j
+        nnoremap OC l
+        nnoremap OD h
+
+        " Source a global configuration file if available
+        if filereadable("/etc/vim/vimrc.local")
+            source /etc/vim/vimrc.local
+        endif
+    endif
+endif
 
 " --- AutoClose - Inserts matching bracket, paren, brace or quote
 
@@ -516,7 +515,7 @@ set ambiwidth=double
 "noremap <F8> "+x
 "noremap <F9> "+p
 "<F1> 查看Vim的runtime路径
-nnoremap <F1> :set rtp<CR>
+"nnoremap <F1> :set rtp<CR>
 "nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <silent> <F2> :exec("NERDTreeToggle ".expand('%:h'))<CR>
 nnoremap <F3> :TagbarToggle<CR>
