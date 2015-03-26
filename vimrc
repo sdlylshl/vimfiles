@@ -1633,7 +1633,7 @@ nnoremap <Leader>cy <Plug>NERDCommenterYank      "复制注释
 " -----------------------------------------------------------------------------
 " 有目录村结构的文件浏览插件
 let NERDTreeQuitOnOpen = 1
-let NERDTreeWinPos='right'
+let NERDTreeWinPos='left'
 let NERDTreeHighlightCursorline=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") &&b:NERDTreeType == "primary") | q | endif
 
@@ -1737,7 +1737,7 @@ let g:syntastic_enable_highlighting = 0
 " 常规模式下输入 tb 调用插件，如果有打开 TagList 窗口则先将其关闭
 "nnoremap tb :TlistClose<CR>:TagbarToggle<CR>
 let g:tagbar_width=30                       "设置窗口宽度
-let g:tagbar_left=1                         "在左侧窗口中显示
+let g:tagbar_left=0                         "在左侧窗口中显示
 let g:tagbar_autofocus = 1
 let g:tagbar_sort = 1                       "按源文件顺序排列
 " 加载代码时自动打开tagbar
