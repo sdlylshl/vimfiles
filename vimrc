@@ -507,13 +507,6 @@ endif
 
 " let mapleader = ";"
 "
-"------grep工具配置------------------------------------------------------------
-"定义快捷键关闭当前分割窗口
-"nmap<Leader>q :q<CR>
-"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin project
-nnoremap<Leader>sp :Grep<CR>
-"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin buffer
-nnoremap <Leader>sb :GrepBuffer -ir<CR><CR>
 "
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
@@ -810,111 +803,6 @@ noremap <leader>r :call Replace()<CR>
 " =============================================================================
 
 " -----------------------------------------------------------------------------
-"  < cscope 工具配置 >
-" -----------------------------------------------------------------------------
-" 用cscope自己的话说 - "你可以把它当做是超过频的ctags"
-"   进入vim后第一件事是要把刚才生成的cscope文件导入到vim中来, 用下面的命令:
-"   :cs add /home/wooin/vim71/cscope.out /home/wooin/vim71
-"   上面这条命令很重要, 必须写全, 不能只写前半句:
-"   :cs add /home/wooin/vim71/cscope.out
-"   因为源码是多级目录的, 如果这样写, cscope是无法在子目录中的源码中工作的
-"   cscope -Rbq -f path/cscope.out
-"   0 或 s: 查找本 C 符号
-"	1 或 g: 查找本定义
-"	2 或 d: 查找本函数调用的函数
-"	3 或 c: 查找调用本函数的函数
-"	4 或 t: 查找本字符串
-"	6 或 e: 查找本 egrep 模式
-"	7 或 f: 查找本文件
-"	8 或 i: 查找包含本文件的文件
-
-"    $ cscope -Rbkq
-"    这个命令会生成三个文件：cscope.out, cscope.in.out, cscope.po.out。
-"    其中cscope.out是基本的符号索引，后两个文件是使用"-q"选项生成的，可以加快cscope的索引速度。上面命令的参数含义如下：
-"    -R: 在生成索引文件时，搜索子目录树中的代码
-"    -b: 只生成索引文件，不进入cscope的界面
-"    -k: 在生成索引文件时，不搜索/usr/include目录
-"    -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
-"    -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用"-"，表示由标准输入获得文件列表。
-"    -I dir: 在-I选项指出的目录中查找头文件
-"    -u: 扫描所有文件，重新生成交叉索引文件
-"    -C: 在搜索时忽略大小写
-"    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
-
-if has("cscope")
-    "    "set csprg=/usr/bin/cscope   " 制定cscope命令
-    "    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
-    "    "set csto=0
-    "    "优先查找Ctags数据库
-    "    set cscopetagorder=1
-    "    "把Cscope的查找结果 输出到quickfix窗口
-    "    set cscopequickfix=s-,c-,d-,i-,t-,e-
-    "    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
-    "    set cscopetag
-    "    " 同时搜索tag文件和cscope数据库
-    "    " set cst
-    "    set nocsverb
-    "    "如果当前目录下有cscope.out则加载进Vim
-    "    "if filereadable("cscope.out")
-    "    "    cs add cscope.out
-    "    "否则添加数据库环境中所指定的数据库到Vim
-    "    "elseif $cscope_db != ""
-    "    "    cs add $cscope_db
-    "    "endif
-    "    function! UpdateCscope()
-    "        call ToGitDir()
-    "        !cscope -Rbkq
-    "        cs add cscope.out
-    "        cs reset
-    "    endfunction
-    "    set cscopeverbose
-    "    "快捷键设置
-    "    " 查找符号
-    "    nnoremap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
-    "    nnoremap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
-    "    nnoremap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
-    "    nnoremap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
-    "    nnoremap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
-    "    nnoremap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
-    "    nnoremap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
-    "    nnoremap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
-    "    nnoremap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
-    "
-    "    nnoremap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
-    "    nnoremap <C-\>r :cs reset<CR>               "   重新初始化所有连接
-    "
-    "    "noremap <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
-    "    nnoremap <F8> :call UpdateCscope()<CR>
-
-
-endif
-
-" -----------------------------------------------------------------------------
-"  < ctags 工具配置 >
-" -----------------------------------------------------------------------------
-" 对浏览代码非常的方便,可以在函数,变量之间跳转等
-" ctags --list-maps 查看支持的语音
-set tags=./tags,./*/tags;                            "向上级目录递归查找tags文件（好像只有在windows下才有用）
-
-set tags+=./../tags,../../tags,../../../tags,../../../../tags
-if g:islinux
-    set tags+=/usr/src/linux-2.6.35/tags,/usr/src/glibc-2.17/tags
-endif
-set tags+=$VIM,$VIMRUNTIME
-
-function! UpdateCtags()
-    call ToGitDir()
-    !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
-endfunction
-
-"noremap <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
-"noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-
-"ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
-"noremap <C-]> g<c-]>
-"noremap <c-[> <c-t>
-
-" -----------------------------------------------------------------------------
 "  < 3 - gvimfullscreen 工具配置 > 请确保已安装了工具
 " -----------------------------------------------------------------------------
 " 用于 Windows Gvim 全屏窗口，可用 F11 切换
@@ -1026,6 +914,7 @@ Bundle 'airblade/vim-gitgutter'
 "Bundle 'ccvext.vim'
 "--- create cscope database and connect to existing proper database automatically.
 Bundle 'sdlylshl/cscope.vim'
+Bundle 'aceofall/gtags.vim'
 
 "--- 显示层次的功能或使用cscope数据库文件调用树
 "--- 依赖::Cscope, Vim 7.xx
@@ -1071,7 +960,7 @@ Bundle 'sdlylshl/cscope.vim'
 "--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
 "Bundle 'Shougo/neocomplcache.vim'
 "--- lua
-Bundle 'Shougo/neocomplete.vim'
+"Bundle 'Shougo/neocomplete.vim'
 
 "--- [与系统omni重复]在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
 "Bundle 'supertab'
@@ -1161,7 +1050,7 @@ Bundle 'kshenoy/vim-signature'
 "Bundle 'Shougo/unite.vim'
 Bundle 'kien/ctrlp.vim'
 "--- http://gnuwin32.sourceforge.net/packages/grep.htm (.../findutils.htm)
-Bundle 'yegappan/grep'
+"Bundle 'yegappan/grep'
 
 if g:islinux
     "--- 依赖: ACK2.x
@@ -1246,12 +1135,19 @@ let g:ctrlspace_default_mapping_key="<S-Space>"
 " ----------------------------------------------------------------------------
 "  < Undotree 插件配置 >
 " ----------------------------------------------------------------------------
-nnoremap <Leader>h :UndotreeToggle<cr>
+nnoremap <Leader>u :UndotreeToggle<cr>
+
 " -----------------------------------------------------------------------------
-"  < Grep 插件配置 >
+"  < grep 插件配置 >
 " ----------------------------------------------------------------------------
+"nmap<Leader>q :q<CR>   "定义快捷键关闭当前分割窗口
+"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin project
+nnoremap<Leader>sp :Grep<CR>
+"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin buffer
+nnoremap <Leader>sb :GrepBuffer -ir<CR><CR>
+
 ":cwindow
-let Grep_OpenQuickfixWindow = 0
+"let Grep_OpenQuickfixWindow = 0
 "循环查找
 "let Grep_Find_Use_Xargs = 0
 let Grep_Default_Filelist = '*.[chS]'
@@ -1308,6 +1204,111 @@ nnoremap <leader>gt <Plug>GitGutterStageHunk
 " m<BackSpace> : Remove all markers
 
 " -----------------------------------------------------------------------------
+"  < cscope 工具配置 >
+" -----------------------------------------------------------------------------
+" 用cscope自己的话说 - "你可以把它当做是超过频的ctags"
+"   进入vim后第一件事是要把刚才生成的cscope文件导入到vim中来, 用下面的命令:
+"   :cs add /home/wooin/vim71/cscope.out /home/wooin/vim71
+"   上面这条命令很重要, 必须写全, 不能只写前半句:
+"   :cs add /home/wooin/vim71/cscope.out
+"   因为源码是多级目录的, 如果这样写, cscope是无法在子目录中的源码中工作的
+"   cscope -Rbq -f path/cscope.out
+"   0 或 s: 查找本 C 符号
+"	1 或 g: 查找本定义
+"	2 或 d: 查找本函数调用的函数
+"	3 或 c: 查找调用本函数的函数
+"	4 或 t: 查找本字符串
+"	6 或 e: 查找本 egrep 模式
+"	7 或 f: 查找本文件
+"	8 或 i: 查找包含本文件的文件
+
+"    $ cscope -Rbkq
+"    这个命令会生成三个文件：cscope.out, cscope.in.out, cscope.po.out。
+"    其中cscope.out是基本的符号索引，后两个文件是使用"-q"选项生成的，可以加快cscope的索引速度。上面命令的参数含义如下：
+"    -R: 在生成索引文件时，搜索子目录树中的代码
+"    -b: 只生成索引文件，不进入cscope的界面
+"    -k: 在生成索引文件时，不搜索/usr/include目录
+"    -q: 生成cscope.in.out和cscope.po.out文件，加快cscope的索引速度
+"    -i: 如果保存文件列表的文件名不是cscope.files时，需要加此选项告诉cscope到哪儿去找源文件列表。可以使用"-"，表示由标准输入获得文件列表。
+"    -I dir: 在-I选项指出的目录中查找头文件
+"    -u: 扫描所有文件，重新生成交叉索引文件
+"    -C: 在搜索时忽略大小写
+"    -P path: 在以相对路径表示的文件前加上的path，这样，你不用切换到你数据库文件所在的目录也可以使用它了。
+
+if has("cscope")
+    "    "set csprg=/usr/bin/cscope   " 制定cscope命令
+    "    "ctags查找顺序，0表示先cscope数据库再标签文件，1表示先标签文件爱
+    "    "set csto=0
+    "    "优先查找Ctags数据库
+    "    set cscopetagorder=1
+    "    "把Cscope的查找结果 输出到quickfix窗口
+    "    set cscopequickfix=s-,c-,d-,i-,t-,e-
+    "    "使支持用 ctrl+]  和 ctrl+t 快捷键在代码间跳转
+    "    set cscopetag
+    "    " 同时搜索tag文件和cscope数据库
+    "    " set cst
+    "    set nocsverb
+    "    "如果当前目录下有cscope.out则加载进Vim
+    "    "if filereadable("cscope.out")
+    "    "    cs add cscope.out
+    "    "否则添加数据库环境中所指定的数据库到Vim
+    "    "elseif $cscope_db != ""
+    "    "    cs add $cscope_db
+    "    "endif
+    "    function! UpdateCscope()
+    "        call ToGitDir()
+    "        !cscope -Rbkq
+    "        cs add cscope.out
+    "        cs reset
+    "    endfunction
+    "    set cscopeverbose
+    "    "快捷键设置
+    "    " 查找符号
+    "    nnoremap <leader>css :cs find s <c-r>=expand("<cword>")<cr><cr>  " C symbol
+    "    nnoremap <leader>csg :cs find g <c-r>=expand("<cword>")<cr><cr>  " decsinition
+    "    nnoremap <leader>csd :cs find d <c-r>=expand("<cword>")<cr><cr>  " called 查找被这个函数调用的函数
+    "    nnoremap <leader>csc :cs find c <c-r>=expand("<cword>")<cr><cr>  " calling[引用] 查找调用这个函数的函数
+    "    nnoremap <leader>cst :cs find t <c-r>=expand("<cword>")<cr><cr>  " 查找这个字符串
+    "    nnoremap <leader>cse :cs find e <c-r>=expand("<cword>")<cr><cr>
+    "    nnoremap <leader>csf :cs find f <c-r>=expand("<cfile>")<cr><cr>  " 查找这个文件
+    "    nnoremap <leader>csi :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
+    "    nnoremap <leader>csl :cs find i ^<c-r>=expand("<cfile>")<cr>$<cr> "查找#include这个文件的文件
+    "
+    "    nnoremap <C-\>w :cw<CR>                     "   :cw quickfix窗口看到所有查找结果
+    "    nnoremap <C-\>r :cs reset<CR>               "   重新初始化所有连接
+    "
+    "    "noremap <F4>:!cscope -Rbq<CR>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+    "    nnoremap <F8> :call UpdateCscope()<CR>
+
+
+endif
+
+" -----------------------------------------------------------------------------
+"  < ctags 工具配置 >
+" -----------------------------------------------------------------------------
+" 对浏览代码非常的方便,可以在函数,变量之间跳转等
+" ctags --list-maps 查看支持的语音
+set tags=./tags,./*/tags;                            "向上级目录递归查找tags文件（好像只有在windows下才有用）
+
+set tags+=./../tags,../../tags,../../../tags,../../../../tags
+if g:islinux
+    set tags+=/usr/src/linux-2.6.35/tags,/usr/src/glibc-2.17/tags
+endif
+set tags+=$VIM,$VIMRUNTIME
+
+function! UpdateCtags()
+    call ToGitDir()
+    !ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+px --c++-kinds=+px --fields=+ainKsS --extra=+qf .
+endfunction
+
+"noremap <s-f12> :vsp <cr>:exec("tselect ".expand("<cword>"))<cr>
+"noremap <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+"ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
+"noremap <C-]> g<c-]>
+"noremap <c-[> <c-t>
+
+" -----------------------------------------------------------------------------
 "  < cscope 插件配置 >
 " ----------------------------------------------------------------------------
 " s: Find this C symbol
@@ -1329,6 +1330,27 @@ noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 noremap <leader>l :call ToggleLocationList()<CR>
 "保留生成文件
 let g:cscope_files_kept = 1
+
+" -----------------------------------------------------------------------------
+"  < gtags 插件配置 >
+" -----------------------------------------------------------------------------
+
+set cscopetag                  " 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
+":cscope show " 查看当前使用的是哪个 TAGS 文件
+" gtags
+let GtagsCscope_Auto_Load = 1
+let CtagsCscope_Auto_Map = 1
+let GtagsCscope_Quiet = 1
+" -----------------------------------------------------------------------------
+"  < ccvext.vim 插件配置 >
+" -----------------------------------------------------------------------------
+" 用于对指定文件自动生成tags与cscope文件并连接
+" 如果是Windows系统, 则生成的文件在源文件所在盘符根目录的.symbs目录下(如: X:\.symbs\)
+" 如果是Linux系统, 则生成的文件在~/.symbs/目录下
+" 具体用法可参考www.vim.org中此插件的说明
+" <Leader>sy 自动生成tags与cscope文件并连接
+" <Leader>sc 连接已存在的tags与cscope文件
 
 " -----------------------------------------------------------------------------
 "  < exVim 插件配置 >
@@ -1496,16 +1518,6 @@ let g:xptemplate_key = '<Tab>'
 " <Leader>be 在当前窗口显示缓存列表并打开选定文件
 " <Leader>bs 水平分割窗口显示缓存列表，并在缓存列表窗口中打开选定文件
 " <Leader>bv 垂直分割窗口显示缓存列表，并在缓存列表窗口中打开选定文件
-
-" -----------------------------------------------------------------------------
-"  < ccvext.vim 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于对指定文件自动生成tags与cscope文件并连接
-" 如果是Windows系统, 则生成的文件在源文件所在盘符根目录的.symbs目录下(如: X:\.symbs\)
-" 如果是Linux系统, 则生成的文件在~/.symbs/目录下
-" 具体用法可参考www.vim.org中此插件的说明
-" <Leader>sy 自动生成tags与cscope文件并连接
-" <Leader>sc 连接已存在的tags与cscope文件
 
 " -----------------------------------------------------------------------------
 "  < cSyntaxAfter 插件配置 >
