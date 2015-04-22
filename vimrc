@@ -254,7 +254,7 @@ match OverLength '\%81v.*'
 "                       < 界面配置 >
 " -----------------------------------------------------------------------------
 set number                                            "显示行号
-set cmdheight=1                                       "设置命令行的高度为2，默认为1
+set cmdheight=2                                     "设置命令行的高度为2，默认为1
 
 "set cursorcolumn                                      "突出显示列
 set cursorline                                        "突出显示当前行
@@ -507,7 +507,14 @@ endif
 
 " let mapleader = ";"
 "
-
+"------grep工具配置------------------------------------------------------------
+"定义快捷键关闭当前分割窗口
+"nmap<Leader>q :q<CR>
+"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin project
+nnoremap<Leader>sp :Grep<CR>
+"使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin buffer
+nnoremap <Leader>sb :GrepBuffer -ir<CR><CR>
+"
 " 常规模式下用空格键来开关光标行所在折叠（注：zR 展开所有折叠，zM 关闭所有折叠）
 "nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 "从系统剪切板中复制，剪切，粘贴
@@ -1064,7 +1071,7 @@ Bundle 'sdlylshl/cscope.vim'
 "--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
 "Bundle 'Shougo/neocomplcache.vim'
 "--- lua
-"Bundle 'Shougo/neocomplete.vim'
+Bundle 'Shougo/neocomplete.vim'
 
 "--- [与系统omni重复]在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
 "Bundle 'supertab'
@@ -1365,14 +1372,15 @@ let g:cscope_files_kept = 1
 "set completeopt=menu,longest,menuone
 "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
 set completeopt=longest,menu
+"set completeopt=menuone,menu,longest
 
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
 let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1
-let OmniCpp_MayCompleteDot = 1
-let OmniCpp_MayCompleteArrow = 1
-let OmniCpp_MayCompleteScope = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表 
+let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
+let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全 
+let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全 
 let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
 let OmniCpp_SelectFirstItem = 2
 let OmniCpp_DisplayMode=1
@@ -1387,6 +1395,11 @@ let OmniCpp_DisplayMode=1
 "   " 在弹出补全列表后用 <c-p> 或 <c-n> 进行上下选择效果比较好
 "   "默认快捷键<C-x><C-u>
 
+" -----------------------------------------------------------------------------
+"  <neocomplete 插件配置>
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
 " -----------------------------------------------------------------------------
 "  < supertab 插件配置 >
 " -----------------------------------------------------------------------------
