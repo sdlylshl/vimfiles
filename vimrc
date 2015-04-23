@@ -550,16 +550,10 @@ nnoremap <silent> <C-F12> <c-w>_<c-w>\|
 "  <  QuickFix 操作 >
 " ----------------------------------------------------------------------------
 nnoremap <silent> <F5> :cw<CR>      "有错误打开QuickFix
-nnoremap <silent> <C-F6> :cp<CR>      "QuickFix窗口中上一条记录
-nnoremap <silent> <C-F7> :cn<CR>      "QuickFix窗口中下一条记录
-nnoremap <silent> <C-F8> :cclose<CR>
-" open the error console
-noremap <leader>cp :botright copen<CR>
-" move to next error
-noremap <leader>] :cn<CR>
-" move to the prev error
-noremap <leader>[ :cp<CR>
-
+"nnoremap <silent> <C-F6> :cp<CR>      "QuickFix窗口中上一条记录 k
+"nnoremap <silent> <C-F7> :cn<CR>      "QuickFix窗口中下一条记录  j
+"nnoremap <silent> <C-F8> :cclose<CR>
+"noremap <leader>cp :botright copen<CR>
 "--------------------------------------------------------------
 " 命令行模式增强，ctrl - a到行首， -e 到行尾
 cnoremap <C-j> <t_kd>
@@ -880,7 +874,6 @@ Bundle 'gmarik/vundle'
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
 "GIT
-"Bundle 'tpope/vim-git'
 "--- 状态栏显示git分支(master)
 Bundle 'tpope/vim-fugitive'
 "--- 状态栏显示fit分支号
@@ -1080,7 +1073,7 @@ Bundle 'asins/vimcdoc'
 ",a*<space> 所有空格依次对齐
 Bundle 'junegunn/vim-easy-align'
 
-"--- 快速跳转到TODO列表
+"--- 快速跳转到todo列表
 Bundle 'vim-scripts/TaskList.vim'
 
 "--- 撤销树Gundo.vim 依赖:python
@@ -1140,7 +1133,7 @@ nnoremap <Leader>u :UndotreeToggle<cr>
 " -----------------------------------------------------------------------------
 "  < grep 插件配置 >
 " ----------------------------------------------------------------------------
-"nmap<Leader>q :q<CR>   "定义快捷键关闭当前分割窗口
+nmap<Leader>q :q<CR>   "定义快捷键关闭当前分割窗口
 "使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin project
 nnoremap<Leader>sp :Grep<CR>
 "使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin buffer
@@ -1153,27 +1146,30 @@ nnoremap <Leader>sb :GrepBuffer -ir<CR><CR>
 let Grep_Default_Filelist = '*.[chS]'
 let Grep_Skip_Files = '*.bak *~'
 
-nnoremap <Leader>gd  :GitDiff
-nnoremap <Leader>gD  :GitDiff –cached
-nnoremap <Leader>gs  :GitStatus
-nnoremap <Leader>gl  :GitLog
-nnoremap <Leader>ga  :GitAdd
-nnoremap <Leader>gA  :GitAdd <cfile>
-nnoremap <Leader>gc  :GitCommit
-nnoremap <Leader>gb  :GitBlame
+" -----------------------------------------------------------------------------
+"  < Git-vim 插件配置 >
+" -----------------------------------------------------------------------------
+"nnoremap <Leader>gd  :GitDiff
+"nnoremap <Leader>gD  :GitDiff –cached
+"nnoremap <Leader>gs  :GitStatus
+"nnoremap <Leader>gl  :GitLog
+"nnoremap <Leader>ga  :GitAdd
+"nnoremap <Leader>gA  :GitAdd <cfile>
+"nnoremap <Leader>gc  :GitCommit
+"nnoremap <Leader>gb  :GitBlame
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
 " -----------------------------------------------------------------------------
-nnoremap ]c <Plug>GitGutterNextHunk
-nnoremap [c <Plug>GitGutterPrevHunk
+nmap ]c <Plug>GitGutterNextHunk
+nmap [c <Plug>GitGutterPrevHunk
 
-nnoremap <leader>gp <Plug>GitGutterPreviewHunk
-nnoremap <leader>gr <Plug>GitGutterRevertHunk
-nnoremap <leader>gt <Plug>GitGutterStageHunk
+nmap <leader>gp <Plug>GitGutterPreviewHunk
+nmap <leader>gr <Plug>GitGutterRevertHunk
+nmap <leader>gt <Plug>GitGutterStageHunk
 
 "暂存 <Leader>hs 和回退 <Leader>hr
-"nnoremap <Leader>hr <Plug>GitGutterStageHunk
-"nnoremap <Leader>hr <Plug>GitGutterRevertHunk
+"nmap <Leader>hr <Plug>GitGutterStageHunk
+"nmap <Leader>hr <Plug>GitGutterRevertHunk
 "显示diff差异<Leader>hp
 
 " -----------------------------------------------------------------------------
@@ -1621,18 +1617,18 @@ let g:indentLine_color_term = 239
 " -----------------------------------------------------------------------------
 " 我主要用于C/C++代码注释(其它的也行)
 " 以下为插件默认快捷键，其中的说明是以C/C++为例的，其它语言类似
-nnoremap <Leader>c$ "ToEOL
-nnoremap <Leader>c<space> <Plug>NERDCommenterToggle "启用
-nnoremap <Leader>cA "添加行尾注释
-nnoremap <Leader>ca <Plug>NERDCommenterUncomment "选择注释方式 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
-nnoremap <Leader>cc <Plug>NERDCommentercomment   "以每行一个 /* */ 注释选中行或区域，再输入则称重复注释
-nnoremap <Leader>ci <Plug>NERDCommenterInvert    "以每行一个 /* */ 注释选中行(选中区域所在行)，再输入则取消注释
-nnoremap <Leader>cl <Plug>NERDCommenterAlignLeft "左对齐
-nnoremap <Leader>cm <Plug>NERDCommenterMinimal   "以一个 /* */ 注释选中行(选中区域所在行)，再输入则称重复注释
-nnoremap <Leader>cn <Plug>NERDCommenterNested    "
-nnoremap <Leader>cs <Plug>NERDCommenterSexy      "左对齐
-nnoremap <Leader>cu <Plug>NERDCommenterUncomment "取消注释 选中区域(行)的注释，选中区域(行)内至少有一个 /* */
-nnoremap <Leader>cy <Plug>NERDCommenterYank      "复制注释
+nmap <Leader>c$ "ToEOL
+nmap <Leader>c<space> <Plug>NERDCommenterToggle "启用
+nmap <Leader>cA "添加行尾注释
+nmap <Leader>ca <Plug>NERDCommenterUncomment "选择注释方式 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
+nmap <Leader>cc <Plug>NERDCommentercomment   "以每行一个 /* */ 注释选中行或区域，再输入则称重复注释
+nmap <Leader>ci <Plug>NERDCommenterInvert    "以每行一个 /* */ 注释选中行(选中区域所在行)，再输入则取消注释
+nmap <Leader>cl <Plug>NERDCommenterAlignLeft "左对齐
+nmap <Leader>cm <Plug>NERDCommenterMinimal   "以一个 /* */ 注释选中行(选中区域所在行)，再输入则称重复注释
+nmap <Leader>cn <Plug>NERDCommenterNested    "
+nmap <Leader>cs <Plug>NERDCommenterSexy      "左对齐
+nmap <Leader>cu <Plug>NERDCommenterUncomment "取消注释 选中区域(行)的注释，选中区域(行)内至少有一个 /* */
+nmap <Leader>cy <Plug>NERDCommenterYank      "复制注释
 
 "   let NERDSpaceDelims = 1                     "在左注释符之后，右注释符之前留有空格
 "   call s:CreateMaps('nx', 'Comment',    'Comment', 'cc')
@@ -1798,10 +1794,11 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
-"
-noremap <leader>t <Plug>TaskList
+"   TODO:快速跳转到列表
+"   不能用noremap 否则功能失效
+nmap <leader>td <Plug>TaskList
 " -----------------------------------------------------------------------------
-"  < TaskList 插件配置 >
+"  < vim-multiple-cursors 插件配置 >
 " -----------------------------------------------------------------------------
 "let g:multi_cursor_use_default_mapping=0
 " Default mapping
@@ -1832,7 +1829,7 @@ noremap <leader>t <Plug>TaskList
 " :let g:vimim_punctuation = 2
 " :let g:vimim_shuangpin = 0
 " :let g:vimim_toggle = 'pinyin,google,sogou'
-" inoremap<silent><C-L> <Plug>VimimChineseToggle
+" imap<silent><C-L> <Plug>VimimChineseToggle
 " =============================================================================
 "                          << 自动命令 >>
 " =============================================================================
