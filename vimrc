@@ -518,8 +518,8 @@ endif
 "nnoremap <F1> :set rtp<CR>
 "nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <silent> <F2> :exec("NERDTreeToggle ".expand('%:h'))<CR>
-nnoremap <F3> :TagbarToggle<CR>
-nnoremap <F4> :SrcExplToggle<CR>
+nnoremap <F3> :SrcExplToggle<CR>
+nnoremap <F4> :TagbarToggle<CR>
 
 " CTRL+ F4 强制关闭当前窗口
 nnoremap <C-F4> :close!<CR>
