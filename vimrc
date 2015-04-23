@@ -1098,11 +1098,6 @@ Bundle 'mbbill/undotree'
 
 "配置
 "Bundle 'carlhuda/janus'
-filetype plugin indent on                             "启用缩进
-
-" =============================================================================
-"                          << 以下为常用插件配置 >>
-" =============================================================================
 
 " ----------------------------------------------------------------------------
 "  < ctrlspace 插件配置 >
@@ -1615,40 +1610,30 @@ let g:indentLine_color_term = 239
 " -----------------------------------------------------------------------------
 "  < nerdcommenter 插件配置 >
 " -----------------------------------------------------------------------------
-" 我主要用于C/C++代码注释(其它的也行)
-" 以下为插件默认快捷键，其中的说明是以C/C++为例的，其它语言类似
-nmap <Leader>c$ "ToEOL
-nmap <Leader>c<space> <Plug>NERDCommenterToggle "启用
-nmap <Leader>cA "添加行尾注释
-nmap <Leader>ca <Plug>NERDCommenterUncomment "选择注释方式 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
-nmap <Leader>cc <Plug>NERDCommentercomment   "以每行一个 /* */ 注释选中行或区域，再输入则称重复注释
-nmap <Leader>ci <Plug>NERDCommenterInvert    "以每行一个 /* */ 注释选中行(选中区域所在行)，再输入则取消注释
-nmap <Leader>cl <Plug>NERDCommenterAlignLeft "左对齐
-nmap <Leader>cm <Plug>NERDCommenterMinimal   "以一个 /* */ 注释选中行(选中区域所在行)，再输入则称重复注释
-nmap <Leader>cn <Plug>NERDCommenterNested    "
-nmap <Leader>cs <Plug>NERDCommenterSexy      "左对齐
-nmap <Leader>cu <Plug>NERDCommenterUncomment "取消注释 选中区域(行)的注释，选中区域(行)内至少有一个 /* */
-nmap <Leader>cy <Plug>NERDCommenterYank      "复制注释
+"let NERDSpaceDelims = 1                     "在左注释符之后，右注释符之前留有空格
 
-"   let NERDSpaceDelims = 1                     "在左注释符之后，右注释符之前留有空格
-"   call s:CreateMaps('nx', 'Comment',    'Comment', 'cc')
-"   call s:CreateMaps('nx', 'Toggle',     'Toggle', 'c<space>')
-"   call s:CreateMaps('nx', 'Minimal',    'Minimal', 'cm')
-"   call s:CreateMaps('nx', 'Nested',     'Nested', 'cn')
-"   call s:CreateMaps('n',  'ToEOL',      'To EOL', 'c$')
-"   call s:CreateMaps('nx', 'Invert',     'Invert', 'ci')
-"   call s:CreateMaps('nx', 'Sexy',       'Sexy', 'cs')
-"   call s:CreateMaps('nx', 'Yank',       'Yank then comment', 'cy')
-"   call s:CreateMaps('',   ':',          '-Sep-', '')
-"   call s:CreateMaps('nx', 'AlignLeft',  'Left aligned', 'cl')
-"   call s:CreateMaps('nx', 'AlignBoth',  'Left and right aligned', 'cb')
-"   call s:CreateMaps('',   ':',          '-Sep2-', '')
-"   call s:CreateMaps('nx', 'Uncomment',  'Uncomment', 'cu')
-"   call s:CreateMaps('n',  'AltDelims',  'Switch Delimiters', 'ca')
-"   call s:CreateMaps('i',  'Insert',     'Insert Comment Here', '')
-"   call s:CreateMaps('',   ':',          '-Sep3-', '')
-"   call s:CreateMaps('',   ':help NERDCommenterContents<CR>', 'Help', '')
+"选择注释方式 在/*...*/与//这两种注释方式中切换（其它语言可能不一样了）
+nmap <leader>ca <plug>NERDCommenterAltDelims
+"常用 注释非注释切换
+nmap <Leader><space> <Plug>NERDCommenterToggle
+"nmap <Leader>ci <Plug>NERDCommenterInvert
 
+"添加行尾注释
+nmap <Leader>cA <plug>NERDCommenterAppend
+
+"添加注释 重复
+"nmap <Leader>cc <Plug>NERDCommentercomment
+"nmap <Leader>cl <Plug>NERDCommenterAlignLeft
+"nmap <Leader>cm <Plug>NERDCommenterMinimal
+"nmap <Leader>cn <Plug>NERDCommenterNested
+"文档注释
+"nmap <Leader>cs <Plug>NERDCommenterSexy
+"nmap <Leader>c$ <plug>NERDCommenterToEOL
+
+"取消注释 
+"nmap <Leader>cu <Plug>NERDCommenterUncomment
+"复制注释
+"nmap <Leader>cy <Plug>NERDCommenterYank
 " -----------------------------------------------------------------------------
 "  < nerdtree 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1663,19 +1648,26 @@ let NERDTreeHighlightCursorline=1
 " -----------------------------------------------------------------------------
 "  < FuzzyFinder 插件配置 >
 " -----------------------------------------------------------------------------
-nnoremap <leader>fuf :FufFile<CR>
-nnoremap <leader>fub :FufBuffer<CR>
-nnoremap <leader>fud :FufDir<CR>
-nnoremap <leader>fut :FufTag<CR>
-nnoremap <leader>fuc :FufChangeList<CR>
-nnoremap <leader>fuj :FufJumpList<CR>
-nnoremap <leader>fuq :FufQuickfix<CR>
+"nnoremap <leader>fuf :FufFile<CR>
+"nnoremap <leader>fub :FufBuffer<CR>
+"nnoremap <leader>fud :FufDir<CR>
+"nnoremap <leader>fut :FufTag<CR>
+"nnoremap <leader>fuc :FufChangeList<CR>
+"nnoremap <leader>fuj :FufJumpList<CR>
+"nnoremap <leader>fuq :FufQuickfix<CR>
 " -----------------------------------------------------------------------------
 "  < ctrlsf 插件配置 >
 " -----------------------------------------------------------------------------
-let g:ctrlsf_ackprg = 'ag'
-let g:ctrlsf_auto_close = 0
-noremap <D-F> :CtrlSF<space>
+"  基于ack2.0 关键字查找 可以看到所在行的上下几行内容
+"let g:ctrlsf_ackprg = 'ag'
+"let g:ctrlsf_auto_close = 0
+"nmap     <C-F>f <Plug>CtrlSFPrompt
+"vmap     <C-F>f <Plug>CtrlSFVwordPath
+"vmap     <C-F>F <Plug>CtrlSFVwordExec
+"nmap     <C-F>n <Plug>CtrlSFCwordPath
+"nmap     <C-F>p <Plug>CtrlSFPwordPath
+"nnoremap <C-F>o :CtrlSFOpen<CR>
+
 " -----------------------------------------------------------------------------
 "  < airline 插件配置 >
 
@@ -1797,6 +1789,7 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 "   TODO:快速跳转到列表
 "   不能用noremap 否则功能失效
 nmap <leader>td <Plug>TaskList
+
 " -----------------------------------------------------------------------------
 "  < vim-multiple-cursors 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1906,3 +1899,7 @@ else
     noremap <leader>e :e $HOME/.vimrc<cr>
     autocmd! bufwritepost .vimrc source %
 endif
+
+"启用缩进
+filetype plugin indent on
+
