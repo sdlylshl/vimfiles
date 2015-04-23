@@ -663,7 +663,7 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 noremap <C-k> <c-w>k
 noremap <C-j> <c-w>j
 noremap <C-h> <c-w>h
-noremap <C-l> <c-w>l
+"noremap <C-l> <c-w>l
 "窗口最大化
 "noremap <C-F12> <c-w>_<c-w>\|
 "nnoremap <c-s-j> <C-W>j<C-W>_
@@ -1127,6 +1127,74 @@ Bundle 'kshenoy/vim-signature'
 " [=           : Jump to prev line having any marker
 " m<BackSpace> : Remove all markers
 " -----------------------------------------------------------------------------
+"  < a.vim 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'a.vim'
+" 用于切换C/C++头文件
+"   :A 头文件／源文件切换
+"   :AS 分割窗后并切换头/源文件(切割为上下两个窗口)
+"   :AV 垂直切割窗口后切换头/源文件(切割为左右两个窗口)
+"   :AT 新建Vim标签式窗口后切换
+"   :AN 在多个匹配文件间循环切换
+" 将光标所在处单词作为文件名打开
+"   :IH 切换至光标所在文件
+"   :IHS 分割窗口后切换至光标所在文件(指将光标所在处单词作为文件名打开)
+"   :IHV 垂直分割窗口后切换
+"   :IHT 新建标签式窗口后切换
+"   :IHN 在多个匹配文件间循环切换
+" 快捷键操作
+"<Leader>ih 切换至光标所在文件*
+"<Leader>is 切换至光标所在处(单词所指)文件的配对文件(如光标所在处为foo.h，则切换至foo.c/foo.cpp...)
+"<Leader>ihn 在多个匹配文件间循环切换
+
+"   let g:alternateRelativeFiles = 1
+"   let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
+"-----------------------------------------------------------------------------
+"  < std_c 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'std_c.zip'
+" 用于增强C语法高亮
+
+" 启用 // 注视风格
+"let c_cpp_comments = 0
+
+" -----------------------------------------------------------------------------
+"  < indentLine 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'Yggdroot/indentLine'
+"TODO无效不知为啥?
+" 用于显示对齐线，与 indent_guides 在显示方式上不同，根据自己喜好选择了
+" 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
+" 开启/关闭对齐线
+"nnoremap <leader>il :IndentLinesToggle<CR>
+"这句 必须加否则无效 "tab:\|\ "
+set list listchars=tab:\|\ 
+" 设置Gvim的对齐线样式
+if g:isGUI
+    let g:indentLine_char = "| "
+"    let g:indentLine_first_char = "┊"
+endif
+
+"let g:indentLine_indentLevel = 2
+" 设置终端对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
+"let g:indentLine_color_term = 239
+
+" 设置 GUI 对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
+ "let g:indentLine_color_gui = '#A4E57E'
+
+"Bundle 'nathanaelkane/vim-indent-guides'
+"let g:indent_guides_enable_on_vim_startup = 1  " 默认关闭
+"let g:indent_guides_guide_size            = 0  " 指定对齐线的尺寸
+"let g:indent_guides_start_level       = 2      " 从第二层开始可视化显示缩进
+
+"Bundle 'junegunn/vim-easy-align'
+" -----------------------------------------------------------------------------
+"  < Align 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'Align'
+" 一个对齐的插件，用来——排版与对齐代码，功能强大，不过用到的机会不多
+
+" -----------------------------------------------------------------------------
 "  < ccvext.vim 插件配置 >
 " -----------------------------------------------------------------------------
 "--- 自动生成tags与cscope文件并连接
@@ -1238,7 +1306,8 @@ noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
 noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
 " i: Find files #including this file
 noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
-noremap <leader>l :call ToggleLocationList()<CR>
+"切换Quickfix 显示
+noremap <Leader>l :call ToggleLocationList()<CR>
 "保留生成文件
 let g:cscope_files_kept = 1
 
@@ -1283,6 +1352,14 @@ set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
 let GtagsCscope_Auto_Load = 1
 let CtagsCscope_Auto_Map = 1
 let GtagsCscope_Quiet = 1
+let Gtags_OpenQuickfixWindow = 0
+"nmap <F2> :Gtags -gi<cr>"在项目文件中搜索匹配的单词（忽略大小写）
+nmap <A-e> :Gtags -gi<cr><cr><cr>*.[ch]<cr>"在项目文件中搜索光标所在的单词
+nmap <C-[> :Gtags<cr><cr>"跳转到光标所在函数的定义
+nmap <A-r> :Gtags -r<cr><cr>"搜索光标所在函数的引用
+
+"不用altkeys映射到窗口列表
+set winaltkeys=no
 " -----------------------------------------------------------------------------
 "  < cSyntaxAfter 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1296,7 +1373,7 @@ let GtagsCscope_Quiet = 1
 "--- VIM 下的Source Insight
 "Bundle 'wesleyche/SrcExpl'
 " 增强源代码浏览，其功能就像Windows中的"Source Insight"
-let g:SrcExpl_gobackKey = '<BS>'
+"et g:SrcExpl_gobackKey = '<BS>'
 let g:SrcExpl_jumpKey = '<C-CR>'
 let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q '
 "
@@ -1476,61 +1553,6 @@ let g:xptemplate_key = '<Tab>'
 
 " " xpt triggers only when you typed whole name of a snippet. Optional
 " let g:xptemplate_minimal_prefix = 'full'
-
-" -----------------------------------------------------------------------------
-"  < a.vim 插件配置 >
-" -----------------------------------------------------------------------------
-"Bundle 'a.vim'
-" 用于切换C/C++头文件
-"   :A 头文件／源文件切换
-"   :AS 分割窗后并切换头/源文件(切割为上下两个窗口)
-"   :AV 垂直切割窗口后切换头/源文件(切割为左右两个窗口)
-"   :AT 新建Vim标签式窗口后切换
-"   :AN 在多个匹配文件间循环切换
-" 将光标所在处单词作为文件名打开
-"   :IH 切换至光标所在文件
-"   :IHS 分割窗口后切换至光标所在文件(指将光标所在处单词作为文件名打开)
-"   :IHV 垂直分割窗口后切换
-"   :IHT 新建标签式窗口后切换
-"   :IHN 在多个匹配文件间循环切换
-" 快捷键操作
-"<Leader>ih 切换至光标所在文件*
-"<Leader>is 切换至光标所在处(单词所指)文件的配对文件(如光标所在处为foo.h，则切换至foo.c/foo.cpp...)
-"<Leader>ihn 在多个匹配文件间循环切换
-
-"   let g:alternateRelativeFiles = 1
-"   let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
-"-----------------------------------------------------------------------------
-"  < std_c 插件配置 >
-" -----------------------------------------------------------------------------
-"Bundle 'std_c.zip'
-" 用于增强C语法高亮
-
-" 启用 // 注视风格
-let c_cpp_comments = 0
-
-" -----------------------------------------------------------------------------
-"  < indentLine 插件配置 >
-" -----------------------------------------------------------------------------
-"Bundle 'Yggdroot/indentLine' "TODO无效不知为啥?
-" 用于显示对齐线，与 indent_guides 在显示方式上不同，根据自己喜好选择了
-" 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
-" 开启/关闭对齐线
-nnoremap <leader>il :IndentLinesToggle<CR>
-
-
-" 设置终端对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
-"let g:indentLine_color_term = 239
-
-" 设置 GUI 对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
-" let g:indentLine_color_gui = '#A4E57E'
-
-"Bundle 'junegunn/vim-easy-align'
-" -----------------------------------------------------------------------------
-"  < Align 插件配置 >
-" -----------------------------------------------------------------------------
-"Bundle 'Align'
-" 一个对齐的插件，用来——排版与对齐代码，功能强大，不过用到的机会不多
 " -----------------------------------------------------------------------------
 "  < tabular 插件配置 >
 " -----------------------------------------------------------------------------
