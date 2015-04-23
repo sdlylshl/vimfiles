@@ -546,6 +546,9 @@ nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 "<F12>窗口最大化
 nnoremap <silent> <F12> <c-w>=
 nnoremap <silent> <C-F12> <c-w>_<c-w>\|
+
+
+
 " -----------------------------------------------------------------------------
 "  <  QuickFix 操作 >
 " ----------------------------------------------------------------------------
@@ -652,16 +655,6 @@ inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
-"系统默认自动补全 OmniCppComplete 配置
-"使用pumvisible()来判断下拉菜单是否显示
-"inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
-inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
-inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
-inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
-"如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
-"如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
-"如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
-"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
 
 " -----------------------------------------------------------------------------
 "  <  窗口 操作 >
@@ -761,15 +754,13 @@ inoremap è <Left>
 inoremap ì <Right>
 
 inoremap {} {<CR>}<Up><End><CR>
-inoremap .> ->
+"inoremap .> ->
 
 "alt+d 删除光标所在的单词
 inoremap ä <esc>ebdei
 " alt+s删除引号之间的字符串
 inoremap ó <esc>di"i
 
-" Ctrl-[ jump out of the tag stack (undo Ctrl-])
-"noremap <C-[> <ESC>:po<CR>
 
 "   插入头文件定义
 noremap <leader>i :call IncludeGuard()<CR>
@@ -873,11 +864,6 @@ Bundle 'gmarik/vundle'
 
 " 以下为要安装或更新的插件，不同仓库都有（具体书写规范请参考帮助）
 
-"GIT
-"--- 状态栏显示git分支(master)
-Bundle 'tpope/vim-fugitive'
-"--- 状态栏显示fit分支号
-Bundle 'airblade/vim-gitgutter'
 
 "Bundle 'motemen/git-vim'
 "Bundle 'mhinz/vim-signify'
@@ -900,25 +886,10 @@ Bundle 'airblade/vim-gitgutter'
 "Plugin 'exvim/ex-hierarchy' " 这个是神器，可以生成c++的类层次关系图。使用 graphviz 去绘制
 "Plugin 'exvim/ex-tagbar'
 
-"Bundle 'a.vim'
-"Bundle 'std_c.zip'
-"--- 自动生成tags与cscope文件并连接
-"More convenience way to use ctags and cscope in vim
-"Bundle 'ccvext.vim'
-"--- create cscope database and connect to existing proper database automatically.
-Bundle 'sdlylshl/cscope.vim'
-Bundle 'aceofall/gtags.vim'
 
 "--- 显示层次的功能或使用cscope数据库文件调用树
 "--- 依赖::Cscope, Vim 7.xx
 "Bundle 'vim-scripts/CCTree'
-
-"--- VIM 下的Source Insight
-"Bundle 'wesleyche/SrcExpl'
-
-"--- 高亮C函数
-"Bundle 'cSyntaxAfter'
-
 
 "Python
 "Bundle 'jmcantrell/vim-virtualenv'
@@ -940,9 +911,6 @@ Bundle 'aceofall/gtags.vim'
 "Bundle 'mattn/calendar-vim'
 "Bundle 'dhruvasagar/vim-table-mode'
 
-"语法检查 错误信息在左侧状态栏标注
-"Bundle 'scrooloose/syntastic'
-
 "自动补全
 
 "--- YouCompleteMe包含("clang_complete "AutoComplPop "Supertab "neocomplcache "jedi(对python的补全)
@@ -950,38 +918,10 @@ Bundle 'aceofall/gtags.vim'
 
 "Bundle 'exvim/ex-autocomplpop'
 
-"--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
-"Bundle 'Shougo/neocomplcache.vim'
-"--- lua
-"Bundle 'Shougo/neocomplete.vim'
-
-"--- [与系统omni重复]在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
-"Bundle 'supertab'
-
-"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
-Bundle 'OmniCppComplete'
-"--- Omni Completion for JAVA 依赖:Ctags
-"Bundle 'vim-javacompleteex'
-
-
 "--- 自动括号补全
 "Bundle 'Raimondi/delimitMate'
 "Bundle 'docunext/closetag.vim'
 
-
-"代码片段
-"--- 宏定义补全 依赖:: Python 3.x
-"Bundle 'SirVer/ultisnips'
-"Bundle 'honza/vim-snippets'
-"--- Snippet 的几个方案 (单选)
-" Bundle 'Shougo/neosnippet.vim'
-" Bundle 'msanders/snipmate.vim'
-" Bundle 'spf13/snipmate-snippets'
-Bundle 'drmingdrmer/xptemplate'
-"
-"代码
-"Bundle 'taglist.vim'
-Bundle 'majutsushi/tagbar'
 
 "状态栏
 if g:isGUI
@@ -1006,34 +946,30 @@ endif
 ",l      本行, 向后快速移动
 ",h      本行, 向前快速移动
 Bundle 'Lokaltog/vim-easymotion'
+"快速查找
+nmap s <Plug>(easymotion-s)
+map  / <Plug>(easymotion-sn)
+
+"map  n <Plug>(easymotion-next)
+"map  N <Plug>(easymotion-prev
+let g:EasyMotion_startofline = 0 " keep cursor colum when JK motion
+" Use uppercase target labels and type as a lower case
+let g:EasyMotion_use_upper = 1
+ " type `l` and match `l`&`L`
+let g:EasyMotion_smartcase = 1
+" Smartsign (type `3` and match `3`&`#`)
+let g:EasyMotion_use_smartsign_us = 1
 "--- 对%命令进行扩展使得能在嵌套标签和语句之间跳转
 " % 正向匹配      g% 反向匹配
 " [% 定位块首     ]% 定位块尾
 Bundle 'vim-scripts/matchit.zip'
 
-"选中
-"+ 增加选中范围(+/=按键)
-"_ 减少选中范围(_/-按键)
-Bundle 'terryma/vim-expand-region'
-"多光标多行编辑
-Bundle 'terryma/vim-multiple-cursors'
 
 "文件浏览
 "---  快速注释
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 "Bundle 'jistr/vim-nerdtree-tabs'
-"tab/buffer导航增强
-Bundle 'szw/vim-ctrlspace'
-
-"Bundle 'jlanzarotta/bufexplorer'
-"Bundle 'vim-scripts/minibufexplorerpp'
-"
-"Bundle 'ShowMarks'
-"Bundle 'Mark--Karkat'
-"--- 左侧显示marks
-"m<space>    去除所有标签
-Bundle 'kshenoy/vim-signature'
 
 "--- 模糊查找 依赖:vim-L9库
 "Bundle 'clones/vim-l9'
@@ -1041,9 +977,6 @@ Bundle 'kshenoy/vim-signature'
 "--- 依赖:python
 "Bundle 'troydm/asyncfinder.vim'
 "Bundle 'Shougo/unite.vim'
-Bundle 'kien/ctrlp.vim'
-"--- http://gnuwin32.sourceforge.net/packages/grep.htm (.../findutils.htm)
-"Bundle 'yegappan/grep'
 
 if g:islinux
     "--- 依赖: ACK2.x
@@ -1062,25 +995,6 @@ Bundle 'asins/vimcdoc'
 "--- 括号自动配对
 "Bundle 'jiangmiao/auto-pairs'
 
-"Bundle 'Align'
-"--- 代码对齐
-"Bundle 'godlygeek/tabular'
-"可以选中多行,不选中默认操作当前行
-",a= 对齐等号表达
-",a: 对齐冒号表达式(json/map等)
-",a<space>  首个空格对齐
-",a2<space> 第二个空格对齐
-",a*<space> 所有空格依次对齐
-Bundle 'junegunn/vim-easy-align'
-
-"--- 快速跳转到todo列表
-Bundle 'vim-scripts/TaskList.vim'
-
-"--- 撤销树Gundo.vim 依赖:python
-"Bundle 'sjl/gundo.vim'
-Bundle 'mbbill/undotree'
-
-"Bundle 'Yggdroot/indentLine'
 "--- 显示文本文件的目录树和语法高亮
 "Bundle 'TxtBrowser'
 "--- <c-w>o 在最大化与还原间切换
@@ -1102,8 +1016,10 @@ Bundle 'mbbill/undotree'
 " ----------------------------------------------------------------------------
 "  < ctrlspace 插件配置 >
 " ----------------------------------------------------------------------------
+"tab/buffer导航增强
+Bundle 'szw/vim-ctrlspace'
 let g:ctrlspace_default_mapping_key="<S-Space>"
-"  ctrl+<space> 得到当前tab的buffer列表
+"  shift+<space> 得到当前tab的buffer列表
 "  j/k     上下移动
 "  回车     跳转到
 "  v/V     vsp分屏打开, v会进入对应文件, V会保留在ctrlspace区域
@@ -1123,12 +1039,17 @@ let g:ctrlspace_default_mapping_key="<S-Space>"
 " ----------------------------------------------------------------------------
 "  < Undotree 插件配置 >
 " ----------------------------------------------------------------------------
+Bundle 'mbbill/undotree'
 nnoremap <Leader>u :UndotreeToggle<cr>
 
+"--- 撤销树Gundo.vim 依赖:python
+"Bundle 'sjl/gundo.vim'
 " -----------------------------------------------------------------------------
 "  < grep 插件配置 >
 " ----------------------------------------------------------------------------
-nmap<Leader>q :q<CR>   "定义快捷键关闭当前分割窗口
+"--- http://gnuwin32.sourceforge.net/packages/grep.htm (.../findutils.htm)
+"Bundle 'yegappan/grep'
+nmap<Leader>q :close!<CR>   "强制关闭窗口:close
 "使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin project
 nnoremap<Leader>sp :Grep<CR>
 "使用Grep.vim插件在工程内全局查找，设置快捷键。快捷键速记法：searchin buffer
@@ -1141,6 +1062,7 @@ nnoremap <Leader>sb :GrepBuffer -ir<CR><CR>
 let Grep_Default_Filelist = '*.[chS]'
 let Grep_Skip_Files = '*.bak *~'
 
+"GIT
 " -----------------------------------------------------------------------------
 "  < Git-vim 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1155,6 +1077,10 @@ let Grep_Skip_Files = '*.bak *~'
 " -----------------------------------------------------------------------------
 "  < GitGutter 插件配置 >
 " -----------------------------------------------------------------------------
+"--- 状态栏显示git分支(master)
+Bundle 'tpope/vim-fugitive'
+"--- 状态栏显示fit分支号
+Bundle 'airblade/vim-gitgutter'
 nmap ]c <Plug>GitGutterNextHunk
 nmap [c <Plug>GitGutterPrevHunk
 
@@ -1167,9 +1093,16 @@ nmap <leader>gt <Plug>GitGutterStageHunk
 "nmap <Leader>hr <Plug>GitGutterRevertHunk
 "显示diff差异<Leader>hp
 
+"----------------------------[marks标签]--------------------------------------------------
+"Bundle 'ShowMarks'
+"Bundle 'Mark--Karkat'
+
 " -----------------------------------------------------------------------------
-"  < vim-signature 插件配置 >
-" -----------------------------------------------------------------------------
+"  < vim-signature 插件配置 >  [marks]
+"-----------------------------------------------------------------------------
+"--- 左侧状态栏显示marks
+"m<space>    去除所有标签
+Bundle 'kshenoy/vim-signature'
 
 " m[a-zA-Z]    : Toggle mark
 " m,           : Place the next available mark
@@ -1193,7 +1126,18 @@ nmap <leader>gt <Plug>GitGutterStageHunk
 " ]=           : Jump to next line having any marker
 " [=           : Jump to prev line having any marker
 " m<BackSpace> : Remove all markers
-
+" -----------------------------------------------------------------------------
+"  < ccvext.vim 插件配置 >
+" -----------------------------------------------------------------------------
+"--- 自动生成tags与cscope文件并连接
+"Bundle 'ccvext.vim'
+"
+" 用于对指定文件自动生成tags与cscope文件并连接
+" 如果是Windows系统, 则生成的文件在源文件所在盘符根目录的.symbs目录下(如: X:\.symbs\)
+" 如果是Linux系统, 则生成的文件在~/.symbs/目录下
+" 具体用法可参考www.vim.org中此插件的说明
+" <Leader>sy 自动生成tags与cscope文件并连接
+" <Leader>sc 连接已存在的tags与cscope文件
 " -----------------------------------------------------------------------------
 "  < cscope 工具配置 >
 " -----------------------------------------------------------------------------
@@ -1275,6 +1219,30 @@ if has("cscope")
 endif
 
 " -----------------------------------------------------------------------------
+"  < cscope 插件配置 >
+" ----------------------------------------------------------------------------
+Bundle 'sdlylshl/cscope.vim'
+" s: Find this C symbol
+noremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+" g: Find this definition
+noremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+" d: Find functions called by this function
+noremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+" c: Find functions calling this function
+noremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+" t: Find this text string
+noremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+" e: Find this egrep pattern
+noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+" f: Find this file
+noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+" i: Find files #including this file
+noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+noremap <leader>l :call ToggleLocationList()<CR>
+"保留生成文件
+let g:cscope_files_kept = 1
+
+" -----------------------------------------------------------------------------
 "  < ctags 工具配置 >
 " -----------------------------------------------------------------------------
 " 对浏览代码非常的方便,可以在函数,变量之间跳转等
@@ -1298,33 +1266,15 @@ endfunction
 "ctrl-]不会自动列出，只会提示“找到 tag: 1 / 2 或更多”  要:tselect 才会列出所有项
 "noremap <C-]> g<c-]>
 "noremap <c-[> <c-t>
-
-" -----------------------------------------------------------------------------
-"  < cscope 插件配置 >
-" ----------------------------------------------------------------------------
-" s: Find this C symbol
-noremap <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
-" g: Find this definition
-noremap <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
-" d: Find functions called by this function
-noremap <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
-" c: Find functions calling this function
-noremap <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
-" t: Find this text string
-noremap <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
-" e: Find this egrep pattern
-noremap <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
-" f: Find this file
-noremap <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
-" i: Find files #including this file
-noremap <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
-noremap <leader>l :call ToggleLocationList()<CR>
-"保留生成文件
-let g:cscope_files_kept = 1
+"  后退操作 <C-o> 前进操作<C-i>
+"map <C-[> <C-t>
+" Ctrl-[ jump out of the tag stack (undo Ctrl-])
+"noremap <C-[> <ESC>:po<CR>
 
 " -----------------------------------------------------------------------------
 "  < gtags 插件配置 >
 " -----------------------------------------------------------------------------
+Bundle 'aceofall/gtags.vim'
 
 set cscopetag                  " 使用 cscope 作为 tags 命令
 set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
@@ -1334,14 +1284,47 @@ let GtagsCscope_Auto_Load = 1
 let CtagsCscope_Auto_Map = 1
 let GtagsCscope_Quiet = 1
 " -----------------------------------------------------------------------------
-"  < ccvext.vim 插件配置 >
+"  < cSyntaxAfter 插件配置 >
 " -----------------------------------------------------------------------------
-" 用于对指定文件自动生成tags与cscope文件并连接
-" 如果是Windows系统, 则生成的文件在源文件所在盘符根目录的.symbs目录下(如: X:\.symbs\)
-" 如果是Linux系统, 则生成的文件在~/.symbs/目录下
-" 具体用法可参考www.vim.org中此插件的说明
-" <Leader>sy 自动生成tags与cscope文件并连接
-" <Leader>sc 连接已存在的tags与cscope文件
+"--- 高亮C函数
+"Bundle 'cSyntaxAfter'
+" 高亮括号与运算符等
+"autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
+" -----------------------------------------------------------------------------
+"  < SrcExpl 插件配置 >
+" -----------------------------------------------------------------------------
+"--- VIM 下的Source Insight
+"Bundle 'wesleyche/SrcExpl'
+" 增强源代码浏览，其功能就像Windows中的"Source Insight"
+let g:SrcExpl_gobackKey = '<BS>'
+let g:SrcExpl_jumpKey = '<C-CR>'
+let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q '
+"
+" -----------------------------------------------------------------------------
+"  < Syntastic 插件配置 >
+" -----------------------------------------------------------------------------
+"语法检查 错误信息在左侧状态栏标注
+"Bundle 'scrooloose/syntastic'
+" 用于保存文件时查检语法
+" 在打开文件的时候检查
+"let g:syntastic_cpp_checkers =['cppcheck','gcc']
+"let g:syntastic_aggregate_errors = 1
+"let g:syntastic_cpp_include_dirs = ['/usr/include/']
+"let g:syntastic_cpp_remove_include_errors = 1
+"let g:syntastic_cpp_check_header = 1
+"let g:syntastic_cpp_compiler = 'clang++'
+"let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
+"whether to show balloons
+let g:syntastic_enable_balloons = 1
+let g:syntastic_always_populate_loc_list = 1
+
+"let g:syntastic_auto_jump=1
+let g:syntastic_check_on_open = 1
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+"let g:syntastic_auto_loc_list = 1
+let g:syntastic_loc_list_height = 0
+let g:syntastic_enable_highlighting = 0
 
 " -----------------------------------------------------------------------------
 "  < exVim 插件配置 >
@@ -1372,6 +1355,11 @@ let GtagsCscope_Quiet = 1
 " -----------------------------------------------------------------------------
 "  < omnicppcomplete 插件配置 >
 " -----------------------------------------------------------------------------
+"--- [必备]类(class),结构(struct)和联合(union)补全 依赖:Ctags
+Bundle 'OmniCppComplete'
+"--- Omni Completion for JAVA 依赖:Ctags
+"Bundle 'vim-javacompleteex'
+"
 " 用于C/C++代码补全，这种补全主要针对命名空间、类、结构、共同体等进行补全，详细
 " 说明可以参考帮助或网络教程等
 " 使用前先执行如下 ctags 命令（本配置中可以直接使用 ccvext 插件来执行以下命令）
@@ -1399,9 +1387,21 @@ let OmniCpp_SelectFirstItem = 2
 let OmniCpp_DisplayMode=1
 
 "系统omni 快捷键默认<C-n>
+"系统默认自动补全 OmniCppComplete 配置
+"使用pumvisible()来判断下拉菜单是否显示
+"inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
+inoremap <expr> <C-J>      pumvisible()?"\<C-n>":"\<C-X><C-O>"
+inoremap <expr> <C-K>      pumvisible()?"\<C-p>":"\<C-K>"
+inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
+"如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
+"如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
+"如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
+"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
 " -----------------------------------------------------------------------------
 "  < neocomplcache 插件配置 >
 " -----------------------------------------------------------------------------
+"--- [太卡]neocomplcache对上下文进行索引，结果保存到缓存中
+"Bundle 'Shougo/neocomplcache.vim'
 " 关键字补全、文件路径补全、tag补全等等，各种，非常好用，速度超快。
 "   let g:neocomplcache_enable_at_startup = 1     "vim 启动时启用插件
 "   let g:neocomplcache_disable_auto_complete = 1 "不自动弹出补全列表
@@ -1410,12 +1410,17 @@ let OmniCpp_DisplayMode=1
 
 " -----------------------------------------------------------------------------
 "  <neocomplete 插件配置>
+" -----------------------------------------------------------------------------
+"--- lua
+Bundle 'Shougo/neocomplete.vim'
 let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
 let g:neocomplete#enable_smart_case = 1
 " -----------------------------------------------------------------------------
-"  < supertab 插件配置 >
+"  < supertab 插件配置 >    [与系统omni重复]
 " -----------------------------------------------------------------------------
+"--- 在输入变量名或路径名等符号中途按Tab键，就能得到以前输入过的符号列表，并通过Tab键循环选择。
+"Bundle 'supertab'
 "let g:SuperTabDefaultCompletionType = '<C-N>' "neo
 "let g:SuperTabMappingForward = '<S-space>'
 "                将向前mapping的键设为 <shift+space>。
@@ -1429,9 +1434,27 @@ let g:neocomplete#enable_smart_case = 1
 " -----------------------------------------------------------------------------
 " java 补全插件
 "
+"--- 宏定义补全 依赖:: Python 3.x
+"Bundle 'SirVer/ultisnips'
+"Bundle 'honza/vim-snippets'
+"-------------------------<代码片段>-------------------------------------------
+"--- Snippet 的几个方案 (单选)
+" Bundle 'Shougo/neosnippet.vim'
+" Bundle 'msanders/snipmate.vim'
+" Bundle 'spf13/snipmate-snippets'
+
 " -----------------------------------------------------------------------------
-"  < xptemplate 插件配置 >
+"  < snipMate 插件配置 >
+" -----------------------------------------------------------------------------"
+" 用于各种代码补全，这种补全是一种对代码中的词与代码块的缩写补全，详细用法可以参
+" 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
+" 侠有什么其它解决方法希望不要保留呀
+" let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/
+
 " -----------------------------------------------------------------------------
+"  < xptemplate 插件配置 > Snippet
+" -----------------------------------------------------------------------------
+Bundle 'drmingdrmer/xptemplate'
 "1. :set compatible?
 "set nocompatible "必须
 "2. :filetype
@@ -1455,16 +1478,9 @@ let g:xptemplate_key = '<Tab>'
 " let g:xptemplate_minimal_prefix = 'full'
 
 " -----------------------------------------------------------------------------
-"  < snipMate 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于各种代码补全，这种补全是一种对代码中的词与代码块的缩写补全，详细用法可以参
-" 考使用说明或网络教程等。不过有时候也会与 supertab 插件在补全时产生冲突，如果大
-" 侠有什么其它解决方法希望不要保留呀
-" let g:snippets_dir = "d:/tools/Vim/vimfiles/snippets/
-
-" -----------------------------------------------------------------------------
 "  < a.vim 插件配置 >
 " -----------------------------------------------------------------------------
+"Bundle 'a.vim'
 " 用于切换C/C++头文件
 "   :A 头文件／源文件切换
 "   :AS 分割窗后并切换头/源文件(切割为上下两个窗口)
@@ -1484,18 +1500,53 @@ let g:xptemplate_key = '<Tab>'
 
 "   let g:alternateRelativeFiles = 1
 "   let g:alternateSearchPath = 'sfr:../,sfr:../../,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
+"-----------------------------------------------------------------------------
+"  < std_c 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'std_c.zip'
+" 用于增强C语法高亮
 
+" 启用 // 注视风格
+let c_cpp_comments = 0
+
+" -----------------------------------------------------------------------------
+"  < indentLine 插件配置 >
+" -----------------------------------------------------------------------------
+"Bundle 'Yggdroot/indentLine' "TODO无效不知为啥?
+" 用于显示对齐线，与 indent_guides 在显示方式上不同，根据自己喜好选择了
+" 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
+" 开启/关闭对齐线
+nnoremap <leader>il :IndentLinesToggle<CR>
+
+
+" 设置终端对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
+"let g:indentLine_color_term = 239
+
+" 设置 GUI 对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
+" let g:indentLine_color_gui = '#A4E57E'
+
+"Bundle 'junegunn/vim-easy-align'
 " -----------------------------------------------------------------------------
 "  < Align 插件配置 >
 " -----------------------------------------------------------------------------
+"Bundle 'Align'
 " 一个对齐的插件，用来——排版与对齐代码，功能强大，不过用到的机会不多
 " -----------------------------------------------------------------------------
 "  < tabular 插件配置 >
 " -----------------------------------------------------------------------------
+"--- 代码对齐
+"Bundle 'godlygeek/tabular'
+"可以选中多行,不选中默认操作当前行
+",a= 对齐等号表达
+",a: 对齐冒号表达式(json/map等)
+",a<space>  首个空格对齐
+",a2<space> 第二个空格对齐
+",a*<space> 所有空格依次对齐
 " \bb                 按=号对齐代码 [Tabular插件]
 "nnoremap <leader>bb :Tab /=<CR>
 " \bn                 自定义对齐    [Tabular插件]
 "nnoremap <leader>bn :Tab /
+
 " -----------------------------------------------------------------------------
 "  < auto-pairs 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1505,20 +1556,29 @@ let g:xptemplate_key = '<Tab>'
 " -----------------------------------------------------------------------------
 "  < BufExplorer 插件配置 >
 " -----------------------------------------------------------------------------
+"Bundle 'jlanzarotta/bufexplorer'
 " 快速轻松的在缓存中切换（相当于另一种多个文件间的切换方式）
 " <Leader>be 在当前窗口显示缓存列表并打开选定文件
 " <Leader>bs 水平分割窗口显示缓存列表，并在缓存列表窗口中打开选定文件
 " <Leader>bv 垂直分割窗口显示缓存列表，并在缓存列表窗口中打开选定文件
 
 " -----------------------------------------------------------------------------
-"  < cSyntaxAfter 插件配置 >
+"  < minibufexpl 插件配置 > 没有ctrlspace好用 
 " -----------------------------------------------------------------------------
-" 高亮括号与运算符等
-"autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,java,javascript} call CSyntaxAfter()
+"Bundle 'fholgado/minibufexpl.vim'
+"切换buffer时,多个窗口的错误
+"let g:miniBufExplorerMoreThanOne=0
+"let g:miniBufExplMapCTabSwitchBufs = 1
+"let g:miniBufExplMapWindowNavVim = 1 
+"let g:miniBufExplMapWindowNavArrows = 1 
+"let g:miniBufExplMapCTabSwitchBufs = 1 
+"let g:miniBufExplModSelTarget = 1 
+
 
 " -----------------------------------------------------------------------------
 "  < ctrlp.vim 插件配置 >
 " -----------------------------------------------------------------------------
+Bundle 'kien/ctrlp.vim'
 " 一个全路径模糊文件，缓冲区，最近最多使用，... 检索插件；详细帮助见 :h ctrlp
 " 常规模式下输入：Ctrl + p 调用插件
 "let g:ctrlp_map = '<leader>p'
@@ -1554,35 +1614,6 @@ let g:ctrlp_mruf_max=500
 let g:ctrlp_follow_symlinks=1
 "定义切换目录
 let g:ctrlp_working_path_mode = 'ra'
-" -----------------------------------------------------------------------------
-"  < emmet-vim（前身为Zen coding） 插件配置 >
-" -----------------------------------------------------------------------------
-" HTML/CSS代码快速编写神器，详细帮助见 :h emmet.txt
-
-" -----------------------------------------------------------------------------
-"  < indentLine 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于显示对齐线，与 indent_guides 在显示方式上不同，根据自己喜好选择了
-" 在终端上会有屏幕刷新的问题，这个问题能解决有更好了
-" 开启/关闭对齐线
-nnoremap <leader>il :IndentLinesToggle<CR>
-
-" 设置Gvim的对齐线样式
-if g:isGUI
-    let g:indentLine_char = "┊"
-    let g:indentLine_first_char = "┊"
-endif
-
-" 设置终端对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
-let g:indentLine_color_term = 239
-
-" 设置 GUI 对齐线颜色，如果不喜欢可以将其注释掉采用默认颜色
-" let g:indentLine_color_gui = '#A4E57E'
-
-" -----------------------------------------------------------------------------
-"  < Mark--Karkat（也就是 Mark） 插件配置 >
-" -----------------------------------------------------------------------------
-" 给不同的单词高亮，表明不同的变量时很有用，详细帮助见 :h mark.txt
 
 " " -----------------------------------------------------------------------------
 " "  < MiniBufExplorer 插件配置 >
@@ -1696,55 +1727,17 @@ set ttimeoutlen=50
 " -----------------------------------------------------------------------------
 " 主要用"."命令来重复上次插件使用的命令
 
-"
-" -----------------------------------------------------------------------------
-"  < SrcExpl 插件配置 >
-" -----------------------------------------------------------------------------
-" 增强源代码浏览，其功能就像Windows中的"Source Insight"
-let g:SrcExpl_gobackKey = '<BS>'
-let g:SrcExpl_jumpKey = '<C-CR>'
-let g:SrcExpl_updateTagsCmd = 'ctags -R --sort=foldcase --file-scope=yes --langmap=c:+.h --languages=Asm,Make,C,C++,C\#,Java,Python,sh,Vim,REXX,SQL --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extra=+q '
-" -----------------------------------------------------------------------------
-"  < std_c 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于增强C语法高亮
-
-" 启用 // 注视风格
-let c_cpp_comments = 0
-
 " -----------------------------------------------------------------------------
 "  < surround 插件配置 >
 " -----------------------------------------------------------------------------
 " 快速给单词/句子两边增加符号（包括html标签），缺点是不能用"."来重复命令
 " 不过 repeat 插件可以解决这个问题，详细帮助见 :h surround.txt
-
-" -----------------------------------------------------------------------------
-"  < Syntastic 插件配置 >
-" -----------------------------------------------------------------------------
-" 用于保存文件时查检语法
-" 在打开文件的时候检查
-"let g:syntastic_cpp_checkers =['cppcheck','gcc']
-"let g:syntastic_aggregate_errors = 1
-"let g:syntastic_cpp_include_dirs = ['/usr/include/']
-"let g:syntastic_cpp_remove_include_errors = 1
-"let g:syntastic_cpp_check_header = 1
-"let g:syntastic_cpp_compiler = 'clang++'
-"let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libstdc++'
-"whether to show balloons
-let g:syntastic_enable_balloons = 1
-let g:syntastic_always_populate_loc_list = 1
-
-"let g:syntastic_auto_jump=1
-let g:syntastic_check_on_open = 1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_loc_list_height = 0
-let g:syntastic_enable_highlighting = 0
+"
 
 " -----------------------------------------------------------------------------
 "  < Tagbar 插件配置 >
 " -----------------------------------------------------------------------------
+Bundle 'majutsushi/tagbar'
 " 相对 TagList 能更好的支持面向对象
 
 " 常规模式下输入 tb 调用插件，如果有打开 TagList 窗口则先将其关闭
@@ -1756,8 +1749,9 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 " 加载代码时自动打开tagbar
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
 " -----------------------------------------------------------------------------
-"  < TagList 插件配置 >
+"  < TagList 插件配置 > [与Tagbar功能重复]
 " -----------------------------------------------------------------------------
+"Bundle 'taglist.vim'
 " 高效地浏览源码, 其功能就像vc中的workpace
 " 那里面列出了当前文件中的所有宏,全局变量, 函数名等
 
@@ -1786,13 +1780,21 @@ let g:tagbar_sort = 1                       "按源文件顺序排列
 " -----------------------------------------------------------------------------
 "  < TaskList 插件配置 >
 " -----------------------------------------------------------------------------
+"--- 快速跳转到todo列表
+Bundle 'vim-scripts/TaskList.vim'
 "   TODO:快速跳转到列表
 "   不能用noremap 否则功能失效
 nmap <leader>td <Plug>TaskList
 
+"选中
+"+ 增加选中范围(+/=按键)
+"_ 减少选中范围(_/-按键)
+Bundle 'terryma/vim-expand-region'
 " -----------------------------------------------------------------------------
 "  < vim-multiple-cursors 插件配置 >
 " -----------------------------------------------------------------------------
+"多光标多行编辑
+Bundle 'terryma/vim-multiple-cursors'
 "let g:multi_cursor_use_default_mapping=0
 " Default mapping
 "let g:multi_cursor_next_key='<C-n>'
@@ -1801,6 +1803,16 @@ nmap <leader>td <Plug>TaskList
 "let g:multi_cursor_quit_key='<Esc>'
 " Map start key separately from next key
 "let g:multi_cursor_start_key='<F6>'
+"
+" -----------------------------------------------------------------------------
+"  < emmet-vim（前身为Zen coding） 插件配置 >
+" -----------------------------------------------------------------------------
+" HTML/CSS代码快速编写神器，详细帮助见 :h emmet.txt
+
+" -----------------------------------------------------------------------------
+"  < Mark--Karkat（也就是 Mark） 插件配置 >
+" -----------------------------------------------------------------------------
+" 给不同的单词高亮，表明不同的变量时很有用，详细帮助见 :h mark.txt
 " -----------------------------------------------------------------------------
 "  < ZoomWin 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1868,7 +1880,8 @@ autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
 
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
-"filetype plugin indent on
+"启用缩进
+filetype plugin indent on
 "autocmd FileType c set omnifunc=ccomplete#Complete
 "autocmd FileType cpp set omnifunc=omni#cpp#complete#main
 "autocmd FileType ruby,eruby set omnifunc=rubycomplete#Complete
@@ -1900,6 +1913,4 @@ else
     autocmd! bufwritepost .vimrc source %
 endif
 
-"启用缩进
-filetype plugin indent on
 
