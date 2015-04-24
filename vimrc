@@ -1435,7 +1435,7 @@ Bundle 'OmniCppComplete'
 "set completeopt=menu                        "关闭预览窗口
 "set completeopt=menu,longest,menuone
 "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
-"set completeopt=longest,menu
+set completeopt=longest,menu
 
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
