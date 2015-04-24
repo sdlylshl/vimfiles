@@ -166,13 +166,6 @@ set wildignore=*.o,*~,*.pyc,*.class,*.swp,*.obj,*.bak,*.exe,.svn,.git
 
 set copyindent		" copy the previous indentation on autoindenting
 
-"开启默认omni complete自动补全 快捷键 搜索补全<c-x><c-o> 自动补全<C-n>
-"set ofu=syntaxcomplete#Complete
-"set omnifunc=syntaxcomplete#Complete
-"set omnifunc=omni
-" 自动补全配置让Vim补全菜单行为跟IDE一致
-"set completeopt=longest,menu
-
 set wildchar=<TAB>	" start wild expansion in the command line using <TAB>
 
 " 增强模式中的命令行 自动完成操作
@@ -191,7 +184,7 @@ set autoread         " 当文件在外部被修改，自动加载文件
 set autowrite        " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 
 set autochdir       "自动切换当前目录为当前文件所在的目录
-
+set hid             " 可以在没有保存的情况下切换buffer
 "不用altkeys映射到窗口列表
 set winaltkeys=no
 
@@ -201,7 +194,7 @@ set nobackup                                "设置无备份文件
 set noswapfile                              "设置无临时文件
 set linebreak                               " 整词换行
 set whichwrap=b,s,<,>,[,]   " 光标从行首和行末时可以跳到另一行去
-
+set whichwrap+=<,>,h,l " 退格键和方向键可以换行
 set browsedir=current    "设置文件浏览使用的目录
 "注：
 "last 使用文件浏览器最近访问相同的目录。
@@ -228,16 +221,11 @@ set clipboard+=unnamed
 " 优化大文件编辑
 let g:LargeFile=10
 
-"历史记录
-set history=50        " set command history to 50    "历史记录50条
-
+set mouse=n     " 在所有模式a下都允许使用鼠标，还可以是n,v,i,c等
 
 "设置 退出vim后，内容显示在终端屏幕, 可以用于查看和复制
 "好处：误删什么的，如果以前屏幕打开，可以找回
 set t_ti= t_te=
-
-
-
 
 " 修复ctrl+m 多光标操作选择的bug，但是改变了ctrl+v进行字符选中时将包含光标下的字符
 "set selection=exclusive
@@ -263,8 +251,6 @@ set nowrap                                            "设置不自动换行
 set shortmess=atI                                     "去掉欢迎界面
 
 set linespace=0                  " 字符间插入的像素行数目
-
-set whichwrap+=<,>,h,l  " 允许backspace和光标键跨越行边界
 
 "--搜索设置--
 set incsearch       " 实时匹配
@@ -539,7 +525,7 @@ nnoremap <silent> <F7> :set wrap!<CR>
 "<Ctrl + F8> 切换语法高亮
 nnoremap <silent> <F8> :exec exists('syntax_on') ? 'syn off' : 'syn on'<CR>
 
-"nmap <F10> :call UpdateCtags()<CR>
+nmap <F10> :call UpdateCtags()<CR>
 " F10 to run python script
 nnoremap <buffer> <C-F10> :exec '!python' shellescape(@%, 1)<cr>
 
@@ -1355,7 +1341,7 @@ let GtagsCscope_Quiet = 1
 let Gtags_OpenQuickfixWindow = 0
 "nmap <F2> :Gtags -gi<cr>"在项目文件中搜索匹配的单词（忽略大小写）
 nmap <A-e> :Gtags -gi<cr><cr><cr>*.[ch]<cr>"在项目文件中搜索光标所在的单词
-nmap <C-[> :Gtags<cr><cr>"跳转到光标所在函数的定义
+nmap <leader> :Gtags<cr><cr>"跳转到光标所在函数的定义
 nmap <A-r> :Gtags -r<cr><cr>"搜索光标所在函数的引用
 
 "不用altkeys映射到窗口列表
@@ -1449,8 +1435,7 @@ Bundle 'OmniCppComplete'
 "set completeopt=menu                        "关闭预览窗口
 "set completeopt=menu,longest,menuone
 "让Vim的补全菜单行为与一般IDE一致(参考VimTip1228)
-set completeopt=longest,menu
-"set completeopt=menuone,menu,longest
+"set completeopt=longest,menu
 
 let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
@@ -1473,7 +1458,14 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "如果下拉菜单弹出，回车映射为接受当前所选项目，否则，仍映射为回车；
 "如果下拉菜单弹出，CTRL-J映射为在下拉菜单中向下翻页。否则映射为CTRL-X CTRL-O；
 "如果下拉菜单弹出，CTRL-K映射为在下拉菜单中向上翻页，否则仍映射为CTRL-K；
-"如果下拉菜单弹出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
+"如果下拉菜单弹" c-j自动补全，当补全菜单打开时，c-j,k上下选择
+imap <expr> <c-j>      pumvisible()?"\<C-N>":"\<C-X><C-O>"
+imap <expr> <c-k>      pumvisible()?"\<C-P>":"\<esc>"
+" f:文件名补全，l:行补全，d:字典补全，]:tag补全
+imap <C-]>             <C-X><C-]>
+imap <C-F>             <C-X><C-F>
+imap <C-D>             <C-X><C-D>
+imap <C-L>             <C-X><C-L> 出，CTRL-U映射为CTRL-E，即停止补全，否则，仍映射为CTRL-U；
 " -----------------------------------------------------------------------------
 "  < neocomplcache 插件配置 >
 " -----------------------------------------------------------------------------
@@ -1489,10 +1481,10 @@ inoremap <expr> <C-U>      pumvisible()?"\<C-E>":"\<C-U>"
 "  <neocomplete 插件配置>
 " -----------------------------------------------------------------------------
 "--- lua
-Bundle 'Shougo/neocomplete.vim'
-let g:neocomplete#enable_at_startup = 1
+"Bundle 'Shougo/neocomplete.vim'
+"let g:neocomplete#enable_at_startup = 1
 " Use smartcase.
-let g:neocomplete#enable_smart_case = 1
+"let g:neocomplete#enable_smart_case = 1
 " -----------------------------------------------------------------------------
 "  < supertab 插件配置 >    [与系统omni重复]
 " -----------------------------------------------------------------------------
@@ -1531,7 +1523,7 @@ let g:neocomplete#enable_smart_case = 1
 " -----------------------------------------------------------------------------
 "  < xptemplate 插件配置 > Snippet
 " -----------------------------------------------------------------------------
-Bundle 'drmingdrmer/xptemplate'
+"Bundle 'drmingdrmer/xptemplate'
 "1. :set compatible?
 "set nocompatible "必须
 "2. :filetype
@@ -1886,11 +1878,12 @@ Bundle 'terryma/vim-multiple-cursors'
 
 " 启用每行超过80列的字符提示（字体变蓝并加下划线），不启用就注释掉
 "autocmd! BufWinEnter * let w:m2=matchadd('Underlined', '\%>' . 80 . 'v.\+', -1)
-
 " 自动删除行尾 Dos回车符和空格
 "autocmd BufEnter * silent! %s/[\r \t]\+$//
 "autocmd BufEnter *.php :%s/[ \t\r]\+$//e
 
+"历史记录
+set history=400  " vim记住的历史操作的数量，默认的是20
 " 恢复上次文件打开位置
 "set viminfo='10,\"100,:20,%,n~/.viminfo
 "autocmd! BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
@@ -1899,7 +1892,6 @@ Bundle 'terryma/vim-multiple-cursors'
 "离开插入模式后 自动关闭预览窗口
 "autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 autocmd cursormovedi,insertLeave * if pumvisible() == 0|silent! pclose|endif
-
 
 "关於omni的设定要写在 filetype plugin ... on, 的后面.
 "启用缩进
